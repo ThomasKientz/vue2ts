@@ -92,8 +92,8 @@ const appReady = async () => {
 
 const createWindow = async () => {
   win = new BrowserWindow({
-    width: 200,
-    height: 600,
+    width: 350,
+    height: 400,
     show: false,
     frame: false,
     webPreferences: {
