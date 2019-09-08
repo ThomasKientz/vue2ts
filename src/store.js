@@ -1,16 +1,18 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Storage from 'electron-store'
+const storage = new Storage()
 
-Vue.use(Vuex)
+const store = {
+  email: storage.get('email'),
+  set: {
+    email: (email) => storage.set('email', email)
+  }
+}
 
-export default new Vuex.Store({
-  state: {
-
-  },
-  mutations: {
-
-  },
-  actions: {
-
+Vue.use({
+  install (Vue) {
+    Vue.prototype.$store = store
   }
 })
+
+export default store

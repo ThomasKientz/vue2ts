@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <!-- <v-text-field label="email" /> -->
-    <v-btn @click="next()" block color="success">
+    <v-text-field v-model="email" label="email" />
+    <v-btn @click="save()" block color="success">
       Next
       <v-icon right>{{mdiArrowRight}}</v-icon>
     </v-btn>
@@ -16,13 +16,16 @@ export default {
 
   data () {
     return {
+      email: null,
       mdiArrowRight
     }
   },
 
   methods: {
-    next () {
-      this.$router.push('/code')
+    save () {
+      console.log('')
+      this.$store.set.email(this.email)
+      this.$router.push('/send')
     }
   }
 

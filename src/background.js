@@ -103,15 +103,15 @@ const createWindow = async () => {
 
   positioner = new Positioner(win)
 
-  win.on('blur', () => {
-    if (!win) {
-      return
-    }
+  // win.on('blur', () => {
+  //   if (!win) {
+  //     return
+  //   }
 
-    if (!win.isAlwaysOnTop()) {
-      hideWindow()
-    }
-  })
+  //   // if (!win.isAlwaysOnTop()) {
+  //   //   hideWindow()
+  //   // }
+  // })
 
   win.on('closed', () => {
     win = null

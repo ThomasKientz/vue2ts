@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store'
 
 Vue.use(Router)
 
@@ -10,14 +11,26 @@ export default new Router({
     {
       path: '/email',
       name: 'email',
-      component: () => import('./pages/Email.vue')
+      component: () => import('./pages/Email.vue'),
+      meta: {
+        hideMenu: true
+      }
     },
     {
       path: '/code',
       name: 'code',
       component: () => import('./pages/Code.vue')
     },
-    { path: '*', redirect: '/email' },
-    { path: '/', redirect: '/email' }
+    {
+      path: '/send',
+      name: 'send',
+      component: () => import('./pages/Send.vue'),
+      beforeEnter: (to, from, next) => {
+        if (store.email) next()
+        else next('/email')
+      }
+    },
+    { path: '*', redirect: '/send' },
+    { path: '/', redirect: '/send' }
   ]
 })
