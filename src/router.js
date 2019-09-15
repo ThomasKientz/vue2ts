@@ -19,6 +19,7 @@ export default new Router({
     {
       path: '/code',
       name: 'code',
+      props: true,
       component: () => import('./pages/Code.vue')
     },
     {

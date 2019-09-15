@@ -1,12 +1,15 @@
 import Vue from 'vue'
-import Storage from 'electron-store'
-const storage = new Storage()
+// import storage from '@/utils/storage'
+
+const storage = {
+  get (val) { return window.localStorage.getItem(val) },
+  set (key, val) { return window.localStorage.setItem(key, val) }
+}
 
 const store = {
   email: storage.get('email'),
-  set: {
-    email: (email) => storage.set('email', email)
-  }
+  token: storage.get('token'),
+  set: (key, value) => storage.set(key, value)
 }
 
 Vue.use({

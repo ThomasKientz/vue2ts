@@ -10,6 +10,7 @@
 
 <script>
 import { mdiArrowRight } from '@mdi/js'
+import { verifyEmail } from '@/utils/api'
 
 export default {
   name: 'email',
@@ -23,9 +24,12 @@ export default {
 
   methods: {
     save () {
-      console.log('')
-      this.$store.set.email(this.email)
-      this.$router.push('/send')
+      const randomId = Math.floor(Math.random() * Math.floor(1000))
+      verifyEmail({ email: this.email, id: randomId }).then(() => {
+        this.$router.push({ path: 'code', query: { id: randomId, email: this.email } })
+      }).catch(e => {
+        console.error(e)
+      })
     }
   }
 
