@@ -1,4 +1,4 @@
-export function getWindowPosition (tray) {
+export function getWindowPosition(tray) {
   switch (process.platform) {
     // macOS
     // Supports top taskbars
@@ -30,7 +30,7 @@ export function getWindowPosition (tray) {
   }
 }
 
-export function taskbarLocation (tray) {
+export function taskbarLocation(tray) {
   const trayBounds = tray.getBounds()
 
   // Determine taskbar location

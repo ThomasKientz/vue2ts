@@ -3,7 +3,7 @@
 
 import { app, protocol, Tray, BrowserWindow } from 'electron'
 import {
-  createProtocol
+  createProtocol,
   // installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
 import * as path from 'path'
@@ -16,7 +16,7 @@ let win, positioner, tray, windowPosition, cachedBounds
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true } }
+  { scheme: 'app', privileges: { secure: true, standard: true } },
 ])
 
 // Quit when all windows are closed.
@@ -97,8 +97,8 @@ const createWindow = async () => {
     show: false,
     frame: false,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
   })
 
   positioner = new Positioner(win)
@@ -128,10 +128,7 @@ const createWindow = async () => {
   }
 }
 
-const clicked = async (
-  event,
-  bounds
-) => {
+const clicked = async (event, bounds) => {
   if (event && (event.shiftKey || event.ctrlKey || event.metaKey)) {
     return hideWindow()
   }
@@ -143,7 +140,7 @@ const clicked = async (
   await showWindow(cachedBounds)
 }
 
-const showWindow = async (trayPos) => {
+const showWindow = async trayPos => {
   if (!tray) {
     throw new Error('Tray should have been instantiated by now')
   }
@@ -174,30 +171,20 @@ const showWindow = async (trayPos) => {
     windowPosition &&
     windowPosition.startsWith('tray')
   ) {
-    noBoundsPosition =
-      process.platform === 'win32' ? 'bottomRight' : 'topRight'
+    noBoundsPosition = process.platform === 'win32' ? 'bottomRight' : 'topRight'
   }
 
   const position = positioner.calculate(
     noBoundsPosition || windowPosition,
-    trayPos
+    trayPos,
   )
 
-  const x =
-  position.x
-  let y =
-  position.y
+  const x = position.x
+  let y = position.y
 
   if (process.platform === 'win32') {
-    if (
-      trayPos &&
-      windowPosition &&
-      windowPosition.startsWith('bottom')
-    ) {
-      y =
-        trayPos.y +
-        trayPos.height / 2 -
-        win.getBounds().height / 2
+    if (trayPos && windowPosition && windowPosition.startsWith('bottom')) {
+      y = trayPos.y + trayPos.height / 2 - win.getBounds().height / 2
     }
   }
 
@@ -206,7 +193,7 @@ const showWindow = async (trayPos) => {
   win.show()
 }
 
-const hideWindow = (trayPos) => {
+const hideWindow = trayPos => {
   if (!win || !win.isVisible()) {
     return
   }

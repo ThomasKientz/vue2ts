@@ -13,25 +13,25 @@ export default new Router({
       name: 'email',
       component: () => import('./pages/Email.vue'),
       meta: {
-        hideMenu: true
-      }
+        hideMenu: true,
+      },
     },
     {
       path: '/code',
       name: 'code',
       props: true,
-      component: () => import('./pages/Code.vue')
+      component: () => import('./pages/Code.vue'),
     },
     {
       path: '/send',
       name: 'send',
       component: () => import('./pages/Send.vue'),
       beforeEnter: (to, from, next) => {
-        if (store.email) next()
+        if (store.token) next()
         else next('/email')
-      }
+      },
     },
     { path: '*', redirect: '/send' },
-    { path: '/', redirect: '/send' }
-  ]
+    { path: '/', redirect: '/send' },
+  ],
 })

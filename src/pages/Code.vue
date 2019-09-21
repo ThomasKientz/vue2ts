@@ -3,7 +3,7 @@
     <v-text-field v-model="code" label="code" />
     <v-btn @click="next()" block color="success">
       Next
-      <v-icon right>{{mdiArrowRight}}</v-icon>
+      <v-icon right>{{ mdiArrowRight }}</v-icon>
     </v-btn>
   </v-container>
 </template>
@@ -13,24 +13,24 @@ import { mdiArrowRight } from '@mdi/js'
 import { getToken } from '@/utils/api'
 
 export default {
-
-  data () {
+  data() {
     return {
       mdiArrowRight,
-      code: null
+      code: null,
     }
   },
 
   methods: {
-    next () {
-      getToken({ email: this.$route.query.email, id: this.$route.query.id, code: this.code }).then(token => {
-        console.log(token)
-        // this.$router.push({ path: 'code', query: { id: randomId } })
-      }).catch(e => {
-        console.error(e)
+    next() {
+      getToken({
+        email: this.$route.query.email,
+        id: this.$route.query.id,
+        code: this.code,
+      }).then(token => {
+        this.$store.set('token', token)
+        this.$router.replace('/send')
       })
-    }
-  }
-
+    },
+  },
 }
 </script>

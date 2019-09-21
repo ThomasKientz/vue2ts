@@ -7,7 +7,7 @@
     </div>
     <v-btn class="flex-grow-0" @click="send()" block color="success">
       Send
-      <v-icon right>{{mdiSend}}</v-icon>
+      <v-icon right>{{ mdiSend }}</v-icon>
     </v-btn>
   </v-container>
 </template>
@@ -16,19 +16,18 @@
 import { mdiSend } from '@mdi/js'
 
 export default {
-  data () {
+  data() {
     return {
       mdiSend,
-      message: null
+      message: null,
     }
   },
 
   methods: {
-    send () {
+    send() {
       console.log('email : ', this.$store.email)
-    }
-  }
-
+    },
+  },
 }
 </script>
 

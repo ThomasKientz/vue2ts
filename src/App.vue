@@ -1,14 +1,10 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      v-model="drawer"
-      width="200"
-      app
-    >
+    <v-navigation-drawer v-model="drawer" width="200" app>
       <v-list dense>
         <v-list-item @click="$router.push('/email')">
           <v-list-item-action>
-            <v-icon>{{mdiSettings}}</v-icon>
+            <v-icon>{{ mdiSettings }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Settings</v-list-item-title>
@@ -25,8 +21,11 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar dense color="primary" dark app>
-      <v-app-bar-nav-icon v-show="!$route.meta.hideMenu" @click.stop="drawer = !drawer">
-         <v-icon>{{mdiMenu}}</v-icon>
+      <v-app-bar-nav-icon
+        v-show="!$route.meta.hideMenu"
+        @click.stop="drawer = !drawer"
+      >
+        <v-icon>{{ mdiMenu }}</v-icon>
       </v-app-bar-nav-icon>
 
       <v-toolbar-title class="subTitle text-capitalize">
@@ -35,7 +34,7 @@
     </v-app-bar>
 
     <v-content>
-      <router-view/>
+      <router-view />
     </v-content>
   </v-app>
 </template>
@@ -48,7 +47,7 @@ export default {
   data: () => ({
     drawer: false,
     mdiSettings,
-    mdiMenu
-  })
+    mdiMenu,
+  }),
 }
 </script>

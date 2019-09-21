@@ -6,7 +6,7 @@ module.exports = {
           args[0]['IS_ELECTRON'] = true
           return args
         })
-      }
-    }
-  }
+      },
+    },
+  },
 }
