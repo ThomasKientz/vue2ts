@@ -19,15 +19,23 @@ export default new Router({
     {
       path: '/code',
       name: 'code',
-      props: true,
       component: () => import('./pages/Code.vue'),
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('./pages/Settings.vue'),
+      beforeEnter: (to, from, next) => {
+        if (store.state.token) next()
+        else next('/')
+      },
     },
     {
       path: '/send',
       name: 'send',
       component: () => import('./pages/Send.vue'),
       beforeEnter: (to, from, next) => {
-        if (store.token) next()
+        if (store.state.token) next()
         else next('/email')
       },
     },

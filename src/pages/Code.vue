@@ -26,8 +26,8 @@ export default {
         email: this.$route.query.email,
         id: this.$route.query.id,
         code: this.code,
-      }).then(token => {
-        this.$store.set('token', token)
+      }).then(async token => {
+        await this.$store.dispatch('saveToken', token)
         this.$router.replace('/send')
       })
     },

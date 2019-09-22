@@ -1,8 +1,9 @@
 <template>
   <v-app>
+    <Toast />
     <v-navigation-drawer v-model="drawer" width="200" app>
       <v-list dense>
-        <v-list-item @click="$router.push('/email')">
+        <v-list-item @click="$router.push('/settings')">
           <v-list-item-action>
             <v-icon>{{ mdiSettings }}</v-icon>
           </v-list-item-action>
@@ -41,9 +42,15 @@
 
 <script>
 import { mdiMenu, mdiSettings } from '@mdi/js'
+import Toast from '@/components/toast'
 
 export default {
   name: 'App',
+
+  components: {
+    Toast,
+  },
+
   data: () => ({
     drawer: false,
     mdiSettings,
@@ -51,3 +58,9 @@ export default {
   }),
 }
 </script>
+
+<style>
+.toasted-container .toasted {
+  font-family: 'Roboto', sans-serif;
+}
+</style>

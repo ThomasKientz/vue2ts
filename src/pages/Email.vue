@@ -26,7 +26,8 @@ export default {
     save() {
       const randomId = Math.floor(Math.random() * Math.floor(1000))
       verifyEmail({ email: this.email, id: randomId })
-        .then(() => {
+        .then(res => {
+          if (res.data && res.data.code) console.log('code :', res.data.code)
           this.$router.push({
             path: 'code',
             query: { id: randomId, email: this.email },

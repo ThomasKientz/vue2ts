@@ -1,8 +1,9 @@
 import Vue from 'vue'
+import jwt from 'jsonwebtoken'
+import Vuex from 'vuex'
+
 // import storage from '@/utils/storage'
-
 // const storage = require('@/utils/storage')
-
 const storage = {
   get(val) {
     return window.localStorage.getItem(val)
@@ -12,15 +13,29 @@ const storage = {
   },
 }
 
-const store = {
-  token: storage.get('token'),
-  set: (key, value) => storage.set(key, value),
-}
+Vue.use(Vuex)
 
-Vue.use({
-  install(Vue) {
-    Vue.prototype.$store = store
+export default new Vuex.Store({
+  state() {
+    return {
+      token: storage.get('token'),
+    }
+  },
+  getters: {
+    email: state => {
+      const { email } = jwt.decode(state.token)
+      return email
+    },
+  },
+  mutations: {
+    setToken: (state, token) => {
+      state.token = token
+    },
+  },
+  actions: {
+    saveToken({ commit }, token) {
+      storage.set('token', token)
+      commit('setToken', token)
+    },
   },
 })
-
-export default store
