@@ -1,7 +1,7 @@
 'use strict'
 /* global __static */
 
-import { app, protocol, Tray, BrowserWindow } from 'electron'
+import { app, protocol, Tray, BrowserWindow, ipcMain } from 'electron'
 import {
   createProtocol,
   // installVueDevtools
@@ -13,6 +13,11 @@ import Positioner from 'electron-positioner'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 let win, positioner, tray, windowPosition, cachedBounds
+
+ipcMain.on('close', () => {
+  console.log('CLOSE')
+  hideWindow()
+})
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -103,15 +108,13 @@ const createWindow = async () => {
 
   positioner = new Positioner(win)
 
-  // win.on('blur', () => {
-  //   if (!win) {
-  //     return
-  //   }
+  win.on('blur', () => {
+    if (!win) {
+      return
+    }
 
-  //   // if (!win.isAlwaysOnTop()) {
-  //   //   hideWindow()
-  //   // }
-  // })
+    hideWindow()
+  })
 
   win.on('closed', () => {
     win = null
@@ -193,7 +196,7 @@ const showWindow = async trayPos => {
   win.show()
 }
 
-const hideWindow = trayPos => {
+const hideWindow = () => {
   if (!win || !win.isVisible()) {
     return
   }

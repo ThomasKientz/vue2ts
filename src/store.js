@@ -2,16 +2,16 @@ import Vue from 'vue'
 import jwt from 'jsonwebtoken'
 import Vuex from 'vuex'
 
-// import storage from '@/utils/storage'
+import storage from '@/utils/storage'
 // const storage = require('@/utils/storage')
-const storage = {
-  get(val) {
-    return window.localStorage.getItem(val)
-  },
-  set(key, val) {
-    return window.localStorage.setItem(key, val)
-  },
-}
+// const storage = {
+//   get(val) {
+//     return window.localStorage.getItem(val)
+//   },
+//   set(key, val) {
+//     return window.localStorage.setItem(key, val)
+//   },
+// }
 
 Vue.use(Vuex)
 

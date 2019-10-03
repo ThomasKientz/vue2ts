@@ -36,7 +36,7 @@ export default new Router({
       component: () => import('./pages/Send.vue'),
       beforeEnter: (to, from, next) => {
         if (store.state.token) next()
-        else next('/email')
+        else next()
       },
     },
     { path: '*', redirect: '/send' },

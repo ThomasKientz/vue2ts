@@ -23,7 +23,7 @@
     </v-navigation-drawer>
     <v-app-bar dense color="primary" dark app>
       <v-app-bar-nav-icon
-        v-show="!$route.meta.hideMenu"
+        v-if="!$route.meta.hideMenu"
         @click.stop="drawer = !drawer"
       >
         <v-icon>{{ mdiMenu }}</v-icon>

@@ -9,4 +9,12 @@ module.exports = {
       },
     },
   },
+  chainWebpack: config => {
+    config.module
+      .rule('webpack-conditional-loader')
+      .test(/\.js$/)
+      .use('webpack-conditional-loader')
+      .loader('webpack-conditional-loader')
+      .end()
+  },
 }
