@@ -1,11 +1,15 @@
 <template>
   <v-container class="fill-height flex-column">
-    <div style="min-width: 100% !important;" class="flex-grow-1">
+    <!-- flex: 1 1 0; fix for safari -->
+    <div style="min-width: 100% !important; flex: 1 1 0;">
       <div style="height: 100%;" @dragover.prevent @drop.prevent="dropHandler">
         <textarea
+          ref="textarea"
           :disabled="loading"
           @dblclick="paste()"
           v-model="message"
+          autofocus
+          @focus="onFocus"
           placeholder="Write something..."
         ></textarea>
       </div>
@@ -121,18 +125,28 @@ const processFiles = async files => {
 }
 
 export default {
-  data() {
-    return {
-      mdiSend,
-      mdiPaperclip,
-      mdiClose,
-      mdiCloseCircle,
-      mdiPlus,
-      message: null,
-      loading: false,
-      showFiles: false,
-      files: [],
-    }
+  data: () => ({
+    mdiSend,
+    mdiPaperclip,
+    mdiClose,
+    mdiCloseCircle,
+    mdiPlus,
+    message: null,
+    loading: false,
+    showFiles: false,
+    files: [],
+  }),
+
+  mounted() {
+    console.log(this.$refs.textarea)
+    setTimeout(() => {
+      this.$refs.textarea.focus()
+      console.log('focus force')
+    }, 500)
+
+    console.log('document.activeElement', document.activeElement)
+
+    // this.onFocus()
   },
 
   methods: {
@@ -174,6 +188,19 @@ export default {
     },
     paste() {
       console.log('paste')
+    },
+    onFocus(e) {
+      console.log('focus', e)
+      // if (!this.$refs.input) return
+
+      // if (document.activeElement !== this.$refs.input) {
+      //   return this.$refs.input.focus()
+      // }
+
+      // if (!this.isFocused) {
+      //   this.isFocused = true
+      //   e && this.$emit('focus', e)
+      // }
     },
   },
 }

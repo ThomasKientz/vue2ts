@@ -3,12 +3,7 @@
     <Toast />
     <v-navigation-drawer v-model="drawer" width="200" app>
       <v-list dense>
-        <v-list-item
-          @click="
-            dialog = true
-            drawer = false
-          "
-        >
+        <v-list-item @click="show('settings')">
           <v-list-item-action>
             <v-icon>{{ mdiSettings }}</v-icon>
           </v-list-item-action>
@@ -16,14 +11,14 @@
             <v-list-item-title>Settings</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <!-- <v-list-item @click="">
+        <v-list-item @click="show('feedback')">
           <v-list-item-action>
-            <v-icon>mdi-contact-mail</v-icon>
+            <v-icon>{{ mdiHeart }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Contact</v-list-item-title>
+            <v-list-item-title>Feedback</v-list-item-title>
           </v-list-item-content>
-        </v-list-item> -->
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar dense color="primary" dark app>
@@ -47,15 +42,17 @@
 
     <v-content>
       <router-view />
-      <settings v-model="dialog" />
+      <settings v-model="showSettings" />
+      <feedback v-model="showFeedback" />
     </v-content>
   </v-app>
 </template>
 
 <script>
-import { mdiMenu, mdiSettings, mdiArrowLeft } from '@mdi/js'
+import { mdiMenu, mdiSettings, mdiArrowLeft, mdiHeart } from '@mdi/js'
 import Toast from '@/components/toast'
 import Settings from '@/pages/Settings'
+import Feedback from '@/pages/Feedback'
 
 export default {
   name: 'App',
@@ -63,15 +60,27 @@ export default {
   components: {
     Toast,
     Settings,
+    Feedback,
   },
 
   data: () => ({
     drawer: false,
     mdiSettings,
     mdiArrowLeft,
+    mdiHeart,
     mdiMenu,
-    dialog: false,
+    showSettings: false,
+    showFeedback: false,
   }),
+  methods: {
+    show(view) {
+      if (view == 'settings') {
+        this.showSettings = true
+      } else this.showFeedback = true
+
+      this.drawer = false
+    },
+  },
 }
 </script>
 

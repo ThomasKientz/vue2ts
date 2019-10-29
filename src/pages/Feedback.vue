@@ -11,49 +11,31 @@
         <v-btn icon dark @click="dialog = false">
           <v-icon>{{ mdiClose }}</v-icon>
         </v-btn>
-        <v-toolbar-title>Settings</v-toolbar-title>
+        <v-toolbar-title>Feedback</v-toolbar-title>
       </v-toolbar>
-      <v-card-text class="pa-0">
-        <v-container fluid>
-          <v-text-field
-            v-for="(email, index) of emails"
-            :key="'email-' + index"
-            :value="email"
-            disabled
-            readonly
-            :label="'email address' + (emails.length > 1 ? ' ' + index : '')"
-          >
-            <template v-slot:append>
-              <v-icon @click="remove(index)" color="red">{{
-                mdiCloseCircle
-              }}</v-icon>
-            </template>
-          </v-text-field>
-          <v-btn
-            v-if="!$store.state.token2"
-            block
-            outlined
-            color="success"
-            @click="
-              dialog = false
-              $router.push('/email')
-            "
-          >
-            <v-icon left>{{ mdiPlus }}</v-icon>
-            Add second email
-          </v-btn>
-          <div class="subtitle-2 mt-3">Email subject</div>
-          <v-radio-group v-model="subjectMode">
-            <v-radio label="Preview" value="preview" />
-            <v-radio label="Custom" value="custom" />
-          </v-radio-group>
-          <v-text-field
-            autofocus
-            v-if="subjectMode == 'custom'"
-            v-model="subjectText"
-            label="subject"
-          />
-          <v-text-field v-model="fromText" label="From" />
+      <v-card-text style="height: 100%;" class="pa-0">
+        <v-container style="height: 100%;" class="fill-height flex-column">
+          <div style="min-width: 100% !important; flex: 1 1 0;">
+            <div style="height: 100%;">
+              <textarea
+                :disabled="loading"
+                v-model="message"
+                placeholder="Write something..."
+              ></textarea>
+            </div>
+          </div>
+          <div style="width: 100%;">
+            <v-row dense>
+              <v-col cols="12" :sm="12">
+                <v-btn :loading="loading" @click="send(1)" color="success" block
+                  >Send
+                  <v-icon v-show="!$store.state.token2" right>{{
+                    mdiSend
+                  }}</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </div>
         </v-container>
       </v-card-text>
     </v-card>
@@ -61,7 +43,7 @@
 </template>
 
 <script>
-import { mdiCloseCircle, mdiPlus, mdiSwapVertical, mdiClose } from '@mdi/js'
+import { mdiSend, mdiClose } from '@mdi/js'
 
 export default {
   props: {
@@ -71,11 +53,10 @@ export default {
   },
 
   data: () => ({
-    mdiCloseCircle,
-    mdiPlus,
-    mdiSwapVertical,
+    mdiSend,
     mdiClose,
-    subject: 'preview',
+    message: null,
+    loading: false,
   }),
 
   computed: {
@@ -131,3 +112,14 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+textarea {
+  resize: none;
+  width: 100%;
+  height: 100%;
+  &:focus {
+    outline: none !important;
+  }
+}
+</style>
