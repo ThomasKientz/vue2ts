@@ -32,32 +32,29 @@
       </v-btn>
     </v-layout>
     <div style="width: 100%;">
-      <v-layout dflex>
-        <v-flex>
+      <v-row dense>
+        <v-col cols="12" :sm="$store.state.token2 ? 6 : 12">
           <v-btn
-            :loading="loading"
-            :disabled="loading"
-            @click="send()"
+            :loading="loading == 1"
+            :disabled="loading == 2"
+            @click="send(1)"
             color="success"
             block
-          >
-            <!-- Send
-            <v-icon right>{{ mdiSend }}</v-icon> -->
-            thomas@kientz.fr
+            >{{ $store.state.token2 ? $store.getters.getEmail(1) : 'Send' }}
+            <v-icon v-show="!$store.state.token2" right>{{ mdiSend }}</v-icon>
           </v-btn>
-        </v-flex>
-        <v-flex class="ml-1">
+        </v-col>
+        <v-col v-if="$store.state.token2" cols="12" sm="6">
           <v-btn
-            :loading="loading"
-            :disabled="loading"
-            @click="send()"
+            :loading="loading == 2"
+            :disabled="loading == 1"
+            @click="send(2)"
             color="success"
             block
-          >
-            thomas@kientz.fr
+            >{{ $store.getters.getEmail(2) }}
           </v-btn>
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
     </div>
     <v-bottom-sheet v-model="showFiles">
       <v-list class="list pa-0" subheader dense>
@@ -149,17 +146,18 @@ export default {
       const files = e.dataTransfer.files
       this.files.push(...(await processFiles(files)))
     },
-    send() {
-      if (!this.message) return
+    send(id) {
+      if (!this.message || this.loading) return
 
-      this.loading = true
+      this.loading = id
       send({
-        token: this.$store.state.token,
+        token: this.$store.state['token' + id],
         message: this.message,
         attachments: this.files,
       })
         .then(() => {
           this.message = null
+          this.files = []
           this.$toast.success('Boomerang sent !')
           setTimeout(() => {
             closeApp()

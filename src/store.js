@@ -1,41 +1,54 @@
 import Vue from 'vue'
 import jwt from 'jsonwebtoken'
 import Vuex from 'vuex'
-
-import storage from '@/utils/storage'
-// const storage = require('@/utils/storage')
-// const storage = {
-//   get(val) {
-//     return window.localStorage.getItem(val)
-//   },
-//   set(key, val) {
-//     return window.localStorage.setItem(key, val)
-//   },
-// }
+import VuexPersist from '@/utils/storage'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  plugins: [VuexPersist.plugin],
+
   state() {
     return {
-      token: storage.get('token'),
+      token1: null,
+      token2: null,
+      subjectMode: null,
+      subjectText: null,
+      fromText: null,
     }
   },
   getters: {
-    email: state => {
-      const { email } = jwt.decode(state.token)
+    getEmail: state => id => {
+      const { email } = jwt.decode(state['token' + id])
       return email
     },
   },
   mutations: {
-    setToken: (state, token) => {
-      state.token = token
+    setToken: (state, { token, id }) => {
+      state['token' + id] = token
+    },
+    setSubjectMode: (state, v) => {
+      state.subjectMode = v
+    },
+    setSubjectText: (state, v) => {
+      state.subjectText = v
+    },
+    setFromText: (state, v) => {
+      state.fromText = v
     },
   },
   actions: {
-    saveToken({ commit }, token) {
-      storage.set('token', token)
-      commit('setToken', token)
+    saveToken({ commit, state }, token) {
+      const id = state.token1 ? 2 : 1
+      commit('setToken', { token, id })
+    },
+    removeToken({ commit, state }, id) {
+      if (id == 1 && state.token2) {
+        commit('setToken', { id: 1, token: state.token2 })
+        commit('setToken', { id: 2, token: null })
+      } else {
+        commit('setToken', { token: null, id })
+      }
     },
   },
 })

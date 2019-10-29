@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-window touchless v-model="activeStep">
       <v-window-item :key="1">
         <v-form ref="formEmail">
