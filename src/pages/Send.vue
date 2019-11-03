@@ -8,8 +8,6 @@
           :disabled="loading"
           @dblclick="paste()"
           v-model="message"
-          autofocus
-          @focus="onFocus"
           placeholder="Write something..."
         ></textarea>
       </div>
@@ -37,7 +35,7 @@
     </v-layout>
     <div style="width: 100%;">
       <v-row dense>
-        <v-col cols="12" :sm="$store.state.token2 ? 6 : 12">
+        <v-col>
           <v-btn
             :loading="loading == 1"
             :disabled="loading == 2"
@@ -48,7 +46,7 @@
             <v-icon v-show="!$store.state.token2" right>{{ mdiSend }}</v-icon>
           </v-btn>
         </v-col>
-        <v-col v-if="$store.state.token2" cols="12" sm="6">
+        <v-col v-if="$store.state.token2">
           <v-btn
             :loading="loading == 2"
             :disabled="loading == 1"
@@ -138,15 +136,9 @@ export default {
   }),
 
   mounted() {
-    console.log(this.$refs.textarea)
     setTimeout(() => {
       this.$refs.textarea.focus()
-      console.log('focus force')
     }, 500)
-
-    console.log('document.activeElement', document.activeElement)
-
-    // this.onFocus()
   },
 
   methods: {
@@ -188,19 +180,6 @@ export default {
     },
     paste() {
       console.log('paste')
-    },
-    onFocus(e) {
-      console.log('focus', e)
-      // if (!this.$refs.input) return
-
-      // if (document.activeElement !== this.$refs.input) {
-      //   return this.$refs.input.focus()
-      // }
-
-      // if (!this.isFocused) {
-      //   this.isFocused = true
-      //   e && this.$emit('focus', e)
-      // }
     },
   },
 }

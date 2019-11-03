@@ -45,16 +45,18 @@
       <settings v-model="showSettings" />
       <feedback v-model="showFeedback" />
     </v-content>
+    <rate-dialog v-model="showRate" />
   </v-app>
 </template>
 
 <script>
 import { mdiMenu, mdiSettings, mdiArrowLeft, mdiHeart } from '@mdi/js'
 import Toast from '@/components/toast'
+import RateDialog from '@/components/rateDialog'
 import Settings from '@/pages/Settings'
 import Feedback from '@/pages/Feedback'
-import { Plugins, StatusBarStyle } from '@capacitor/core'
-const { SplashScreen, StatusBar } = Plugins
+import { Plugins } from '@capacitor/core'
+const { SplashScreen } = Plugins
 
 export default {
   name: 'App',
@@ -63,15 +65,17 @@ export default {
     Toast,
     Settings,
     Feedback,
-  },
-
-  created() {
-    document.defaultView
+    RateDialog,
   },
 
   mounted() {
-    StatusBar.setStyle({ style: StatusBarStyle.Dark })
     SplashScreen.hide()
+
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+
+    mq.addEventListener('change', e => {
+      this.$vuetify.theme.dark = e.matches
+    })
   },
 
   data: () => ({
@@ -82,6 +86,7 @@ export default {
     mdiMenu,
     showSettings: false,
     showFeedback: false,
+    showRate: true,
   }),
 
   methods: {
