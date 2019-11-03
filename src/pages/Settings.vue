@@ -131,3 +131,10 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+::v-deep header {
+  height: calc(48px + var(--ion-safe-area-top)) !important;
+  padding-top: var(--ion-safe-area-top);
+}
+</style>

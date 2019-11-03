@@ -53,6 +53,8 @@ import { mdiMenu, mdiSettings, mdiArrowLeft, mdiHeart } from '@mdi/js'
 import Toast from '@/components/toast'
 import Settings from '@/pages/Settings'
 import Feedback from '@/pages/Feedback'
+import { Plugins, StatusBarStyle } from '@capacitor/core'
+const { SplashScreen, StatusBar } = Plugins
 
 export default {
   name: 'App',
@@ -61,6 +63,15 @@ export default {
     Toast,
     Settings,
     Feedback,
+  },
+
+  created() {
+    document.defaultView
+  },
+
+  mounted() {
+    StatusBar.setStyle({ style: StatusBarStyle.Dark })
+    SplashScreen.hide()
   },
 
   data: () => ({
@@ -72,6 +83,7 @@ export default {
     showSettings: false,
     showFeedback: false,
   }),
+
   methods: {
     show(view) {
       if (view == 'settings') {
@@ -84,8 +96,27 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+body {
+  touch-action: manipulation;
+}
+
 .toasted-container .toasted {
   font-family: 'Roboto', sans-serif;
+}
+
+.v-content {
+  flex: 1 0 0px !important;
+  padding: 0px !important;
+}
+
+.v-app-bar.v-app-bar--fixed {
+  position: static !important;
+  flex: 0 0 calc(48px + var(--ion-safe-area-top)) !important;
+  padding-top: var(--ion-safe-area-top);
+}
+
+.v-navigation-drawer {
+  padding-top: var(--ion-safe-area-top);
 }
 </style>
