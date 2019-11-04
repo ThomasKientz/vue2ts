@@ -7,10 +7,11 @@
             :disabled="loading"
             validate-on-blur
             v-model.trim="email"
-            type="text"
+            type="email"
             label="email"
             :rules="emailRules"
             placeholder="john@doe.com"
+            autofocus
           />
         </v-form>
       </v-window-item>
@@ -24,10 +25,12 @@
           <v-text-field
             validate-on-blur
             type="text"
+            pattern="[0-9]*"
             v-model="code"
             :disabled="loading"
             :rules="codeRules"
             label="Verification code"
+            autofocus
           />
         </v-form>
       </v-window-item>
@@ -117,6 +120,7 @@ export default {
               this.$toast.error()
             }
           }
+          this.loading = false
         })
     },
     send() {

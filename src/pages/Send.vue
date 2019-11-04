@@ -6,7 +6,6 @@
         <textarea
           ref="textarea"
           :disabled="loading"
-          @dblclick="paste()"
           v-model="message"
           placeholder="Write something..."
         ></textarea>
@@ -93,6 +92,9 @@ import {
 } from '@mdi/js'
 import { send } from '@/utils/api'
 import { closeApp } from '@/utils'
+import { Plugins } from '@capacitor/core'
+
+const { App } = Plugins
 
 const getDataUrl = file => {
   return new Promise((resolve, reject) => {
@@ -141,6 +143,12 @@ export default {
     }, 500)
   },
 
+  created() {
+    App.addListener('appStateChange', state => {
+      state.isActive && this.$refs.textarea.focus()
+    })
+  },
+
   methods: {
     async onInput(e) {
       const files = e.target.files
@@ -177,9 +185,6 @@ export default {
           closeApp()
         })
         .finally(() => (this.loading = false))
-    },
-    paste() {
-      console.log('paste')
     },
   },
 }

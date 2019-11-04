@@ -86,7 +86,7 @@ export default {
     mdiMenu,
     showSettings: false,
     showFeedback: false,
-    showRate: true,
+    showRate: false,
   }),
 
   methods: {
@@ -122,6 +122,10 @@ body {
 }
 
 .v-navigation-drawer {
+  padding-top: var(--ion-safe-area-top);
+}
+
+.v-snack--top {
   padding-top: var(--ion-safe-area-top);
 }
 </style>
