@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import jwt from 'jsonwebtoken'
 import Vuex from 'vuex'
-import VuexPersist from '@/utils/storage'
+import { VuexPersist } from '@/utils/storage'
 
 Vue.use(Vuex)
 
