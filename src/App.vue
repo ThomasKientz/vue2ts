@@ -56,7 +56,7 @@ import RateDialog from '@/components/rateDialog'
 import Settings from '@/pages/Settings'
 import Feedback from '@/pages/Feedback'
 import { Plugins } from '@capacitor/core'
-const { SplashScreen } = Plugins
+const { SplashScreen, App } = Plugins
 
 export default {
   name: 'App',
@@ -76,6 +76,10 @@ export default {
     mq.addEventListener('change', e => {
       this.$vuetify.theme.dark = e.matches
     })
+
+    // App.addListener('appStateChange', state => {
+    //   this.$vuetify.theme.dark = state.isActive && mq.matches
+    // })
   },
 
   data: () => ({
