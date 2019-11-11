@@ -161,13 +161,13 @@ export default {
       this.files.push(...(await processFiles(files)))
     },
     send(id) {
-      if (!this.message || this.loading) return
+      if (!(this.message || this.files.length) || this.loading) return
 
       this.loading = id
       send({
         token: this.$store.state['token' + id],
-        message: this.message,
-        attachments: this.files,
+        ...(this.message && { message: this.message }),
+        ...(this.files.length && { attachments: this.files }),
       })
         .then(() => {
           this.message = null

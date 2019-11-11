@@ -24,8 +24,6 @@ const getStorage = () => {
       storage: {
         getItem: key =>
           CapStorage.get({ key }).then(res => {
-            console.log('GET key :', key)
-            console.log('val :', res)
             return res.value && JSON.parse(res.value)
           }),
         setItem: (key, value) =>

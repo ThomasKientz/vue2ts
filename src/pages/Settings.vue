@@ -62,6 +62,11 @@
 
 <script>
 import { mdiCloseCircle, mdiPlus, mdiSwapVertical, mdiClose } from '@mdi/js'
+import {
+  FROM_TEXT_DEFAULT,
+  SUBJECT_MODE_DEFAULT,
+  SUBJECT_TEXT_DEFAULT,
+} from '@/utils/defaults'
 
 export default {
   props: {
@@ -96,7 +101,7 @@ export default {
     },
     subjectMode: {
       get() {
-        return this.$store.state.subjectMode || 'preview'
+        return this.$store.state.subjectMode || SUBJECT_MODE_DEFAULT
       },
       set(v) {
         return this.$store.commit('setSubjectMode', v)
@@ -104,7 +109,7 @@ export default {
     },
     subjectText: {
       get() {
-        return this.$store.state.subjectText || 'New Boomerang'
+        return this.$store.state.subjectText || SUBJECT_TEXT_DEFAULT
       },
       set(v) {
         return this.$store.commit('setSubjectText', v)
@@ -112,7 +117,7 @@ export default {
     },
     fromText: {
       get() {
-        return this.$store.state.fromText || 'Me'
+        return this.$store.state.fromText || FROM_TEXT_DEFAULT
       },
       set(v) {
         return this.$store.commit('setFromText', v)

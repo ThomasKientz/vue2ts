@@ -1,6 +1,7 @@
 import axios from 'axios'
-
 import { toast } from './toast'
+import store from '@/store'
+import { SUBJECT_TEXT_DEFAULT, FROM_TEXT_DEFAULT } from '@/utils/defaults'
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -25,10 +26,17 @@ api.interceptors.response.use(
 )
 
 export const send = ({ token, message, attachments }) => {
+  const subject =
+    store.state.subjectMode === 'custom'
+      ? store.state.subjectText || SUBJECT_TEXT_DEFAULT
+      : message.substring(0, 78).replace('\n', ' ')
+
   return api.post('/send', {
     token,
     message,
     attachments,
+    fromText: store.state.fromText || FROM_TEXT_DEFAULT,
+    subject,
   })
 }
 
