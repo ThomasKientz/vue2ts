@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-window touchless v-model="activeStep">
       <v-window-item :key="1">
-        <div class="text-center subtitle-1 my-2">
+        <div class="text-center subtitle-1">
           What is your email address ?
         </div>
         <v-form ref="formEmail">
@@ -20,11 +20,11 @@
       </v-window-item>
 
       <v-window-item :key="2">
-        <div class="subtitle-1 text-center my-2" style="line-height: 1.5;">
+        <div class="subtitle-1 text-center" style="line-height: 1.5;">
           We have sent a verification email to :
           <strong>{{ email }}</strong>
         </div>
-        <p class="body-2 text-center my-2">
+        <p class="body-2 mt-2 text-center">
           Check your spams and whitelist the incoming address.
         </p>
         <v-form ref="formCode">
@@ -86,7 +86,7 @@ export default {
       mdiArrowRight,
       mdiArrowLeft,
       loading: false,
-      activeStep: 1,
+      activeStep: 0,
       emailRules: [
         requiredRule,
         v => emailFormat.test(v) || 'Invalid email address',
