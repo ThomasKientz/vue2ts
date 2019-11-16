@@ -21,7 +21,7 @@
             :value="email"
             disabled
             readonly
-            :label="'email address' + (emails.length > 1 ? ' ' + index : '')"
+            :label="'email address' + (index > 0 ? ' ' + (index + 1) : '')"
           >
             <template v-slot:append>
               <v-icon @click="remove(index)" color="red">{{
@@ -51,9 +51,13 @@
             autofocus
             v-if="subjectMode == 'custom'"
             v-model="subjectText"
-            label="subject"
+            label="Custom subject"
           />
-          <v-text-field v-model="fromText" label="From" />
+          <v-text-field
+            :value="fromText"
+            label="From field"
+            @change="fromText = $event"
+          />
         </v-container>
       </v-card-text>
     </v-card>

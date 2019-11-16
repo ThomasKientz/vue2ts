@@ -29,7 +29,14 @@ export const send = ({ token, message, attachments }) => {
   const subject =
     store.state.subjectMode === 'custom'
       ? store.state.subjectText || SUBJECT_TEXT_DEFAULT
-      : message.substring(0, 78).replace('\n', ' ')
+      : message
+      ? message.substring(0, 78).replace('\n', ' ')
+      : attachments && attachments.length
+      ? attachments
+          .map(e => e.name)
+          .join(', ')
+          .substring(0, 78)
+      : SUBJECT_TEXT_DEFAULT
 
   return api.post('/send', {
     token,

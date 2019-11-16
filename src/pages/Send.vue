@@ -34,7 +34,7 @@
     </v-layout>
     <div style="width: 100%;">
       <v-row dense>
-        <v-col>
+        <v-col :cols="$store.state.token2 ? 6 : 12">
           <v-btn
             :loading="loading == 1"
             :disabled="loading == 2"
@@ -45,7 +45,7 @@
             <v-icon v-show="!$store.state.token2" right>{{ mdiSend }}</v-icon>
           </v-btn>
         </v-col>
-        <v-col v-if="$store.state.token2">
+        <v-col cols="6" v-if="$store.state.token2">
           <v-btn
             :loading="loading == 2"
             :disabled="loading == 1"
@@ -203,5 +203,12 @@ textarea {
 .list {
   max-height: 200px;
   overflow: auto;
+}
+
+::v-deep .v-btn__content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: block;
 }
 </style>

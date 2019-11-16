@@ -2,6 +2,9 @@
   <v-container fluid>
     <v-window touchless v-model="activeStep">
       <v-window-item :key="1">
+        <div class="text-center subtitle-1 my-2">
+          What is your email address ?
+        </div>
         <v-form ref="formEmail">
           <v-text-field
             :disabled="loading"
@@ -17,10 +20,13 @@
       </v-window-item>
 
       <v-window-item :key="2">
-        <div class="subtitle-1 text-center my-2">
-          Please type in the verification code sent to :
+        <div class="subtitle-1 text-center my-2" style="line-height: 1.5;">
+          We have sent a verification email to :
           <strong>{{ email }}</strong>
         </div>
+        <p class="body-2 text-center my-2">
+          Check your spams and whitelist the incoming address.
+        </p>
         <v-form ref="formCode">
           <v-text-field
             validate-on-blur
@@ -29,7 +35,7 @@
             v-model="code"
             :disabled="loading"
             :rules="codeRules"
-            label="Verification code"
+            label="Code"
             autofocus
           />
         </v-form>
@@ -49,7 +55,7 @@
     <v-btn
       v-if="activeStep > 0"
       :disabled="loading"
-      @click="activeStep--"
+      @click="goBack()"
       class="mt-2"
       block
       text
@@ -80,7 +86,7 @@ export default {
       mdiArrowRight,
       mdiArrowLeft,
       loading: false,
-      activeStep: 0,
+      activeStep: 1,
       emailRules: [
         requiredRule,
         v => emailFormat.test(v) || 'Invalid email address',
@@ -144,6 +150,10 @@ export default {
         .finally(() => {
           this.loading = false
         })
+    },
+    goBack() {
+      this.activeStep--
+      this.$refs.formCode.reset()
     },
   },
 }

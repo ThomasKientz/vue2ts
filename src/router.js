@@ -11,7 +11,7 @@ const router = new Router({
       name: 'email',
       component: () => import('./pages/Email.vue'),
       meta: {
-        name: 'Register an email address',
+        name: 'Email',
         menuButton: false,
         backButton: true,
       },
