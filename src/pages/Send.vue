@@ -14,26 +14,26 @@
     <v-layout
       style="flex-grow: 0 !important; flex-shrink: 0 !important; width: 100%; height: auto;"
       align-center
-      class="d-flex mb-3"
+      class="d-flex mb-2"
     >
       <v-spacer></v-spacer>
-      <span v-show="files.length"
-        >{{ files.length }} file{{ files.length && 's' }}</span
-      >
-      <v-btn
-        style="flex-grow: 0 !important; flex-shrink: 0 !important;"
-        class="mr-0 ml-2 elevation-2"
-        color="grey"
-        fab
-        small
-        dark
-        @click="showFiles = true"
-      >
-        <v-icon>{{ mdiPaperclip }}</v-icon>
-      </v-btn>
+      <v-badge color="amber" :value="files.length">
+        <template v-slot:badge>{{ files.length }}</template>
+        <v-btn
+          style="flex-grow: 0 !important; flex-shrink: 0 !important;"
+          class="mr-0 ml-2 elevation-2"
+          color="grey"
+          fab
+          small
+          dark
+          @click="onFilesButton()"
+        >
+          <v-icon>{{ mdiPaperclip }}</v-icon>
+        </v-btn>
+      </v-badge>
     </v-layout>
     <div style="width: 100%;">
-      <v-row dense>
+      <v-row :no-gutters="!$store.state.token2" dense>
         <v-col :cols="$store.state.token2 ? 6 : 12">
           <v-btn
             :loading="loading == 1"
@@ -43,6 +43,9 @@
             block
             >{{ $store.state.token2 ? $store.getters.getEmail(1) : 'Send' }}
             <v-icon v-show="!$store.state.token2" right>{{ mdiSend }}</v-icon>
+            <template v-if="files.length" v-slot:loader>
+              <v-progress-circular size="30" rotate="270" :value="progress" />
+            </template>
           </v-btn>
         </v-col>
         <v-col cols="6" v-if="$store.state.token2">
@@ -53,6 +56,9 @@
             color="success"
             block
             >{{ $store.getters.getEmail(2) }}
+            <template v-if="files.length" v-slot:loader>
+              <v-progress-circular size="30" rotate="270" :value="progress" />
+            </template>
           </v-btn>
         </v-col>
       </v-row>
@@ -60,7 +66,7 @@
     <v-bottom-sheet v-model="showFiles">
       <v-list class="list pa-0" subheader dense>
         <template v-for="(file, n) in files">
-          <v-list-item :key="'list-item-' + n" @click="showFiles = false">
+          <v-list-item :key="'list-item-' + n">
             <v-list-item-title>{{ file.name }}</v-list-item-title>
             <v-list-item-action>
               <v-icon @click.stop.prevent="files.splice(n, 1)" color="red">{{
@@ -135,17 +141,18 @@ export default {
     loading: false,
     showFiles: false,
     files: [],
+    progress: 0,
   }),
 
   mounted() {
     setTimeout(() => {
       this.$refs.textarea.focus()
-    }, 500)
+    }, 300)
   },
 
   created() {
     App.addListener('appStateChange', state => {
-      state.isActive && this.$refs.textarea.focus()
+      state.isActive && this.$refs.textarea && this.$refs.textarea.focus()
     })
   },
 
@@ -160,6 +167,13 @@ export default {
       const files = e.dataTransfer.files
       this.files.push(...(await processFiles(files)))
     },
+    onFilesButton() {
+      if (this.files.length === 0) {
+        this.$refs.input.click()
+      } else {
+        this.showFiles = true
+      }
+    },
     send(id) {
       if (!(this.message || this.files.length) || this.loading) return
 
@@ -167,7 +181,10 @@ export default {
       send({
         token: this.$store.state['token' + id],
         ...(this.message && { message: this.message }),
-        ...(this.files.length && { attachments: this.files }),
+        ...(this.files.length && {
+          attachments: this.files,
+          progress: percentage => (this.progress = percentage),
+        }),
       })
         .then(() => {
           this.message = null
@@ -181,10 +198,14 @@ export default {
           if (error.code) {
             console.error('unknown error code :', error.code)
             this.$toast.error()
+          } else {
+            // error already handled in interceptor
           }
-          closeApp()
         })
-        .finally(() => (this.loading = false))
+        .finally(() => {
+          this.loading = false
+          this.progress = 0
+        })
     },
   },
 }
@@ -210,5 +231,10 @@ textarea {
   text-overflow: ellipsis;
   width: 100%;
   display: block;
+}
+
+::v-deep .v-badge__badge {
+  right: -8px;
+  top: -8px;
 }
 </style>

@@ -48,7 +48,6 @@
             <v-radio label="Custom" value="custom" />
           </v-radio-group>
           <v-text-field
-            autofocus
             v-if="subjectMode == 'custom'"
             v-model="subjectText"
             label="Custom subject"

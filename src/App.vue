@@ -35,7 +35,7 @@
         <v-icon>{{ mdiArrowLeft }}</v-icon>
       </v-app-bar-nav-icon>
 
-      <v-toolbar-title class="subTitle">
+      <v-toolbar-title class="subTitle pl-2">
         <span>{{ $route.meta.name }}</span>
       </v-toolbar-title>
     </v-app-bar>
@@ -56,7 +56,7 @@ import RateDialog from '@/components/rateDialog'
 import Settings from '@/pages/Settings'
 import Feedback from '@/pages/Feedback'
 import { Plugins } from '@capacitor/core'
-const { SplashScreen, App } = Plugins
+const { SplashScreen, App, StatusBar } = Plugins
 
 export default {
   name: 'App',
@@ -70,16 +70,21 @@ export default {
 
   mounted() {
     SplashScreen.hide()
+    StatusBar.show()
 
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
 
-    mq.addEventListener('change', e => {
+    // Not compatible with iOS safari
+    // mq.addEventListener('change', e => {
+    //   this.$vuetify.theme.dark = e.matches
+    // })
+    mq.addListener(e => {
       this.$vuetify.theme.dark = e.matches
     })
 
-    // App.addListener('appStateChange', state => {
-    //   this.$vuetify.theme.dark = state.isActive && mq.matches
-    // })
+    App.addListener('appStateChange', state => {
+      this.$vuetify.theme.dark = state.isActive && mq.matches
+    })
   },
 
   data: () => ({
