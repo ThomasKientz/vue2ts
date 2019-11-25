@@ -55,7 +55,7 @@ import Toast from '@/components/toast'
 import RateDialog from '@/components/rateDialog'
 import Settings from '@/pages/Settings'
 import Feedback from '@/pages/Feedback'
-import { Plugins } from '@capacitor/core'
+import { Plugins, Capacitor } from '@capacitor/core'
 const { SplashScreen, App, StatusBar } = Plugins
 
 export default {
@@ -69,8 +69,10 @@ export default {
   },
 
   mounted() {
-    SplashScreen.hide()
-    StatusBar.show()
+    if (Capacitor.isNative) {
+      SplashScreen.hide()
+      StatusBar.show()
+    }
 
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
 

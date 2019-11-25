@@ -2,11 +2,16 @@ import Vue from 'vue'
 import jwt from 'jsonwebtoken'
 import Vuex from 'vuex'
 import { VuexPersist } from '@/utils/storage'
+import AppPrefPlugin from './appPrefPlugin'
+import { Capacitor } from '@capacitor/core'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  plugins: [VuexPersist.plugin],
+  plugins: [
+    VuexPersist.plugin,
+    ...((Capacitor.isNative && [AppPrefPlugin]) || []),
+  ],
 
   state() {
     return {
