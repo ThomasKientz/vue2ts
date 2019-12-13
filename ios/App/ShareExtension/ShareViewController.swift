@@ -6,25 +6,166 @@
 //
 
 import UIKit
-import Social
+import MobileCoreServices
 
-class ShareViewController: SLComposeServiceViewController {
+class ShareViewController: UIViewController {
 
-    override func isContentValid() -> Bool {
-        // Do validation of contentText and/or NSExtensionContext attachments here
-        return true
+    @IBOutlet private weak var loaderVisualEffectView: UIVisualEffectView! {
+        didSet {
+            loaderVisualEffectView.layer.cornerRadius = 10
+            loaderVisualEffectView.clipsToBounds = true
+        }
     }
-
-    override func didSelectPost() {
-        // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
     
-        // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
-        self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        guard let item = self.extensionContext?.inputItems.first as? NSExtensionItem,
+          let attachments = item.attachments
+          else {
+            return
+        }
+        
+        let background = DispatchQueue.global(qos: .background)
+        let group = DispatchGroup()
+        
+        var preparedAttachments = [Attachment]()
+        
+        attachments.forEach { (provider) in
+            
+            background.async(group: group) {
+                
+                provider.loadItem(forTypeIdentifier: provider.registeredTypeIdentifiers.first!, options: nil) { (encoded, error) in
+                    
+                    let dataa: Data?
+                    
+                    switch encoded {
+                    case let decodedData as Data:
+                        dataa = decodedData
+                    case let url as URL:
+                        dataa = try? Data(contentsOf: url)
+                    default:
+                        dataa = nil
+                        //There may be other cases...
+                        print("Unexpected data:", type(of: encoded))
+                    }
+                    
+                    let mimee = UTTypeCopyPreferredTagWithClass(provider.registeredTypeIdentifiers.first! as CFString, kUTTagClassMIMEType)?.takeRetainedValue() as String?
+                    guard let data = dataa, let mime = mimee else {
+                        return
+                    }
+                    
+                    print("Successfully retrieved data of UTI: \(provider.registeredTypeIdentifiers)")
+                    print("MIME is: \(mime)")
+                    
+                    preparedAttachments.append(
+                        Attachment(
+                            name: provider.suggestedName ?? "Data",
+                            type: mime,
+                            data: data
+                        )
+                    )
+                }
+                
+            }
+            
+        }
+        
+        group.notify(queue: background) { [weak self] in
+            self?.send(
+                message: "test",
+                subject: "test",
+                attachments: preparedAttachments
+            )
+        }
+    }
+    
+    func send(message: String, subject: String, attachments: [Attachment]) {
+        
+        /* Configure session, choose between:
+           * defaultSessionConfiguration
+           * ephemeralSessionConfiguration
+           * backgroundSessionConfigurationWithIdentifier:
+         And set session-wide properties, such as: HTTPAdditionalHeaders,
+         HTTPCookieAcceptPolicy, requestCachePolicy or timeoutIntervalForRequest.
+         */
+        let sessionConfig = URLSessionConfiguration.default
+
+        /* Create session, and optionally set a URLSessionDelegate. */
+        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+
+        /* Create the Request:
+           Send  (POST https://boomerang-app-api-dev.herokuapp.com/send)
+         */
+
+        guard let url = URL(string: "https://boomerang-app-api-dev.herokuapp.com/send") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+
+        // Headers
+
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        // JSON Body
+
+        let bodyObject: [String : Any] = [
+            "fromText": "Boomerang",
+            "message": message,
+            "subject": subject,
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZG9tYWluLmNvbSIsImlhdCI6MTU3NDY5ODE5NX0.KLAcendFFzP7OI7GlFCTu-LyV3ut9uZmBP0thBb2RZY",
+            "attachments": attachments.compactMap({ $0.dictionary })
+        ]
+        request.httpBody = try! JSONSerialization.data(withJSONObject: bodyObject, options: [])
+
+        /* Start a new Task */
+        let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if (error == nil) {
+                // Success
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                print("URL Session Task Succeeded: HTTP \(statusCode)")
+            }
+            else {
+                // Failure
+                print("URL Session Task Failed: %@", error!.localizedDescription);
+            }
+        })
+        task.resume()
+        session.finishTasksAndInvalidate()
     }
 
-    override func configurationItems() -> [Any]! {
-        // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
-        return []
-    }
+}
 
+
+
+/// Get URL's html value and remove what stands before and after the title tag
+func title(from url: URL) -> String? {
+    /*
+     Get the HTML from the URL, then proceed to isolate the title tag with ranges.
+     
+     `beginTitleRange`: Look for the `<title` tag, but ignore any character before the next `>` (end of tag).
+     That helps us ignore parameters that may be installed inside the HTML title tag.
+     */
+    guard var title = try? String(contentsOf: url),
+        let endTitleRange = title.range(of: "</title>"),
+        let beginTitleRange = title.range(of: "<title.+?(?<=\\>)", options: .regularExpression)
+        else { return nil }
+    
+    /*
+     The order by which we reduce the string is important
+     because starting by removing the first half will mess the range
+     of the second half.
+     */
+    title.removeSubrange(endTitleRange.lowerBound ..< title.endIndex)
+    title.removeSubrange(title.startIndex ..< beginTitleRange.upperBound)
+    
+    // Cleaning: Remove extra spaces that are sometimes in URLs
+    title = title.components(separatedBy: CharacterSet.whitespacesAndNewlines).filter {
+        !$0.isEmpty
+    }.joined(separator: " ")
+    
+    // Replace &quot; by ".
+    title = title.replacingOccurrences(of: "&quot;", with: "\"")
+    
+    return title
 }
