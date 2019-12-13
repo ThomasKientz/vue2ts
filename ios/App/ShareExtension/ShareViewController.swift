@@ -31,20 +31,31 @@ class ShareViewController: UIViewController {
         let group = DispatchGroup()
         
         var preparedAttachments = [Attachment]()
+        var message: String?
         
         attachments.forEach { (provider) in
             
             background.async(group: group) {
                 
+                group.enter()
                 provider.loadItem(forTypeIdentifier: provider.registeredTypeIdentifiers.first!, options: nil) { (encoded, error) in
+                    defer{ group.leave() }
                     
                     let dataa: Data?
                     
                     switch encoded {
                     case let decodedData as Data:
                         dataa = decodedData
-                    case let url as URL:
+                    case let url as URL where url.isFileURL:
                         dataa = try? Data(contentsOf: url)
+                    case let url as URL where !url.isFileURL:
+                        if let title = url.title {
+                            message = "\(title)\n\(url))"
+                        } else {
+                            message = url.absoluteString
+                        }
+                        
+                        return
                     default:
                         dataa = nil
                         //There may be other cases...
@@ -74,12 +85,14 @@ class ShareViewController: UIViewController {
         
         group.notify(queue: background) { [weak self] in
             self?.send(
-                message: "test",
+                message: message ?? "",
                 subject: "test",
                 attachments: preparedAttachments
             )
         }
     }
+    
+    
     
     func send(message: String, subject: String, attachments: [Attachment]) {
         
@@ -133,39 +146,5 @@ class ShareViewController: UIViewController {
         task.resume()
         session.finishTasksAndInvalidate()
     }
-
-}
-
-
-
-/// Get URL's html value and remove what stands before and after the title tag
-func title(from url: URL) -> String? {
-    /*
-     Get the HTML from the URL, then proceed to isolate the title tag with ranges.
-     
-     `beginTitleRange`: Look for the `<title` tag, but ignore any character before the next `>` (end of tag).
-     That helps us ignore parameters that may be installed inside the HTML title tag.
-     */
-    guard var title = try? String(contentsOf: url),
-        let endTitleRange = title.range(of: "</title>"),
-        let beginTitleRange = title.range(of: "<title.+?(?<=\\>)", options: .regularExpression)
-        else { return nil }
     
-    /*
-     The order by which we reduce the string is important
-     because starting by removing the first half will mess the range
-     of the second half.
-     */
-    title.removeSubrange(endTitleRange.lowerBound ..< title.endIndex)
-    title.removeSubrange(title.startIndex ..< beginTitleRange.upperBound)
-    
-    // Cleaning: Remove extra spaces that are sometimes in URLs
-    title = title.components(separatedBy: CharacterSet.whitespacesAndNewlines).filter {
-        !$0.isEmpty
-    }.joined(separator: " ")
-    
-    // Replace &quot; by ".
-    title = title.replacingOccurrences(of: "&quot;", with: "\"")
-    
-    return title
 }

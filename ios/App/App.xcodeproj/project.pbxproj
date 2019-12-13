@@ -13,6 +13,7 @@
 		41C905AB239A93FC009BFCFD /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 41C905A1239A93FC009BFCFD /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		41E3BEAD23A3EF2500C2F4AD /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E3BEAC23A3EF2500C2F4AD /* Attachment.swift */; };
 		41E3BEAF23A3F0AE00C2F4AD /* Encodable+Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E3BEAE23A3F0AE00C2F4AD /* Encodable+Dictionary.swift */; };
+		41E3BEB123A3FCD700C2F4AD /* URL+Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E3BEB023A3FCD700C2F4AD /* URL+Title.swift */; };
 		50379B232058CBB4000EE86E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
 		504EC3081FED79650016851F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
 		504EC30D1FED79650016851F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30B1FED79650016851F /* Main.storyboard */; };
@@ -54,6 +55,7 @@
 		41C905A8239A93FC009BFCFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		41E3BEAC23A3EF2500C2F4AD /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		41E3BEAE23A3F0AE00C2F4AD /* Encodable+Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Dictionary.swift"; sourceTree = "<group>"; };
+		41E3BEB023A3FCD700C2F4AD /* URL+Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Title.swift"; sourceTree = "<group>"; };
 		50379B222058CBB4000EE86E /* capacitor.config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacitor.config.json; sourceTree = "<group>"; };
 		504EC3041FED79650016851F /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		504EC3071FED79650016851F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 				41C905A3239A93FC009BFCFD /* ShareViewController.swift */,
 				41E3BEAC23A3EF2500C2F4AD /* Attachment.swift */,
 				41E3BEAE23A3F0AE00C2F4AD /* Encodable+Dictionary.swift */,
+				41E3BEB023A3FCD700C2F4AD /* URL+Title.swift */,
 				41C905A5239A93FC009BFCFD /* MainInterface.storyboard */,
 				41C905A8239A93FC009BFCFD /* Info.plist */,
 			);
@@ -298,6 +301,7 @@
 			files = (
 				41E3BEAD23A3EF2500C2F4AD /* Attachment.swift in Sources */,
 				41E3BEAF23A3F0AE00C2F4AD /* Encodable+Dictionary.swift in Sources */,
+				41E3BEB123A3FCD700C2F4AD /* URL+Title.swift in Sources */,
 				41C905A4239A93FC009BFCFD /* ShareViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
