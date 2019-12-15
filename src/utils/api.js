@@ -58,12 +58,14 @@ export const send = ({ token, message, attachments, progress }) => {
       subject,
     },
     {
-      onUploadProgress: progressEvent => {
-        const percentCompleted = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total,
-        )
-        progress(percentCompleted)
-      },
+      ...(typeof progress == 'function' && {
+        onUploadProgress: progressEvent => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total,
+          )
+          progress(percentCompleted)
+        },
+      }),
     },
   )
 }
