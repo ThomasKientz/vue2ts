@@ -2,6 +2,7 @@ import axios from 'axios'
 import { toast } from './toast'
 import store from '@/store'
 import { SUBJECT_TEXT_DEFAULT, FROM_TEXT_DEFAULT } from '@/utils/defaults'
+import { Capacitor } from '@capacitor/core'
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -65,6 +66,14 @@ export const send = ({ token, message, attachments, progress }) => {
       },
     },
   )
+}
+
+export const sendFeedback = ({ message }) => {
+  return api.post('/feedback', {
+    token: store.state.token1,
+    message,
+    context: Capacitor.platform,
+  })
 }
 
 export const verifyEmail = ({ email, id }) => {
