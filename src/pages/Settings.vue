@@ -63,6 +63,11 @@
             :items="themeItems"
             @change="theme = $event"
           />
+          <v-switch
+            :input-value="autoClose"
+            label="Auto close app after sending"
+            @change="autoClose = $event"
+          />
         </v-container>
       </v-card-text>
     </v-card>
@@ -145,6 +150,14 @@ export default {
       },
       set(v) {
         return this.$store.commit('setTheme', v)
+      },
+    },
+    autoClose: {
+      get() {
+        return this.$store.state.autoClose
+      },
+      set(v) {
+        return this.$store.commit('setAutoClose', v)
       },
     },
   },
