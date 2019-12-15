@@ -57,6 +57,7 @@ import Settings from '@/pages/Settings'
 import Feedback from '@/pages/Feedback'
 import { Plugins, Capacitor } from '@capacitor/core'
 const { SplashScreen, App, StatusBar } = Plugins
+import { mapState } from 'vuex'
 
 export default {
   name: 'App',
@@ -68,25 +69,17 @@ export default {
     RateDialog,
   },
 
+  created() {
+    if (this.$store.state.theme == 'dark') this.$vuetify.theme.dark = true
+  },
+
   mounted() {
     if (Capacitor.isNative) {
       SplashScreen.hide()
       StatusBar.show()
     }
 
-    const mq = window.matchMedia('(prefers-color-scheme: dark)')
-
-    // Not compatible with iOS safari
-    // mq.addEventListener('change', e => {
-    //   this.$vuetify.theme.dark = e.matches
-    // })
-    mq.addListener(e => {
-      this.$vuetify.theme.dark = e.matches
-    })
-
-    App.addListener('appStateChange', state => {
-      this.$vuetify.theme.dark = state.isActive && mq.matches
-    })
+    this.initAutoTheme()
   },
 
   data: () => ({
@@ -100,7 +93,24 @@ export default {
     showRate: false,
   }),
 
+  computed: {
+    ...mapState(['theme']),
+  },
+
   methods: {
+    initAutoTheme() {
+      const mq = window.matchMedia('(prefers-color-scheme: dark)')
+
+      // 'addEventListener' function is not compatible with iOS safari
+      mq.addListener(e => {
+        if (this.theme == 'auto') this.$vuetify.theme.dark = e.matches
+      })
+
+      App.addListener('appStateChange', state => {
+        if (this.theme == 'auto')
+          this.$vuetify.theme.dark = state.isActive && mq.matches
+      })
+    },
     show(view) {
       if (view == 'settings') {
         this.showSettings = true

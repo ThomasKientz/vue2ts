@@ -57,6 +57,12 @@
             label="From field"
             @change="fromText = $event"
           />
+          <v-select
+            :value="theme"
+            label="Theme"
+            :items="themeItems"
+            @change="theme = $event"
+          />
         </v-container>
       </v-card-text>
     </v-card>
@@ -84,7 +90,14 @@ export default {
     mdiSwapVertical,
     mdiClose,
     subject: 'preview',
+    themeItems: ['auto', 'light', 'dark'],
   }),
+
+  watch: {
+    theme(v) {
+      this.$vuetify.theme.dark = v == 'dark'
+    },
+  },
 
   computed: {
     dialog: {
@@ -124,6 +137,14 @@ export default {
       },
       set(v) {
         return this.$store.commit('setFromText', v)
+      },
+    },
+    theme: {
+      get() {
+        return this.$store.state.theme
+      },
+      set(v) {
+        return this.$store.commit('setTheme', v)
       },
     },
   },
