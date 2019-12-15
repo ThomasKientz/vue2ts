@@ -27,7 +27,7 @@ api.interceptors.response.use(
       const msg = error.response.data && error.response.data.message
       toast.error(
         msg ||
-          'Ooops, an unkown error occured. We have been notified, please try later.',
+          'Ooops, an unknown error occurred. We have been notified, please try later.',
       )
       return Promise.reject('handled')
     }
