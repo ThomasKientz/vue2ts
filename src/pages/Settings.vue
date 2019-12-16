@@ -20,6 +20,7 @@
             :key="'email-' + index"
             :value="email"
             disabled
+            hide-details
             readonly
             :label="'email address' + (index > 0 ? ' ' + (index + 1) : '')"
           >
@@ -31,6 +32,7 @@
           </v-text-field>
           <v-btn
             v-if="!$store.state.token2"
+            class="mt-2"
             block
             outlined
             color="success"
