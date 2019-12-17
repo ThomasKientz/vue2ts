@@ -10,9 +10,17 @@ import Foundation
 struct Attachment: Codable {
     
     let name: String
+    
     /// The MIME identifier of the attached data.
     let type: String
-    let dataUrl: String
+    
+    let data: Data
+    
+    var dataUrl: String {
+        return "data:\(type);base64,\(data.base64EncodedString())"
+    }
+    
+    
     
     /// Initializes an attachment object in the correct format
     /// - Parameters:
@@ -22,7 +30,7 @@ struct Attachment: Codable {
     init(name: String, type: String, data: Data) {
         self.name = name
         self.type = type
-        self.dataUrl = "data:\(type);base64,\(data.base64EncodedString())"
+        self.data = data
     }
     
 }

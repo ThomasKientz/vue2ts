@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
+		41B71DF423A7BE85000440D4 /* Data+Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF323A7BE85000440D4 /* Data+Size.swift */; };
+		41B71DF623A7C29C000440D4 /* SendModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF523A7C29C000440D4 /* SendModel.swift */; };
+		41B71DF823A7E1C0000440D4 /* SendError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF723A7E1C0000440D4 /* SendError.swift */; };
+		41B71DFA23A907FE000440D4 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF923A907FE000440D4 /* PaddingLabel.swift */; };
 		41C905A4239A93FC009BFCFD /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C905A3239A93FC009BFCFD /* ShareViewController.swift */; };
 		41C905A7239A93FC009BFCFD /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 41C905A5239A93FC009BFCFD /* MainInterface.storyboard */; };
 		41C905AB239A93FC009BFCFD /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 41C905A1239A93FC009BFCFD /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -49,6 +53,10 @@
 
 /* Begin PBXFileReference section */
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
+		41B71DF323A7BE85000440D4 /* Data+Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Size.swift"; sourceTree = "<group>"; };
+		41B71DF523A7C29C000440D4 /* SendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendModel.swift; sourceTree = "<group>"; };
+		41B71DF723A7E1C0000440D4 /* SendError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendError.swift; sourceTree = "<group>"; };
+		41B71DF923A907FE000440D4 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		41C905A1239A93FC009BFCFD /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		41C905A3239A93FC009BFCFD /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		41C905A6239A93FC009BFCFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -97,15 +105,27 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		41B71DF223A7BE5A000440D4 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				41E3BEAE23A3F0AE00C2F4AD /* Encodable+Dictionary.swift */,
+				41E3BEB023A3FCD700C2F4AD /* URL+Title.swift */,
+				41B71DF323A7BE85000440D4 /* Data+Size.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		41C905A2239A93FC009BFCFD /* ShareExtension */ = {
 			isa = PBXGroup;
 			children = (
 				41C905A3239A93FC009BFCFD /* ShareViewController.swift */,
+				41B71DF523A7C29C000440D4 /* SendModel.swift */,
 				41E3BEAC23A3EF2500C2F4AD /* Attachment.swift */,
-				41E3BEAE23A3F0AE00C2F4AD /* Encodable+Dictionary.swift */,
-				41E3BEB023A3FCD700C2F4AD /* URL+Title.swift */,
+				41B71DF223A7BE5A000440D4 /* Extensions */,
 				41C905A5239A93FC009BFCFD /* MainInterface.storyboard */,
 				41C905A8239A93FC009BFCFD /* Info.plist */,
+				41B71DF923A907FE000440D4 /* PaddingLabel.swift */,
+				41B71DF723A7E1C0000440D4 /* SendError.swift */,
 			);
 			path = ShareExtension;
 			sourceTree = "<group>";
@@ -299,7 +319,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41B71DF423A7BE85000440D4 /* Data+Size.swift in Sources */,
+				41B71DF623A7C29C000440D4 /* SendModel.swift in Sources */,
 				41E3BEAD23A3EF2500C2F4AD /* Attachment.swift in Sources */,
+				41B71DF823A7E1C0000440D4 /* SendError.swift in Sources */,
+				41B71DFA23A907FE000440D4 /* PaddingLabel.swift in Sources */,
 				41E3BEAF23A3F0AE00C2F4AD /* Encodable+Dictionary.swift in Sources */,
 				41E3BEB123A3FCD700C2F4AD /* URL+Title.swift in Sources */,
 				41C905A4239A93FC009BFCFD /* ShareViewController.swift in Sources */,

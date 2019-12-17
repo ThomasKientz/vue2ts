@@ -6,9 +6,10 @@
 //
 
 import UIKit
-import MobileCoreServices
 
 class ShareViewController: UIViewController {
+    
+    // MARK: - Properties
 
     @IBOutlet private weak var loaderVisualEffectView: UIVisualEffectView! {
         didSet {
@@ -17,9 +18,35 @@ class ShareViewController: UIViewController {
         }
     }
     
+    private lazy var successLabel: PaddingLabel = {
+        let label = PaddingLabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
+        label.textColor = .white
+        label.textAlignment = NSTextAlignment.center
+        label.numberOfLines = 1
+        label.text = "Boomerang sent!"
+        label.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+        label.paddingInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        label.layer.cornerRadius = 10
+        label.clipsToBounds = true
+        return label
+    }()
+    
+    var model: SendModel?
+    
+    
+    // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        successLabel.isHidden = true
+        view.addSubview(successLabel)
+        NSLayoutConstraint.activate([
+            successLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            successLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
 
         guard let item = self.extensionContext?.inputItems.first as? NSExtensionItem,
           let attachments = item.attachments
@@ -27,124 +54,29 @@ class ShareViewController: UIViewController {
             return
         }
         
-        let background = DispatchQueue.global(qos: .background)
-        let group = DispatchGroup()
-        
-        var preparedAttachments = [Attachment]()
-        var message: String?
-        
-        attachments.forEach { (provider) in
-            
-            background.async(group: group) {
+        model = SendModel(attachments: attachments, onSendingCompleted: { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
                 
-                group.enter()
-                provider.loadItem(forTypeIdentifier: provider.registeredTypeIdentifiers.first!, options: nil) { (encoded, error) in
-                    defer{ group.leave() }
-                    
-                    let dataa: Data?
-                    
-                    switch encoded {
-                    case let decodedData as Data:
-                        dataa = decodedData
-                    case let url as URL where url.isFileURL:
-                        dataa = try? Data(contentsOf: url)
-                    case let url as URL where !url.isFileURL:
-                        if let title = url.title {
-                            message = "\(title)\n\(url))"
-                        } else {
-                            message = url.absoluteString
-                        }
-                        
-                        return
-                    default:
-                        dataa = nil
-                        //There may be other cases...
-                        print("Unexpected data:", type(of: encoded))
+                // Sending is finished so we can hide the loader
+                self.loaderVisualEffectView.isHidden = true
+                
+                switch result {
+                case .success(()):
+                    self.successLabel.isHidden = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                        self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
                     }
-                    
-                    let mimee = UTTypeCopyPreferredTagWithClass(provider.registeredTypeIdentifiers.first! as CFString, kUTTagClassMIMEType)?.takeRetainedValue() as String?
-                    guard let data = dataa, let mime = mimee else {
-                        return
-                    }
-                    
-                    print("Successfully retrieved data of UTI: \(provider.registeredTypeIdentifiers)")
-                    print("MIME is: \(mime)")
-                    
-                    preparedAttachments.append(
-                        Attachment(
-                            name: provider.suggestedName ?? "Data",
-                            type: mime,
-                            data: data
-                        )
-                    )
+                case .failure(let error):
+                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                        self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+                    }))
+                    self.present(alert, animated: true, completion: nil)
                 }
-                
-            }
-            
-        }
-        
-        group.notify(queue: background) { [weak self] in
-            self?.send(
-                message: message ?? "",
-                subject: "test",
-                attachments: preparedAttachments
-            )
-        }
-    }
-    
-    
-    
-    func send(message: String, subject: String, attachments: [Attachment]) {
-        
-        /* Configure session, choose between:
-           * defaultSessionConfiguration
-           * ephemeralSessionConfiguration
-           * backgroundSessionConfigurationWithIdentifier:
-         And set session-wide properties, such as: HTTPAdditionalHeaders,
-         HTTPCookieAcceptPolicy, requestCachePolicy or timeoutIntervalForRequest.
-         */
-        let sessionConfig = URLSessionConfiguration.default
-
-        /* Create session, and optionally set a URLSessionDelegate. */
-        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-
-        /* Create the Request:
-           Send  (POST https://boomerang-app-api-dev.herokuapp.com/send)
-         */
-
-        guard let url = URL(string: "https://boomerang-app-api-dev.herokuapp.com/send") else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-
-        // Headers
-
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        // JSON Body
-
-        let bodyObject: [String : Any] = [
-            "fromText": "Boomerang",
-            "message": message,
-            "subject": subject,
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZG9tYWluLmNvbSIsImlhdCI6MTU3NDY5ODE5NX0.KLAcendFFzP7OI7GlFCTu-LyV3ut9uZmBP0thBb2RZY",
-            "attachments": attachments.compactMap({ $0.dictionary })
-        ]
-        request.httpBody = try! JSONSerialization.data(withJSONObject: bodyObject, options: [])
-
-        /* Start a new Task */
-        let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            if (error == nil) {
-                // Success
-                let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session Task Succeeded: HTTP \(statusCode)")
-            }
-            else {
-                // Failure
-                print("URL Session Task Failed: %@", error!.localizedDescription);
             }
         })
-        task.resume()
-        session.finishTasksAndInvalidate()
     }
+    
     
 }
