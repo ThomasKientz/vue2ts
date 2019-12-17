@@ -20,14 +20,14 @@
               <textarea
                 :disabled="loading"
                 v-model="message"
-                placeholder="Write something..."
+                placeholder="How can we improve Boomerang ?"
               ></textarea>
             </div>
           </div>
           <div style="width: 100%;">
             <v-row dense>
               <v-col cols="12" :sm="12">
-                <v-btn :loading="loading" @click="send(1)" color="success" block
+                <v-btn :loading="loading" @click="send()" color="success" block
                   >Send
                   <v-icon v-show="!$store.state.token2" right>{{
                     mdiSend
@@ -44,6 +44,7 @@
 
 <script>
 import { mdiSend, mdiClose } from '@mdi/js'
+import { sendFeedback } from '@/utils/api'
 
 export default {
   props: {
@@ -68,46 +69,24 @@ export default {
         this.$emit('input', v)
       },
     },
-    emails() {
-      if (this.$store.state.token1) {
-        return this.$store.state.token2
-          ? [this.$store.getters.getEmail(1), this.$store.getters.getEmail(2)]
-          : [this.$store.getters.getEmail(1)]
-      } else return []
-    },
-    subjectMode: {
-      get() {
-        return this.$store.state.subjectMode || 'preview'
-      },
-      set(v) {
-        return this.$store.commit('setSubjectMode', v)
-      },
-    },
-    subjectText: {
-      get() {
-        return this.$store.state.subjectText || 'New Boomerang'
-      },
-      set(v) {
-        return this.$store.commit('setSubjectText', v)
-      },
-    },
-    fromText: {
-      get() {
-        return this.$store.state.fromText || 'Me'
-      },
-      set(v) {
-        return this.$store.commit('setFromText', v)
-      },
-    },
   },
 
   methods: {
-    remove(index) {
-      if (!this.$store.state.token2 && index == 0) {
-        this.$router.replace('/email')
-        this.dialog = false
-      }
-      this.$store.dispatch('removeToken', index + 1)
+    send() {
+      if (!this.message || this.loading) return
+
+      this.loading = true
+      sendFeedback({
+        message: this.message,
+      })
+        .then(() => {
+          this.message = null
+          this.$toast.success('Thanks !')
+        })
+        .catch(() => {})
+        .finally(() => {
+          this.loading = false
+        })
     },
   },
 }

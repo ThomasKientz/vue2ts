@@ -2,6 +2,7 @@ import axios from 'axios'
 import { toast } from './toast'
 import store from '@/store'
 import { SUBJECT_TEXT_DEFAULT, FROM_TEXT_DEFAULT } from '@/utils/defaults'
+import { Capacitor } from '@capacitor/core'
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -27,7 +28,7 @@ api.interceptors.response.use(
       const msg = error.response.data && error.response.data.message
       toast.error(
         msg ||
-          'Ooops, an unkown error occured. We have been notified, please try later.',
+          'Ooops, an unknown error occurred. We have been notified, please try later.',
       )
       return Promise.reject('handled')
     }
@@ -57,14 +58,24 @@ export const send = ({ token, message, attachments, progress }) => {
       subject,
     },
     {
-      onUploadProgress: progressEvent => {
-        const percentCompleted = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total,
-        )
-        progress(percentCompleted)
-      },
+      ...(typeof progress == 'function' && {
+        onUploadProgress: progressEvent => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total,
+          )
+          progress(percentCompleted)
+        },
+      }),
     },
   )
+}
+
+export const sendFeedback = ({ message }) => {
+  return api.post('/feedback', {
+    token: store.state.token1,
+    message,
+    context: Capacitor.platform,
+  })
 }
 
 export const verifyEmail = ({ email, id }) => {

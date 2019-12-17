@@ -8,7 +8,6 @@ document.addEventListener('deviceready', async () => {
 export default store => {
   store.subscribe((mutation, state) => {
     const { fromText, subjectMode, subjectText, token1, token2 } = state
-    console.log('state', { fromText, subjectMode, subjectText, token1, token2 })
 
     if (!userPref) {
       throw new Error('App preferences not initialized')

@@ -16,17 +16,23 @@
             placeholder="john@doe.com"
             autofocus
           />
+          <p class="caption">
+            We strongly value privacy and will <strong>never</strong> sell it.
+          </p>
         </v-form>
       </v-window-item>
 
       <v-window-item :key="2">
         <div class="subtitle-1 text-center" style="line-height: 1.5;">
-          We have sent a verification email to :
+          Verification code sent to :
           <strong>{{ email }}</strong>
         </div>
-        <p class="body-2 mt-2 text-center">
-          Check your spams and whitelist the incoming address.
-        </p>
+        <div class="d-flex align-center mt-2">
+          <v-icon color="warning">{{ mdiAlert }}</v-icon>
+          <div class="caption ml-3">
+            Please check your spams and whitelist the incoming address.
+          </div>
+        </div>
         <v-form ref="formCode">
           <v-text-field
             validate-on-blur
@@ -67,7 +73,7 @@
 </template>
 
 <script>
-import { mdiArrowRight, mdiArrowLeft } from '@mdi/js'
+import { mdiArrowRight, mdiArrowLeft, mdiAlert } from '@mdi/js'
 import { verifyEmail, getToken } from '@/utils/api'
 
 const emailFormat = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
@@ -85,6 +91,7 @@ export default {
       randomId: null,
       mdiArrowRight,
       mdiArrowLeft,
+      mdiAlert,
       loading: false,
       activeStep: 0,
       emailRules: [

@@ -20,6 +20,7 @@
             :key="'email-' + index"
             :value="email"
             disabled
+            hide-details
             readonly
             :label="'email address' + (index > 0 ? ' ' + (index + 1) : '')"
           >
@@ -31,6 +32,7 @@
           </v-text-field>
           <v-btn
             v-if="!$store.state.token2"
+            class="mt-2"
             block
             outlined
             color="success"
@@ -56,6 +58,17 @@
             :value="fromText"
             label="From field"
             @change="fromText = $event"
+          />
+          <v-select
+            :value="theme"
+            label="Theme"
+            :items="themeItems"
+            @change="theme = $event"
+          />
+          <v-switch
+            :input-value="autoClose"
+            label="Auto close app after sending"
+            @change="autoClose = $event"
           />
         </v-container>
       </v-card-text>
@@ -84,7 +97,14 @@ export default {
     mdiSwapVertical,
     mdiClose,
     subject: 'preview',
+    themeItems: ['auto', 'light', 'dark'],
   }),
+
+  watch: {
+    theme(v) {
+      this.$vuetify.theme.dark = v == 'dark'
+    },
+  },
 
   computed: {
     dialog: {
@@ -124,6 +144,22 @@ export default {
       },
       set(v) {
         return this.$store.commit('setFromText', v)
+      },
+    },
+    theme: {
+      get() {
+        return this.$store.state.theme
+      },
+      set(v) {
+        return this.$store.commit('setTheme', v)
+      },
+    },
+    autoClose: {
+      get() {
+        return this.$store.state.autoClose
+      },
+      set(v) {
+        return this.$store.commit('setAutoClose', v)
       },
     },
   },

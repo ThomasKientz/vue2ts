@@ -1,9 +1,12 @@
-// #if process.env.PLATFORM === 'electron'
+// #if process.env.IS_ELECTRON
 import { ipcRenderer } from 'electron'
 // #endif
 
+import { Plugins } from '@capacitor/core'
+const { App } = Plugins
+
 export const closeApp = () => {
-  if (process.env.PLATFORM === 'electron')
-    return ipcRenderer.send('close', 'ping')
-  else return console.log('closeApp() not implemented for this platform.')
+  if (process.env.IS_ELECTRON) return ipcRenderer.send('close')
+
+  return App.exitApp()
 }

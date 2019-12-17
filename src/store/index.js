@@ -20,6 +20,8 @@ export default new Vuex.Store({
       subjectMode: null,
       subjectText: null,
       fromText: null,
+      theme: 'auto',
+      autoClose: false,
     }
   },
   getters: {
@@ -40,6 +42,12 @@ export default new Vuex.Store({
     },
     setFromText: (state, v) => {
       state.fromText = v
+    },
+    setTheme: (state, v) => {
+      state.theme = v
+    },
+    setAutoClose: (state, v) => {
+      state.autoClose = v
     },
   },
   actions: {
