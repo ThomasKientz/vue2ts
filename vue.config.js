@@ -7,6 +7,10 @@ module.exports = {
           return args
         })
       },
+      builderOptions: {
+        appId: 'app.boomerang.mac',
+        afterSign: 'scripts/notarize.js',
+      },
     },
   },
   chainWebpack: config => {
