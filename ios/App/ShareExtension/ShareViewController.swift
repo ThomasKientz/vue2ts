@@ -27,7 +27,7 @@ class ShareViewController: UIViewController {
         label.numberOfLines = 1
         label.text = "Boomerang sent!"
         label.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
-        label.paddingInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        label.paddingInsets = UIEdgeInsets(top: 16, left: 32, bottom: 16, right: 32)
         label.layer.cornerRadius = 10
         label.clipsToBounds = true
         return label

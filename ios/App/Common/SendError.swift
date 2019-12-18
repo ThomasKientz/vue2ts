@@ -7,9 +7,9 @@
 
 import Foundation
 
-enum SendError: Error {
+enum SendError: LocalizedError {
     
-    var localizedDescription: String {
+    var errorDescription: String? {
         switch self {
         case .testRequestFailed:
             return "Servers are currently unavailable. Please try again later."
