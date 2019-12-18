@@ -7,7 +7,12 @@
     scrollable
   >
     <v-card>
-      <v-toolbar style="flex-grow: 0;" dark dense color="primary">
+      <v-toolbar
+        style="flex-grow: 0;"
+        dark
+        dense
+        :color="$vuetify.theme.isDark ? 'dark' : 'primary'"
+      >
         <v-btn icon dark @click="dialog = false">
           <v-icon>{{ mdiClose }}</v-icon>
         </v-btn>

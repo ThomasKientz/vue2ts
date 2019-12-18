@@ -21,7 +21,12 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar dense color="primary" dark app>
+    <v-app-bar
+      dense
+      :color="$vuetify.theme.isDark ? 'dark' : 'primary'"
+      dark
+      app
+    >
       <v-app-bar-nav-icon
         v-if="$route.meta.menuButton"
         @click.stop="drawer = !drawer"
