@@ -1,7 +1,7 @@
 'use strict'
 /* global __static */
 
-import { app, protocol, Tray, BrowserWindow, ipcMain } from 'electron'
+import { app, protocol, Tray, BrowserWindow, ipcMain, Menu } from 'electron'
 import {
   createProtocol,
   // installVueDevtools
@@ -89,6 +89,11 @@ const appReady = async () => {
   // tray.on('click', clicked.bind(this))
   tray.on('click', clicked)
   tray.on('double-click', clicked)
+
+  tray.on('right-click', () => {
+    const contextMenu = Menu.buildFromTemplate([{ role: 'quit' }])
+    tray.popUpContextMenu(contextMenu)
+  })
 
   windowPosition = getWindowPosition(tray)
 
