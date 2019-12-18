@@ -64,7 +64,7 @@ class ShareViewController: UIViewController {
                 switch result {
                 case .success(()):
                     self.successLabel.isHidden = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                         self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
                     }
                 case .failure(let error):

@@ -7,6 +7,7 @@
 
 import Foundation
 import MobileCoreServices
+import os.log
 
 typealias SendingResult = ((Result<Void,Error>) -> ())?
 
@@ -14,10 +15,11 @@ class SendModel {
     
     // MARK: - Properties
     
-    var onSendingCompleted: SendingResult
+    private let onSendingCompleted: SendingResult
     
     private let attachments: [NSItemProvider]
     
+    private let sendSessionDelegate = SendSessionDelegate()
     
     private let queue = DispatchQueue.global(qos: .background)
         
@@ -25,35 +27,31 @@ class SendModel {
     
     private var message: String?
     
+    private var backgroundSession: URLSession?
+    
     private lazy var onitemsLoaded = DispatchWorkItem(block: { [weak self] in
         guard let self = self else { return }
         
         if self.preparedAttachments.isEmpty {
             // Case where we send a request without attachments
-            
-            self.send(
-                message: self.message ?? "",
-                subject: "test",
-                attachments: self.preparedAttachments
-            )
+            if let message = self.message {
+                self.send(
+                    message: message,
+                    subject: "Boomerang",
+                    attachments: self.preparedAttachments
+                )
+            } else {
+                self.onSendingCompleted?(.failure(SendError.invalidSelection))
+            }
         } else {
             // Case where we send a request with attachments. Other considerations are required.
             
-            let isIndividualSizeLimitReached = !self.preparedAttachments.isEmpty && (self.preparedAttachments.first(where: { $0.data.sizeInMB >= 10.0 }) != nil)
-            if isIndividualSizeLimitReached {
-                self.onSendingCompleted?(.failure(SendError.individualFileInvalidSize))
-                return
-            }
-            
-            let isTotalSizeLimitReached = (self.preparedAttachments.reduce(0) { $0 + $1.data.sizeInMB }) > 25.0
-            if isTotalSizeLimitReached {
-                self.onSendingCompleted?(.failure(SendError.totalFileInvalidSize))
-                return
-            }
-            
-            let filesCountLimitReached = self.preparedAttachments.count >= 10
-            if filesCountLimitReached {
-                self.onSendingCompleted?(.failure(SendError.invalidFilesCount))
+            do {
+                try self.checkIndividualSizeLimit()
+                try self.checkTotalSizeLimit()
+                try self.checkFileCountLimit()
+            } catch let error {
+                self.onSendingCompleted?(.failure(error))
                 return
             }
             
@@ -84,6 +82,10 @@ class SendModel {
         self.attachments = attachments
         
         start()
+    }
+    
+    deinit {
+        self.backgroundSession?.finishTasksAndInvalidate();
     }
     
     private func start() {
@@ -148,17 +150,18 @@ class SendModel {
         
         let isBackgroundUpload = !attachments.isEmpty
         
-        /* Configure session, choose between:
-           * defaultSessionConfiguration
-           * backgroundSessionConfigurationWithIdentifier:
-         And set session-wide properties, such as: HTTPAdditionalHeaders,
-         HTTPCookieAcceptPolicy, requestCachePolicy or timeoutIntervalForRequest.
-         */
+        // Configure session
         let sessionConfig = isBackgroundUpload ? URLSessionConfiguration.background(withIdentifier: "com.boomerang.app.send-with-attachments") : URLSessionConfiguration.default
+        sessionConfig.sharedContainerIdentifier = "group.com.boomerang.app-Dev"
         sessionConfig.timeoutIntervalForRequest = 20.0
+        sessionConfig.isDiscretionary = false
 
-        /* Create session, and optionally set a URLSessionDelegate. */
-        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        // Create Session
+        backgroundSession = URLSession(
+            configuration: sessionConfig,
+            delegate: isBackgroundUpload ? sendSessionDelegate : nil,
+            delegateQueue: nil
+        )
 
         /* Create the Request:
            Send  (POST https://boomerang-app-api-dev.herokuapp.com/send)
@@ -181,41 +184,56 @@ class SendModel {
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZG9tYWluLmNvbSIsImlhdCI6MTU3NDY5ODE5NX0.KLAcendFFzP7OI7GlFCTu-LyV3ut9uZmBP0thBb2RZY",
             "attachments": attachments.compactMap({ $0.dictionary })
         ]
-        request.httpBody = try! JSONSerialization.data(withJSONObject: bodyObject, options: [])
-
-        /* Start a new Task */
-        let task: URLSessionDataTask
-        if isBackgroundUpload {
-            task = session.dataTask(with: request)
-        } else {
-            task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
-                if error == nil {
-                    // Success
-                    let statusCode = (response as! HTTPURLResponse).statusCode
-                    print("URL Session Task Succeeded: HTTP \(statusCode)")
-                    
-                    if (200..<300).contains(statusCode) {
-                        self.onSendingCompleted?(.success(()))
-                    } else {
-                        self.onSendingCompleted?(.failure(SendError.sendRequestFailed))
-                    }
-                }
-                else {
-                    // Failure
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
-                    if !isBackgroundUpload {
-                        self.onSendingCompleted?(.failure(error!))
-                    }
-                }
-            })
-        }
-        task.resume()
-        session.finishTasksAndInvalidate()
         
-        // If it's going to be a background upload, notify on success now.
-        if isBackgroundUpload {
-            self.onSendingCompleted?(.success(()))
+        do {
+            let dataObject = try JSONSerialization.data(withJSONObject: bodyObject, options: [])
+            
+            /* Start a new Task */
+            let task: URLSessionTask
+            if isBackgroundUpload {
+                guard let groupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.boomerang.app-Dev") else {
+                    self.onSendingCompleted?(.failure(SendError.sendRequestFailed))
+                    return
+                }
+                
+                let filePath = groupURL.appendingPathComponent("upload-attachment")
+                try dataObject.write(to: filePath)
+                task = self.backgroundSession!.uploadTask(with: request, fromFile: filePath)
+            } else {
+                request.httpBody = dataObject
+                
+                task = self.backgroundSession!.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+                    if error == nil {
+                        // Success
+                        let statusCode = (response as! HTTPURLResponse).statusCode
+                        print("URL Session Task Succeeded: HTTP \(statusCode)")
+                        
+                        if (200..<300).contains(statusCode) {
+                            self.onSendingCompleted?(.success(()))
+                        } else {
+                            self.onSendingCompleted?(.failure(SendError.sendRequestFailed))
+                        }
+                    }
+                    else {
+                        // Failure
+                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                        if !isBackgroundUpload {
+                            self.onSendingCompleted?(.failure(error!))
+                        }
+                    }
+                })
+            }
+            task.resume()
+            
+            // If it's going to be a background upload, notify on success now.
+            if isBackgroundUpload {
+                self.onSendingCompleted?(.success(()))
+            }
+            
+        } catch {
+            self.onSendingCompleted?(.failure(error))
         }
+        
     }
     
     private func testRequest(_ completionHandler: @escaping (Result<Void,Error>) -> ()) {
@@ -252,5 +270,62 @@ class SendModel {
         session.finishTasksAndInvalidate()
     }
     
+    
+}
+
+
+
+// MARK: - Limit Checks
+
+private extension SendModel {
+    
+    func checkIndividualSizeLimit() throws {
+        let individualSizeLimit = 10.0
+        let itemAboveLimit = self.preparedAttachments.first(where: { $0.data.sizeInMB >= individualSizeLimit })
+        
+        if let itemAboveLimit = itemAboveLimit {
+            if #available(iOS 12.0, *) {
+                os_log(.error, log: .itemDecoding, "Individual size of: %{PRIVATE}f MB exceeds limit of %{PUBLIC}f MB.", itemAboveLimit.data.sizeInMB, individualSizeLimit)
+            }
+            throw SendError.individualFileInvalidSize
+        }
+        
+        if #available(iOS 12.0, *) {
+            os_log(.debug, log: .itemDecoding, "Individual item size check passed with success. No item exceeded the %{PUBLIC}f MB limit.", individualSizeLimit)
+        }
+    }
+    
+    func checkTotalSizeLimit() throws {
+        let totalSize = self.preparedAttachments.reduce(0) { $0 + $1.data.sizeInMB }
+        let totalSizeLimit = 25.0
+        let isTotalSizeLimitReached = totalSize > totalSizeLimit
+        
+        if isTotalSizeLimitReached {
+            if #available(iOS 12.0, *) {
+                os_log(.error, log: .itemDecoding, "Total size of: %{PRIVATE}f MB exceeds limit of %{PUBLIC}f MB.", totalSize, totalSizeLimit)
+            }
+            throw SendError.totalFileInvalidSize
+        }
+        
+        if #available(iOS 12.0, *) {
+            os_log(.debug, log: .itemDecoding, "Total size check passed with success. (%{PRIVATE}f MB).", totalSize)
+        }
+    }
+    
+    func checkFileCountLimit() throws {
+        let fileCountLimit = 10
+        let fileCountLimitReached = self.preparedAttachments.count > fileCountLimit
+        
+        if fileCountLimitReached {
+            if #available(iOS 12.0, *) {
+                os_log(.error, log: .itemDecoding, "%{PRIVATE}d items exceeds limit of %{PUBLIC}d.", self.preparedAttachments.count, fileCountLimit)
+            }
+            throw SendError.invalidFilesCount
+        }
+        
+        if #available(iOS 12.0, *) {
+            os_log(.debug, log: .itemDecoding, "File count check passed with success. (%{PRIVATE}d items).", self.preparedAttachments.count)
+        }
+    }
     
 }

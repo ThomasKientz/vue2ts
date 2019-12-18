@@ -1,16 +1,43 @@
 import UIKit
 import Capacitor
+import os.log
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-  var window: UIWindow?
+    var window: UIWindow?
+    
+    var backgroundCompletionHandler: (() -> Void)?
+    
+    var sendSessionDelegate: SendSessionDelegate?
+    
+    
 
-
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    // Override point for customization after application launch.
-    return true
-  }
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        // TODO: Should be moved elsewhere so that the user doesn't instant refuses it.
+        NotificationController.requestNotificationPermission()
+        
+        return true
+    }
+    
+    
+    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
+        // We're initializing and storing a reference to our delegate
+        sendSessionDelegate = SendSessionDelegate(completionHandler)
+        
+        if #available(iOS 12.0, *) {
+            os_log(.debug, log: .backgroundUpload, "Recreating session from AppDelegate.application(_:handleEventsForBackgroundURLSession:completionHandler:).")
+        }
+        
+        if identifier == "com.boomerang.app.send-with-attachments" {
+            let configuration = URLSessionConfiguration.background(withIdentifier: "com.boomerang.app.send-with-attachments")
+            configuration.sharedContainerIdentifier = "group.com.boomerang.app-Dev"
+            let session = URLSession(configuration: configuration, delegate: sendSessionDelegate, delegateQueue: .main)
+        }
+    }
+    
+    
 
   func applicationWillResignActive(_ application: UIApplication) {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

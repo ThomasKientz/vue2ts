@@ -21,6 +21,8 @@ enum SendError: Error {
             return "The number of attachments exceeds the maximum limit of 10."
         case .sendRequestFailed:
             return "Something failed during the upload."
+        case .invalidSelection:
+            return "The request couldn't be sent because the data wasn't of a supported format."
         }
     }
     
@@ -29,6 +31,7 @@ enum SendError: Error {
     case individualFileInvalidSize
     case totalFileInvalidSize
     case invalidFilesCount
+    case invalidSelection
     
     case sendRequestFailed
 }
