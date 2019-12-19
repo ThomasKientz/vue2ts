@@ -7,8 +7,9 @@
     "dev": "npm run serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build --skipBundle",
+    "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
+    "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "upgrade-interactive": "npm-check --update"
@@ -42,6 +43,7 @@
     "babel-eslint": "^10.0.3",
     "deepmerge": "^4.2.2",
     "electron": "^6.0.10",
+    "electron-icon-builder": "^1.0.2",
     "electron-notarize": "^0.2.1",
     "eslint": "^6.6.0",
     "eslint-plugin-prettier": "^3.1.1",
