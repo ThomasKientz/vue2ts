@@ -8,6 +8,7 @@ import {
 } from 'vue-cli-plugin-electron-builder/lib'
 import * as path from 'path'
 import { getWindowPosition } from './utils/getWindowPosition'
+import { getStartOnLogginSetting, setStartOnLogginSetting } from './utils/index'
 import Positioner from 'electron-positioner'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -15,14 +16,24 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 let win, positioner, tray, windowPosition, cachedBounds
 
 ipcMain.on('close', () => {
-  console.log('CLOSE')
   hideWindow()
+})
+
+ipcMain.on('setStartLogin', (event, v) => {
+  setStartOnLogginSetting(v)
+  app.setLoginItemSettings({
+    openAtLogin: v,
+  })
 })
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } },
 ])
+
+app.setLoginItemSettings({
+  openAtLogin: getStartOnLogginSetting(),
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
