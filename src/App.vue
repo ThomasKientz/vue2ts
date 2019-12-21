@@ -57,9 +57,6 @@
 <script>
 import { mdiMenu, mdiSettings, mdiArrowLeft, mdiHeart } from '@mdi/js'
 import Toast from '@/components/toast'
-import RateDialog from '@/components/rateDialog'
-import Settings from '@/pages/Settings'
-import Feedback from '@/pages/Feedback'
 import { Plugins, Capacitor } from '@capacitor/core'
 const { SplashScreen, App, StatusBar } = Plugins
 import { mapState } from 'vuex'
@@ -69,9 +66,9 @@ export default {
 
   components: {
     Toast,
-    Settings,
-    Feedback,
-    RateDialog,
+    Settings: () => import('@/pages/Settings'),
+    Feedback: () => import('@/pages/Feedback'),
+    RateDialog: () => import('@/components/rateDialog'),
   },
 
   created() {
