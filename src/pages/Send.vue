@@ -103,6 +103,8 @@ import { mapState } from 'vuex'
 
 const { App } = Plugins
 
+const MAX_SIZE = 10000000
+
 const getDataUrl = file => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -119,8 +121,9 @@ const processFiles = async files => {
   for (let i = 0; i < files.length; i++) {
     const file = files[i]
 
-    if (file.size > 10000000) totalExceed++
-    else {
+    if (file.size > MAX_SIZE) {
+      totalExceed++
+    } else {
       const dataUrl = await getDataUrl(file)
 
       filesArray.push({
@@ -171,11 +174,8 @@ export default {
 
       if (totalExceed) {
         if (filesArray.length)
-          this.$toast.error(
-            "Some files are too big (> 10 mB) and can't be uploaded.",
-          )
-        else
-          this.$toast.error("File is too big (> 10 mB) and can't be uploaded.")
+          this.$toast.error('Some files selected are too big (> 10 mB).')
+        else this.$toast.error('The file selected is too big (> 10 mB)')
       }
 
       this.showFiles = false
@@ -184,7 +184,9 @@ export default {
     async onInput(e) {
       const files = e.target.files
 
-      this.addFiles(files)
+      this.addFiles(files).then(() => {
+        this.$refs.input.value = ''
+      })
     },
     async dropHandler(e) {
       const files = e.dataTransfer.files
@@ -200,6 +202,15 @@ export default {
     },
     send(id) {
       if (!(this.message || this.files.length) || this.loading) return
+
+      const totalSize = this.files.reduce((acc, file) => {
+        return acc + file.size
+      }, 0)
+
+      if (totalSize > MAX_SIZE) {
+        this.$toast.error('Total files size must be less than 10mB')
+        return
+      }
 
       this.loading = id
       send({
