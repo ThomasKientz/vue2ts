@@ -93,7 +93,7 @@ import {
   SUBJECT_MODE_DEFAULT,
   SUBJECT_TEXT_DEFAULT,
 } from '@/utils/defaults'
-import { getStartOnLogginSetting, setStartOnLoggin } from '@/utils'
+import { getStartOnLogginSetting, setStartOnLogginSetting } from '@/utils'
 
 export default {
   props: {
@@ -109,7 +109,7 @@ export default {
     mdiClose,
     subject: 'preview',
     themeItems: ['auto', 'light', 'dark'],
-    autoStart: process.env.IS_ELECTRON ? getStartOnLogginSetting() : null,
+    autoStart: getStartOnLogginSetting(),
     isElectron: process.env.IS_ELECTRON,
   }),
 
@@ -118,7 +118,7 @@ export default {
       this.$vuetify.theme.dark = v == 'dark'
     },
     autoStart(v) {
-      setStartOnLoggin(v)
+      setStartOnLogginSetting(v)
     },
   },
 
