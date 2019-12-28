@@ -97,9 +97,7 @@ import {
   mdiPlus,
 } from '@mdi/js'
 import { send } from '@/utils/api'
-import { closeApp } from '@/utils'
 import { Plugins } from '@capacitor/core'
-import { mapState } from 'vuex'
 
 const { App } = Plugins
 
@@ -151,10 +149,6 @@ export default {
     files: [],
     progress: 0,
   }),
-
-  computed: {
-    ...mapState(['autoClose']),
-  },
 
   mounted() {
     setTimeout(() => {
@@ -225,9 +219,8 @@ export default {
           this.message = null
           this.files = []
           this.$toast.success('Boomerang sent !')
-          setTimeout(() => {
-            this.autoClose && closeApp()
-          }, 1000)
+
+          this.$emit('send')
         })
         .catch(error => {
           if (error.code) {

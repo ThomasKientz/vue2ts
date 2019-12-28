@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import { VuexPersist } from '@/utils/storage'
 import AppPrefPlugin from './appPrefPlugin'
 import { Capacitor } from '@capacitor/core'
+import rateModule from './rateModule'
 
 Vue.use(Vuex)
 
@@ -12,6 +13,9 @@ export default new Vuex.Store({
     VuexPersist.plugin,
     ...((Capacitor.isNative && [AppPrefPlugin]) || []),
   ],
+  modules: {
+    rate: rateModule,
+  },
 
   state() {
     return {

@@ -46,11 +46,11 @@
     </v-app-bar>
 
     <v-content>
-      <router-view />
+      <router-view @send="onSend" />
       <settings v-model="showSettings" />
-      <feedback v-model="showFeedback" />
+      <feedback v-model="showFeedback" :rating="rating" />
     </v-content>
-    <rate-dialog v-model="showRate" />
+    <rate-dialog v-model="showRate" @rate="rating = $event" />
   </v-app>
 </template>
 
@@ -60,6 +60,8 @@ import Toast from '@/components/toast'
 import { Plugins, Capacitor } from '@capacitor/core'
 const { SplashScreen, App, StatusBar } = Plugins
 import { mapState } from 'vuex'
+import { closeApp } from '@/utils'
+import { isSameDay } from 'date-fns'
 
 export default {
   name: 'App',
@@ -93,10 +95,22 @@ export default {
     showSettings: false,
     showFeedback: false,
     showRate: false,
+    rating: null,
   }),
 
   computed: {
     ...mapState(['theme']),
+  },
+
+  watch: {
+    rating(v, old) {
+      if (typeof v === 'number' && old === null) {
+        this.showFeedback = true
+      }
+    },
+    showFeedback(v) {
+      if (v == false) this.rating = null
+    },
   },
 
   methods: {
@@ -119,6 +133,24 @@ export default {
       } else this.showFeedback = true
 
       this.drawer = false
+    },
+    onSend() {
+      const { rating, neverAsk, counter } = this.$store.state.rate
+
+      this.$store.commit('increment')
+
+      const skipDate = this.$store.getters.skipDate
+
+      setTimeout(() => {
+        if (
+          rating === null &&
+          counter > 0 &&
+          !neverAsk &&
+          (!skipDate || !isSameDay(skipDate, new Date()))
+        ) {
+          this.showRate = true
+        } else this.$store.state.autoClose && closeApp()
+      }, 1000)
     },
   },
 }

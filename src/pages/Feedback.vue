@@ -56,6 +56,10 @@ export default {
     value: {
       type: Boolean,
     },
+    rating: {
+      type: Number,
+      default: null,
+    },
   },
 
   data: () => ({
@@ -82,7 +86,10 @@ export default {
 
       this.loading = true
       sendFeedback({
-        message: this.message,
+        message:
+          this.rating !== null
+            ? `(rate : ${this.rating}) ${this.message}`
+            : this.message,
       })
         .then(() => {
           this.message = null
