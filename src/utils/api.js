@@ -8,6 +8,23 @@ const api = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
 })
 
+const getPlatform = () => {
+  if (Capacitor.platform === 'ios' || Capacitor.platform === 'android') {
+    return Capacitor.platform
+  }
+
+  if (Capacitor.platform === 'electron' && process.platform) {
+    return 'electron ' + process.platform
+  }
+
+  console.error('getPlatform() : unknown platform')
+  console.log('Capacitor.platform :', Capacitor.platform)
+  console.log('process.platform :', process.platform)
+  return 'unknown platform'
+}
+
+const platform = getPlatform()
+
 api.interceptors.response.use(
   res => res,
   error => {
@@ -56,6 +73,7 @@ export const send = ({ token, message, attachments, progress }) => {
       attachments,
       fromText: store.state.fromText || FROM_TEXT_DEFAULT,
       subject,
+      platform,
     },
     {
       ...(typeof progress == 'function' && {
@@ -75,15 +93,16 @@ export const sendFeedback = ({ message }) => {
     token: store.state.token1,
     message,
     context: Capacitor.platform,
+    platform,
   })
 }
 
 export const verifyEmail = ({ email, id }) => {
-  return api.post('/verifyEmail', { email, id })
+  return api.post('/verifyEmail', { email, id, platform })
 }
 
 export const getToken = ({ email, id, code }) => {
   return api
-    .post('/verifyCode', { email, id, code })
+    .post('/verifyCode', { email, id, code, platform })
     .then(res => res && res.data)
 }
