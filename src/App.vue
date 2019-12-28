@@ -125,6 +125,8 @@ export default {
       App.addListener('appStateChange', state => {
         if (this.theme == 'auto')
           this.$vuetify.theme.dark = state.isActive && mq.matches
+
+        this.showRate = false
       })
     },
     show(view) {
