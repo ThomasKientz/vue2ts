@@ -68,9 +68,9 @@ export default {
           const url = `https://apps.apple.com/us/app/boomerang-mail-myself/id1154427984?action=write-review`
           App.openUrl({ url })
         } else if (Capacitor.platform === 'android') {
-          const url = `https://play.google.com/store/apps/details?id=com.boomerang.app`
-          // const url = `market://details?id=com.boomerang.app`
-          return App.openUrl(url)
+          // const url = `https://play.google.com/store/apps/details?id=com.boomerang.app`
+          const url = `market://details?id=com.boomerang.app`
+          return App.openUrl({ url })
         } else if (process.env.IS_ELECTRON && process.platform === 'darwin') {
           const url = `https://apps.apple.com/us/app/ringer-ringtone-maker/id402437824?action=write-review`
           shell.openExternal(url)
