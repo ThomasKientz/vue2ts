@@ -36,7 +36,7 @@
         <v-form ref="formCode" @submit.prevent="next()">
           <v-text-field
             validate-on-blur
-            type="text"
+            type="number"
             pattern="[0-9]*"
             v-model="code"
             :disabled="loading"
