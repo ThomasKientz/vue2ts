@@ -3,10 +3,6 @@ html.plt-ios.plt-pwa {
   --ion-statusbar-padding: 20px;
 }
 
-html {
-  --ion-statusbar-padding: 20px;
-}
-
 @supports (padding-top: 20px) {
   html {
     --ion-safe-area-top: var(--ion-statusbar-padding);
