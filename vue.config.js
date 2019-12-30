@@ -21,4 +21,5 @@ module.exports = {
       .loader('webpack-conditional-loader')
       .end()
   },
+  transpileDependencies: ['vuetify'],
 }
