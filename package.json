@@ -9,7 +9,7 @@
     "build-local": "vue-cli-service build --mode localhost && npx cap copy",
     "build-android-production": "BROWSERSLIST_ENV=android vue-cli-service build --mode production && npx cap copy",
     "build-ios-production": "BROWSERSLIST_ENV=ios vue-cli-service build --mode production && npx cap copy",
-    "build-electron-production": "BROWSERSLIST_ENV=electron vue-cli-service build --mode production && npx cap copy",
+    "build-electron-production": "BROWSERSLIST_ENV=electron vue-cli-service electron:build --mode production",
     "dev": "npm run serve",
     "electron:build": "vue-cli-service electron:build",
     "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
