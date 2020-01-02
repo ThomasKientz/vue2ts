@@ -13,7 +13,7 @@ const getPlatform = () => {
     return Capacitor.platform
   }
 
-  if (Capacitor.platform === 'electron' && process.platform) {
+  if (process.env.IS_ELECTRON && process.platform) {
     return 'electron ' + process.platform
   }
 
