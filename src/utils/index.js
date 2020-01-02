@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core'
 // #if process.env.IS_ELECTRON
 import { ipcRenderer } from 'electron'
 import Store from 'electron-store'
@@ -22,3 +23,20 @@ export const closeApp = () => {
 
   return App.exitApp()
 }
+
+const getPlatform = () => {
+  if (Capacitor.platform === 'ios' || Capacitor.platform === 'android') {
+    return Capacitor.platform
+  }
+
+  if (process.env.IS_ELECTRON && process.platform) {
+    return 'electron ' + process.platform
+  }
+
+  console.error('getPlatform() : unknown platform')
+  console.log('Capacitor.platform :', Capacitor.platform)
+  console.log('process.platform :', process.platform)
+  return 'unknown platform'
+}
+
+export const platform = getPlatform()

@@ -3,27 +3,11 @@ import { toast } from './toast'
 import store from '@/store'
 import { SUBJECT_TEXT_DEFAULT, FROM_TEXT_DEFAULT } from '@/utils/defaults'
 import { Capacitor } from '@capacitor/core'
+import { platform } from '@/utils'
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
 })
-
-const getPlatform = () => {
-  if (Capacitor.platform === 'ios' || Capacitor.platform === 'android') {
-    return Capacitor.platform
-  }
-
-  if (process.env.IS_ELECTRON && process.platform) {
-    return 'electron ' + process.platform
-  }
-
-  console.error('getPlatform() : unknown platform')
-  console.log('Capacitor.platform :', Capacitor.platform)
-  console.log('process.platform :', process.platform)
-  return 'unknown platform'
-}
-
-const platform = getPlatform()
 
 api.interceptors.response.use(
   res => res,
