@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="show">
+  <v-dialog persistent v-model="show">
     <v-card>
       <v-card-title class="title text-center d-block">
         Enjoying Boomerang ?
