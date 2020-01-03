@@ -127,7 +127,6 @@ const processFiles = async files => {
       filesArray.push({
         name: file.name,
         size: file.size,
-        type: file.type,
         dataUrl,
       })
     }
