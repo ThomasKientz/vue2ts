@@ -9,7 +9,8 @@ module.exports = {
       },
       builderOptions: {
         appId: 'app.boomerang.mac',
-        afterSign: 'scripts/notarize.js',
+        productName: 'Boomerang',
+        // afterSign: 'scripts/notarize.js',
       },
     },
   },

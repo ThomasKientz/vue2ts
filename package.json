@@ -1,5 +1,8 @@
 {
   "name": "boomerang",
+  "description": "email yourself in one tap",
+  "homepage": "https://getboomerang.app",
+  "author": "Thomas Kientz <contact@boomerang-app.io>",
   "version": "0.1.0",
   "private": true,
   "scripts": {
