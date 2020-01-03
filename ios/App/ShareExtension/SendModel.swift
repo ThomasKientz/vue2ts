@@ -177,13 +177,18 @@ class SendModel {
 
         // JSON Body
 
-        let bodyObject: [String : Any] = [
+        var bodyObject: [String : Any] = [
             "fromText": "Boomerang",
             "message": message,
             "subject": subject,
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZG9tYWluLmNvbSIsImlhdCI6MTU3NDY5ODE5NX0.KLAcendFFzP7OI7GlFCTu-LyV3ut9uZmBP0thBb2RZY",
-            "attachments": attachments.compactMap({ $0.dictionary })
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNsZW1lbnRAdGVzdC5jbyIsImlhdCI6MTU3ODA0MDc4MX0.DW8pRwfu3LfZFgKtDr9-dRQ6heuRagbWf-r4oSNMiIQ",
+            "platform": "ios_share_extension"
         ]
+        
+        // Add the attachments if any
+        if !attachments.isEmpty {
+            bodyObject["attachments"] = attachments.compactMap({ $0.dictionary })
+        }
         
         do {
             let dataObject = try JSONSerialization.data(withJSONObject: bodyObject, options: [])
@@ -211,6 +216,7 @@ class SendModel {
                         if (200..<300).contains(statusCode) {
                             self.onSendingCompleted?(.success(()))
                         } else {
+                            print(response.debugDescription)
                             self.onSendingCompleted?(.failure(SendError.sendRequestFailed))
                         }
                     }
