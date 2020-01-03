@@ -146,7 +146,7 @@ export default {
       setTimeout(() => {
         if (
           rating === null &&
-          counter > 0 &&
+          counter > 5 &&
           !neverAsk &&
           (!skipDate || !isSameDay(skipDate, new Date()))
         ) {
