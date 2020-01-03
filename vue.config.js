@@ -7,6 +7,10 @@ module.exports = {
           return args
         })
       },
+      builderOptions: {
+        appId: 'app.boomerang.mac',
+        afterSign: 'scripts/notarize.js',
+      },
     },
   },
   chainWebpack: config => {
@@ -15,6 +19,8 @@ module.exports = {
       .test(/\.js$/)
       .use('webpack-conditional-loader')
       .loader('webpack-conditional-loader')
+      .after('define')
       .end()
   },
+  transpileDependencies: ['vuetify'],
 }

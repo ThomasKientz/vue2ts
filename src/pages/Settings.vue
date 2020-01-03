@@ -7,11 +7,16 @@
     scrollable
   >
     <v-card>
-      <v-toolbar style="flex-grow: 0;" dark dense color="primary">
+      <v-toolbar
+        style="flex-grow: 0;"
+        dark
+        dense
+        :color="$vuetify.theme.isDark ? 'dark' : 'primary'"
+      >
         <v-btn icon dark @click="dialog = false">
           <v-icon>{{ mdiClose }}</v-icon>
         </v-btn>
-        <v-toolbar-title>Settings</v-toolbar-title>
+        <v-toolbar-title class="pl-0">Settings</v-toolbar-title>
       </v-toolbar>
       <v-card-text class="pa-0">
         <v-container fluid>
@@ -70,6 +75,11 @@
             label="Auto close app after sending"
             @change="autoClose = $event"
           />
+          <v-switch
+            v-if="isElectron"
+            v-model="autoStart"
+            label="Start at login"
+          />
         </v-container>
       </v-card-text>
     </v-card>
@@ -83,6 +93,7 @@ import {
   SUBJECT_MODE_DEFAULT,
   SUBJECT_TEXT_DEFAULT,
 } from '@/utils/defaults'
+import { getStartOnLogginSetting, setStartOnLogginSetting } from '@/utils'
 
 export default {
   props: {
@@ -98,11 +109,16 @@ export default {
     mdiClose,
     subject: 'preview',
     themeItems: ['auto', 'light', 'dark'],
+    autoStart: getStartOnLogginSetting(),
+    isElectron: process.env.IS_ELECTRON,
   }),
 
   watch: {
     theme(v) {
       this.$vuetify.theme.dark = v == 'dark'
+    },
+    autoStart(v) {
+      setStartOnLogginSetting(v)
     },
   },
 

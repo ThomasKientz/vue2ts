@@ -1,4 +1,4 @@
-// #if process.env.PLATFORM === 'electron'
+// #if process.env.IS_ELECTRON
 import ElectronStorage from 'electron-store'
 // #endif
 
@@ -6,7 +6,7 @@ import { Plugins, Capacitor } from '@capacitor/core'
 import VuexPersistence from 'vuex-persist'
 
 const getStorage = () => {
-  if (process.env.PLATFORM === 'electron') {
+  if (process.env.IS_ELECTRON) {
     const storage = new ElectronStorage()
 
     return {

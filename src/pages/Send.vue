@@ -97,11 +97,11 @@ import {
   mdiPlus,
 } from '@mdi/js'
 import { send } from '@/utils/api'
-import { closeApp } from '@/utils'
 import { Plugins } from '@capacitor/core'
-import { mapState } from 'vuex'
 
 const { App } = Plugins
+
+const MAX_SIZE = 10000000
 
 const getDataUrl = file => {
   return new Promise((resolve, reject) => {
@@ -114,21 +114,26 @@ const getDataUrl = file => {
 
 const processFiles = async files => {
   const filesArray = []
+  let totalExceed = 0
 
   for (let i = 0; i < files.length; i++) {
     const file = files[i]
 
-    const dataUrl = await getDataUrl(file)
+    if (file.size > MAX_SIZE) {
+      totalExceed++
+    } else {
+      const dataUrl = await getDataUrl(file)
 
-    filesArray.push({
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      dataUrl,
-    })
+      filesArray.push({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        dataUrl,
+      })
+    }
   }
 
-  return Promise.resolve(filesArray)
+  return Promise.resolve({ filesArray, totalExceed })
 }
 
 export default {
@@ -145,10 +150,6 @@ export default {
     progress: 0,
   }),
 
-  computed: {
-    ...mapState(['autoClose']),
-  },
-
   mounted() {
     setTimeout(() => {
       this.$refs.textarea.focus()
@@ -162,15 +163,29 @@ export default {
   },
 
   methods: {
+    async addFiles(files) {
+      const { filesArray, totalExceed } = await processFiles(files)
+
+      if (totalExceed) {
+        if (filesArray.length)
+          this.$toast.error('Some files selected are too big (> 10 mB).')
+        else this.$toast.error('The file selected is too big (> 10 mB)')
+      }
+
+      this.showFiles = false
+      this.files.push(...filesArray)
+    },
     async onInput(e) {
       const files = e.target.files
-      const processedFiles = await processFiles(files)
-      this.showFiles = false
-      this.files.push(...processedFiles)
+
+      this.addFiles(files).then(() => {
+        this.$refs.input.value = ''
+      })
     },
     async dropHandler(e) {
       const files = e.dataTransfer.files
-      this.files.push(...(await processFiles(files)))
+
+      this.addFiles(files)
     },
     onFilesButton() {
       if (this.files.length === 0) {
@@ -181,6 +196,15 @@ export default {
     },
     send(id) {
       if (!(this.message || this.files.length) || this.loading) return
+
+      const totalSize = this.files.reduce((acc, file) => {
+        return acc + file.size
+      }, 0)
+
+      if (totalSize > MAX_SIZE) {
+        this.$toast.error('Total files size must be less than 10mB')
+        return
+      }
 
       this.loading = id
       send({
@@ -195,9 +219,8 @@ export default {
           this.message = null
           this.files = []
           this.$toast.success('Boomerang sent !')
-          setTimeout(() => {
-            this.autoClose && closeApp()
-          }, 1000)
+
+          this.$emit('send')
         })
         .catch(error => {
           if (error.code) {

@@ -5,7 +5,7 @@
         <div class="text-center subtitle-1">
           What is your email address ?
         </div>
-        <v-form ref="formEmail">
+        <v-form ref="formEmail" @submit.prevent="next()">
           <v-text-field
             :disabled="loading"
             validate-on-blur
@@ -33,10 +33,10 @@
             Please check your spams and whitelist the incoming address.
           </div>
         </div>
-        <v-form ref="formCode">
+        <v-form ref="formCode" @submit.prevent="next()">
           <v-text-field
             validate-on-blur
-            type="text"
+            type="number"
             pattern="[0-9]*"
             v-model="code"
             :disabled="loading"
@@ -51,7 +51,7 @@
     <v-btn
       :loading="loading"
       :disabled="loading"
-      @click="activeStep == 0 ? send() : validate()"
+      @click="next()"
       block
       color="success"
     >
@@ -86,7 +86,7 @@ export default {
   data() {
     return {
       valid: null,
-      email: 'qsd@qsd.fr',
+      email: null,
       code: null,
       randomId: null,
       mdiArrowRight,
@@ -111,8 +111,11 @@ export default {
   },
 
   methods: {
+    next() {
+      return this.activeStep == 0 ? this.send() : this.validate()
+    },
     validate() {
-      if (!this.$refs.formCode.validate()) return
+      if (this.loading || !this.$refs.formCode.validate()) return
 
       this.loading = true
       getToken({
@@ -137,7 +140,7 @@ export default {
         })
     },
     send() {
-      if (!this.$refs.formEmail.validate()) return
+      if (this.loading || !this.$refs.formEmail.validate()) return
 
       this.loading = true
       this.randomId = Math.floor(Math.random() * Math.floor(1000))

@@ -7,7 +7,12 @@
     scrollable
   >
     <v-card>
-      <v-toolbar style="flex-grow: 0;" dark dense color="primary">
+      <v-toolbar
+        style="flex-grow: 0;"
+        dark
+        dense
+        :color="$vuetify.theme.isDark ? 'dark' : 'primary'"
+      >
         <v-btn icon dark @click="dialog = false">
           <v-icon>{{ mdiClose }}</v-icon>
         </v-btn>
@@ -51,6 +56,10 @@ export default {
     value: {
       type: Boolean,
     },
+    rating: {
+      type: Number,
+      default: null,
+    },
   },
 
   data: () => ({
@@ -77,7 +86,10 @@ export default {
 
       this.loading = true
       sendFeedback({
-        message: this.message,
+        message:
+          this.rating !== null
+            ? `(rate : ${this.rating}) ${this.message}`
+            : this.message,
       })
         .then(() => {
           this.message = null

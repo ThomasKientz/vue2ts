@@ -3,6 +3,7 @@ import { toast } from './toast'
 import store from '@/store'
 import { SUBJECT_TEXT_DEFAULT, FROM_TEXT_DEFAULT } from '@/utils/defaults'
 import { Capacitor } from '@capacitor/core'
+import { platform } from '@/utils'
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -56,6 +57,7 @@ export const send = ({ token, message, attachments, progress }) => {
       attachments,
       fromText: store.state.fromText || FROM_TEXT_DEFAULT,
       subject,
+      platform,
     },
     {
       ...(typeof progress == 'function' && {
@@ -75,15 +77,16 @@ export const sendFeedback = ({ message }) => {
     token: store.state.token1,
     message,
     context: Capacitor.platform,
+    platform,
   })
 }
 
 export const verifyEmail = ({ email, id }) => {
-  return api.post('/verifyEmail', { email, id })
+  return api.post('/verifyEmail', { email, id, platform })
 }
 
 export const getToken = ({ email, id, code }) => {
   return api
-    .post('/verifyCode', { email, id, code })
+    .post('/verifyCode', { email, id, code, platform })
     .then(res => res && res.data)
 }

@@ -14,8 +14,10 @@ const vuetify = new Vuetify({
     dark: mq.matches,
     themes: {
       dark: {
-        primary: colors.blue.darken4,
-        success: colors.green.darken3,
+        primary: colors.blue.lighten3,
+        accent: colors.blue.lighten2,
+        success: colors.green.lighten1,
+        error: colors.red.lighten1,
       },
     },
   },

@@ -21,7 +21,12 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar dense color="primary" dark app>
+    <v-app-bar
+      dense
+      :color="$vuetify.theme.isDark ? 'dark' : 'primary'"
+      dark
+      app
+    >
       <v-app-bar-nav-icon
         v-if="$route.meta.menuButton"
         @click.stop="drawer = !drawer"
@@ -41,32 +46,31 @@
     </v-app-bar>
 
     <v-content>
-      <router-view />
+      <router-view @send="onSend" />
       <settings v-model="showSettings" />
-      <feedback v-model="showFeedback" />
+      <feedback v-model="showFeedback" :rating="rating" />
     </v-content>
-    <rate-dialog v-model="showRate" />
+    <rate-dialog v-model="showRate" @rate="rating = $event" />
   </v-app>
 </template>
 
 <script>
 import { mdiMenu, mdiSettings, mdiArrowLeft, mdiHeart } from '@mdi/js'
 import Toast from '@/components/toast'
-import RateDialog from '@/components/rateDialog'
-import Settings from '@/pages/Settings'
-import Feedback from '@/pages/Feedback'
 import { Plugins, Capacitor } from '@capacitor/core'
 const { SplashScreen, App, StatusBar } = Plugins
 import { mapState } from 'vuex'
+import { closeApp } from '@/utils'
+import { isSameDay } from 'date-fns'
 
 export default {
   name: 'App',
 
   components: {
     Toast,
-    Settings,
-    Feedback,
-    RateDialog,
+    Settings: () => import('@/pages/Settings'),
+    Feedback: () => import('@/pages/Feedback'),
+    RateDialog: () => import('@/components/rateDialog'),
   },
 
   created() {
@@ -91,10 +95,22 @@ export default {
     showSettings: false,
     showFeedback: false,
     showRate: false,
+    rating: null,
   }),
 
   computed: {
     ...mapState(['theme']),
+  },
+
+  watch: {
+    rating(v, old) {
+      if (typeof v === 'number' && old === null) {
+        this.showFeedback = true
+      }
+    },
+    showFeedback(v) {
+      if (v == false) this.rating = null
+    },
   },
 
   methods: {
@@ -109,6 +125,8 @@ export default {
       App.addListener('appStateChange', state => {
         if (this.theme == 'auto')
           this.$vuetify.theme.dark = state.isActive && mq.matches
+
+        this.showRate = false
       })
     },
     show(view) {
@@ -117,6 +135,24 @@ export default {
       } else this.showFeedback = true
 
       this.drawer = false
+    },
+    onSend() {
+      const { rating, neverAsk, counter } = this.$store.state.rate
+
+      this.$store.commit('increment')
+
+      const skipDate = this.$store.getters.skipDate
+
+      setTimeout(() => {
+        if (
+          rating === null &&
+          counter > 0 &&
+          !neverAsk &&
+          (!skipDate || !isSameDay(skipDate, new Date()))
+        ) {
+          this.showRate = true
+        } else this.$store.state.autoClose && closeApp()
+      }, 1000)
     },
   },
 }
