@@ -9,13 +9,13 @@ Sentry.init({
   ],
   environment: 'production',
 })
-
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import './plugins/toast'
+import 'typeface-roboto'
 import '@/style/main.scss'
 import { setupPlatforms } from '@/utils/platform'
 
