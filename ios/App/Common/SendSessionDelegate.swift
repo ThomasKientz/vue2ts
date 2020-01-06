@@ -57,6 +57,12 @@ final class SendSessionDelegate: NSObject, URLSessionDataDelegate {
                 )
                 #endif
             } else {
+                if #available(iOS 12.0, *) {
+                    let isFromRecreatedSession = completionHandler != nil
+                    let recreatedDebugString = isFromRecreatedSession ? " from recreated session." : "."
+                    os_log(.info, log: .backgroundUpload, "Background task failed with HTTP status code %{PUBLIC}d%{PUBLIC}@", statusCode, recreatedDebugString)
+                }
+                
                 // Failure! Should send notification
                 #if DEBUG
                 let errorMessage = "Something went wrong. \(statusCode)"

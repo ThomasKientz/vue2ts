@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if identifier == "com.boomerang.app.send-with-attachments" {
             let configuration = URLSessionConfiguration.background(withIdentifier: "com.boomerang.app.send-with-attachments")
-            configuration.sharedContainerIdentifier = "group.com.boomerang.app-Dev"
+            configuration.sharedContainerIdentifier = Constants.appGroup
             let session = URLSession(configuration: configuration, delegate: sendSessionDelegate, delegateQueue: .main)
         }
     }

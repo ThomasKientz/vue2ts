@@ -15,6 +15,10 @@ class SendModel {
     
     // MARK: - Properties
     
+    private let config: Config
+    
+    lazy var selectedTokenIndex: Int = 0
+    
     private let onSendingCompleted: SendingResult
     
     private let attachments: [NSItemProvider]
@@ -24,6 +28,9 @@ class SendModel {
     private let queue = DispatchQueue.global(qos: .background)
         
     private var preparedAttachments = [Attachment]()
+    
+    /// A subject proceeded from a shared URL. This should be prioritized as the email subject.
+    private var urlSubject: String?
     
     private var message: String?
     
@@ -35,9 +42,20 @@ class SendModel {
         if self.preparedAttachments.isEmpty {
             // Case where we send a request without attachments
             if let message = self.message {
+                
+                let subject: String
+                
+                if let urlSubject = self.urlSubject {
+                    subject = urlSubject
+                } else if self.config.subjectMode == .subjectText {
+                    subject = self.config.subjectText
+                } else {
+                    subject = String(message.prefix(78))
+                }
+                
                 self.send(
                     message: message,
-                    subject: "Boomerang",
+                    subject: subject,
                     attachments: self.preparedAttachments
                 )
             } else {
@@ -59,10 +77,27 @@ class SendModel {
             self.testRequest { (result) in
                 switch result {
                 case .success:
+                    let subject: String
+                    
+                    if self.config.subjectMode == .subjectText {
+                        subject = self.config.subjectText
+                    } else if let message = self.message {
+                        subject = String(message.prefix(78))
+                    } else if !self.preparedAttachments.isEmpty {
+                        subject = String(
+                            self.preparedAttachments
+                                .map({ $0.name })
+                                .joined(separator: ", ")
+                                .prefix(78)
+                        )
+                    } else {
+                        subject = self.config.subjectText
+                    }
+                    
                     // Looks ok, can proceed.
                     self.send(
-                        message: self.message ?? "",
-                        subject: "test",
+                        message: self.message ?? " ",
+                        subject: subject,
                         attachments: self.preparedAttachments
                     )
                 case .failure:
@@ -77,18 +112,17 @@ class SendModel {
     
     // MARK: - Life Cycle
     
-    init(attachments: [NSItemProvider], onSendingCompleted: SendingResult) {
+    init(attachments: [NSItemProvider], config: Config, onSendingCompleted: SendingResult) {
         self.onSendingCompleted = onSendingCompleted
         self.attachments = attachments
-        
-        start()
+        self.config = config
     }
     
     deinit {
         self.backgroundSession?.finishTasksAndInvalidate();
     }
     
-    private func start() {
+    func start() {
         let group = DispatchGroup()
         
         attachments.forEach { [unowned self] (provider) in
@@ -105,11 +139,12 @@ class SendModel {
                         }
                     case let url as URL where url.isFileURL:
                         if let data = try? Data(contentsOf: url),
-                            let attachment = self.attachment(for: provider, with: data) {
+                            let attachment = self.attachment(for: provider, with: data, name: url.lastPathComponent) {
                             self.preparedAttachments.append(attachment)
                         }
                     case let url as URL where !url.isFileURL:
                         if let title = url.title {
+                            self.urlSubject = title
                             self.message = "\(title)\n\(url))"
                         } else {
                             self.message = url.absoluteString
@@ -129,18 +164,18 @@ class SendModel {
         group.notify(queue: queue, work: onitemsLoaded)
     }
     
-    private func attachment(for provider: NSItemProvider, with data: Data) -> Attachment? {
+    private func attachment(for provider: NSItemProvider, with data: Data, name: String? = nil) -> Attachment? {
         guard
             let mime = UTTypeCopyPreferredTagWithClass(provider.registeredTypeIdentifiers.first! as CFString, kUTTagClassMIMEType)?.takeRetainedValue() as String?
             else {
                 return nil
         }
-        
+                
         print("Successfully retrieved data of UTI: \(provider.registeredTypeIdentifiers)")
         print("MIME is: \(mime)")
         
         return Attachment(
-            name: provider.suggestedName ?? "Data",
+            name: name ?? provider.suggestedName ?? "Data",
             type: mime,
             data: data
         )
@@ -152,7 +187,7 @@ class SendModel {
         
         // Configure session
         let sessionConfig = isBackgroundUpload ? URLSessionConfiguration.background(withIdentifier: "com.boomerang.app.send-with-attachments") : URLSessionConfiguration.default
-        sessionConfig.sharedContainerIdentifier = "group.com.boomerang.app-Dev"
+        sessionConfig.sharedContainerIdentifier = Constants.appGroup
         sessionConfig.timeoutIntervalForRequest = 20.0
         sessionConfig.isDiscretionary = false
 
@@ -178,10 +213,10 @@ class SendModel {
         // JSON Body
 
         var bodyObject: [String : Any] = [
-            "fromText": "Boomerang",
+            "fromText": config.fromText,
             "message": message,
             "subject": subject,
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNsZW1lbnRAdGVzdC5jbyIsImlhdCI6MTU3ODA0MDc4MX0.DW8pRwfu3LfZFgKtDr9-dRQ6heuRagbWf-r4oSNMiIQ",
+            "token": config.emailTokens[selectedTokenIndex].token,
             "platform": "ios_share_extension"
         ]
         
@@ -192,11 +227,11 @@ class SendModel {
         
         do {
             let dataObject = try JSONSerialization.data(withJSONObject: bodyObject, options: [])
-            
+             
             /* Start a new Task */
             let task: URLSessionTask
             if isBackgroundUpload {
-                guard let groupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.boomerang.app-Dev") else {
+                guard let groupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.settings.boomerang") else {
                     self.onSendingCompleted?(.failure(SendError.sendRequestFailed))
                     return
                 }
@@ -211,7 +246,7 @@ class SendModel {
                     if error == nil {
                         // Success
                         let statusCode = (response as! HTTPURLResponse).statusCode
-                        print("URL Session Task Succeeded: HTTP \(statusCode)")
+                        print("Send request succeeded: HTTP \(statusCode)")
                         
                         if (200..<300).contains(statusCode) {
                             self.onSendingCompleted?(.success(()))
@@ -222,7 +257,7 @@ class SendModel {
                     }
                     else {
                         // Failure
-                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                        print("Send request failed: %@", error!.localizedDescription);
                         if !isBackgroundUpload {
                             self.onSendingCompleted?(.failure(error!))
                         }
@@ -258,7 +293,7 @@ class SendModel {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session Task Succeeded: HTTP \(statusCode)")
+                print("Test request Succeeded: HTTP \(statusCode)")
                 
                 if (200..<300).contains(statusCode) {
                     completionHandler(.success(()))
@@ -268,7 +303,7 @@ class SendModel {
             }
             else {
                 // Failure
-                print("URL Session Task Failed: %@", error!.localizedDescription);
+                print("Test request failed: %@", error!.localizedDescription);
                 completionHandler(.failure(error!))
             }
         })

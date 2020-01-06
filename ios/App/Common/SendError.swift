@@ -11,6 +11,8 @@ enum SendError: LocalizedError {
     
     var errorDescription: String? {
         switch self {
+        case.noValidEmail:
+            return "Couldn't find a valid email. Please open the app to register an email address."
         case .testRequestFailed:
             return "Servers are currently unavailable. Please try again later."
         case .individualFileInvalidSize:
@@ -25,6 +27,8 @@ enum SendError: LocalizedError {
             return "The request couldn't be sent because the data wasn't of a supported format."
         }
     }
+    
+    case noValidEmail
     
     case testRequestFailed
     

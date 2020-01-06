@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
+		411579F423BF39A300F92E5F /* ConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411579F323BF39A300F92E5F /* ConfigReader.swift */; };
 		4156E79E23AA2BD9005C42A7 /* OSLog+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */; };
 		4156E79F23AA2BD9005C42A7 /* OSLog+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */; };
 		41A9C80023A9275E00B2CEDC /* SendSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A9C7FF23A9275E00B2CEDC /* SendSessionDelegate.swift */; };
@@ -19,6 +20,10 @@
 		41C905A4239A93FC009BFCFD /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C905A3239A93FC009BFCFD /* ShareViewController.swift */; };
 		41C905A7239A93FC009BFCFD /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 41C905A5239A93FC009BFCFD /* MainInterface.storyboard */; };
 		41C905AB239A93FC009BFCFD /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 41C905A1239A93FC009BFCFD /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		41D0AFFF23C325700041C398 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 41D0AFFE23C325700041C398 /* JWTDecode */; };
+		41D0B00223C33DB60041C398 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D0B00123C33DB60041C398 /* Config.swift */; };
+		41D0B00423C34A950041C398 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D0B00323C34A950041C398 /* Constants.swift */; };
+		41D0B00523C34AA70041C398 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D0B00323C34A950041C398 /* Constants.swift */; };
 		41E3BEAD23A3EF2500C2F4AD /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E3BEAC23A3EF2500C2F4AD /* Attachment.swift */; };
 		41E3BEAF23A3F0AE00C2F4AD /* Encodable+Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E3BEAE23A3F0AE00C2F4AD /* Encodable+Dictionary.swift */; };
 		41E3BEB123A3FCD700C2F4AD /* URL+Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E3BEB023A3FCD700C2F4AD /* URL+Title.swift */; };
@@ -63,6 +68,7 @@
 
 /* Begin PBXFileReference section */
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
+		411579F323BF39A300F92E5F /* ConfigReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigReader.swift; sourceTree = "<group>"; };
 		4156E79B23AA0DBF005C42A7 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OSLog+Custom.swift"; sourceTree = "<group>"; };
 		41A9C7FF23A9275E00B2CEDC /* SendSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendSessionDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +80,8 @@
 		41C905A3239A93FC009BFCFD /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		41C905A6239A93FC009BFCFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		41C905A8239A93FC009BFCFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		41D0B00123C33DB60041C398 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		41D0B00323C34A950041C398 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		41E3BEAC23A3EF2500C2F4AD /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		41E3BEAE23A3F0AE00C2F4AD /* Encodable+Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Dictionary.swift"; sourceTree = "<group>"; };
 		41E3BEB023A3FCD700C2F4AD /* URL+Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Title.swift"; sourceTree = "<group>"; };
@@ -97,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41D0AFFF23C325700041C398 /* JWTDecode in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +135,7 @@
 				41E6B6E823AA4194005D91CF /* NotificationController.swift */,
 				41B71DF723A7E1C0000440D4 /* SendError.swift */,
 				41B71DF223A7BE5A000440D4 /* Extensions */,
+				41D0B00323C34A950041C398 /* Constants.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -147,12 +157,22 @@
 				4156E79B23AA0DBF005C42A7 /* ShareExtension.entitlements */,
 				41C905A3239A93FC009BFCFD /* ShareViewController.swift */,
 				41B71DF523A7C29C000440D4 /* SendModel.swift */,
-				41E3BEAC23A3EF2500C2F4AD /* Attachment.swift */,
+				41D0B00023C33D900041C398 /* Model Objects */,
 				41C905A5239A93FC009BFCFD /* MainInterface.storyboard */,
 				41C905A8239A93FC009BFCFD /* Info.plist */,
 				41B71DF923A907FE000440D4 /* PaddingLabel.swift */,
 			);
 			path = ShareExtension;
+			sourceTree = "<group>";
+		};
+		41D0B00023C33D900041C398 /* Model Objects */ = {
+			isa = PBXGroup;
+			children = (
+				41D0B00123C33DB60041C398 /* Config.swift */,
+				411579F323BF39A300F92E5F /* ConfigReader.swift */,
+				41E3BEAC23A3EF2500C2F4AD /* Attachment.swift */,
+			);
+			path = "Model Objects";
 			sourceTree = "<group>";
 		};
 		504EC2FB1FED79650016851F = {
@@ -217,6 +237,9 @@
 			dependencies = (
 			);
 			name = ShareExtension;
+			packageProductDependencies = (
+				41D0AFFE23C325700041C398 /* JWTDecode */,
+			);
 			productName = ShareExtension;
 			productReference = 41C905A1239A93FC009BFCFD /* ShareExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -270,6 +293,9 @@
 				Base,
 			);
 			mainGroup = 504EC2FB1FED79650016851F;
+			packageReferences = (
+				41D0AFFD23C325700041C398 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */,
+			);
 			productRefGroup = 504EC3051FED79650016851F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -351,10 +377,13 @@
 				41E6B6EA23AA4197005D91CF /* NotificationController.swift in Sources */,
 				41B71DF823A7E1C0000440D4 /* SendError.swift in Sources */,
 				41B71DFA23A907FE000440D4 /* PaddingLabel.swift in Sources */,
+				41D0B00223C33DB60041C398 /* Config.swift in Sources */,
 				41E3BEAF23A3F0AE00C2F4AD /* Encodable+Dictionary.swift in Sources */,
 				41E3BEB123A3FCD700C2F4AD /* URL+Title.swift in Sources */,
 				4156E79F23AA2BD9005C42A7 /* OSLog+Custom.swift in Sources */,
 				41A9C80123A9275E00B2CEDC /* SendSessionDelegate.swift in Sources */,
+				41D0B00423C34A950041C398 /* Constants.swift in Sources */,
+				411579F423BF39A300F92E5F /* ConfigReader.swift in Sources */,
 				41C905A4239A93FC009BFCFD /* ShareViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -371,6 +400,7 @@
 				41E6B6EC23AA5A98005D91CF /* Data+Size.swift in Sources */,
 				41A9C80023A9275E00B2CEDC /* SendSessionDelegate.swift in Sources */,
 				41E6B6ED23AA5A9A005D91CF /* URL+Title.swift in Sources */,
+				41D0B00523C34AA70041C398 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,10 +453,14 @@
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.boomerang.app.ShareExtension";
+				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -445,9 +479,13 @@
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.boomerang.app.ShareExtension";
+				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.ShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -557,7 +595,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -573,7 +612,10 @@
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -594,7 +636,10 @@
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = USE_PUSH;
@@ -634,6 +679,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		41D0AFFD23C325700041C398 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/auth0/JWTDecode.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		41D0AFFE23C325700041C398 /* JWTDecode */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 41D0AFFD23C325700041C398 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */;
+			productName = JWTDecode;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 504EC2FC1FED79650016851F /* Project object */;
 }
