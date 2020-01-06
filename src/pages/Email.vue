@@ -104,7 +104,7 @@ export default {
 
   watch: {
     code(v) {
-      if (v.length == 4) {
+      if (v && v.length == 4) {
         if (this.codeRules.every(rule => rule(v))) this.validate()
       }
     },

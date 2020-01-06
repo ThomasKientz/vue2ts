@@ -127,7 +127,6 @@ const processFiles = async files => {
       filesArray.push({
         name: file.name,
         size: file.size,
-        type: file.type,
         dataUrl,
       })
     }
@@ -255,14 +254,14 @@ textarea {
 }
 
 ::v-deep .v-btn__content {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%;
-  display: block;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  width: 100% !important;
+  display: block !important;
 }
 
 ::v-deep .v-badge__badge {
-  right: -8px;
-  top: -8px;
+  right: -8px !important;
+  top: -8px !important;
 }
 </style>

@@ -4,7 +4,7 @@
 import { app, protocol, Tray, BrowserWindow, ipcMain, Menu } from 'electron'
 import {
   createProtocol,
-  // installVueDevtools
+  installVueDevtools,
 } from 'vue-cli-plugin-electron-builder/lib'
 import * as path from 'path'
 import { getWindowPosition } from './utils/getWindowPosition'
@@ -63,11 +63,11 @@ app.on('ready', async () => {
     // Electron will not launch with Devtools extensions installed on Windows 10 with dark mode
     // If you are not using Windows 10 dark mode, you may uncomment these lines
     // In addition, if the linked issue is closed, you can upgrade electron and uncomment these lines
-    // try {
-    //   await installVueDevtools()
-    // } catch (e) {
-    //   console.error('Vue Devtools failed to install:', e.toString())
-    // }
+    try {
+      await installVueDevtools()
+    } catch (e) {
+      console.error('Vue Devtools failed to install:', e.toString())
+    }
   }
 
   appReady()
@@ -97,7 +97,6 @@ const appReady = async () => {
 
   tray = new Tray(trayImage)
 
-  // tray.on('click', clicked.bind(this))
   tray.on('click', clicked)
   tray.on('double-click', clicked)
 
@@ -124,14 +123,6 @@ const createWindow = async () => {
 
   positioner = new Positioner(win)
 
-  win.on('blur', () => {
-    if (!win) {
-      return
-    }
-
-    hideWindow()
-  })
-
   win.on('closed', () => {
     win = null
   })
@@ -151,7 +142,7 @@ const clicked = async (event, bounds) => {
   if (event && (event.shiftKey || event.ctrlKey || event.metaKey)) {
     return hideWindow()
   }
-  if (win && win.isVisible()) {
+  if (win && win.isFocused()) {
     return hideWindow()
   }
 
