@@ -145,7 +145,7 @@ class SendModel {
                     case let url as URL where !url.isFileURL:
                         if let title = url.title {
                             self.urlSubject = title
-                            self.message = "\(title)\n\(url))"
+                            self.message = "\(title)\n\(url)"
                         } else {
                             self.message = url.absoluteString
                         }
