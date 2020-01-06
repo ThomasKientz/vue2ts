@@ -198,11 +198,7 @@ class SendModel {
             delegateQueue: nil
         )
 
-        /* Create the Request:
-           Send  (POST https://boomerang-app-api-dev.herokuapp.com/send)
-         */
-
-        guard let url = URL(string: "https://boomerang-app-api-dev.herokuapp.com/send") else { return }
+        guard let url = URL(string: "https://api.boomerang-app.io/send") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
 
@@ -284,7 +280,7 @@ class SendModel {
         // Create session
         let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         
-        guard let url = URL(string: "https://boomerang-app-api-dev.herokuapp.com/test") else { return }
+        guard let url = URL(string: "https://api.boomerang-app.io/test") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
 
