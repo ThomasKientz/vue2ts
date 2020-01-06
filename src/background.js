@@ -93,7 +93,7 @@ const appReady = async () => {
     app.dock.hide()
   }
 
-  let trayImage = path.join(__static, 'icons', 'icon.png')
+  let trayImage = path.join(__static, 'icons', 'iconTemplate.png')
 
   tray = new Tray(trayImage)
 
