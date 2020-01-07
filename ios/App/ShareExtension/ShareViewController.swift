@@ -27,7 +27,7 @@ class ShareViewController: UIViewController {
         label.textAlignment = NSTextAlignment.center
         label.numberOfLines = 1
         label.text = "Boomerang sent!"
-        label.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+        label.backgroundColor = UIColor(red:0.30, green:0.69, blue:0.31, alpha:1.0)
         label.paddingInsets = UIEdgeInsets(top: 16, left: 32, bottom: 16, right: 32)
         label.layer.cornerRadius = 10
         label.clipsToBounds = true
@@ -82,7 +82,7 @@ class ShareViewController: UIViewController {
                 switch result {
                 case .success(()):
                     self.successLabel.isHidden = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
                         self.completeRequest()
                     }
                 case .failure(let error):
