@@ -101,7 +101,7 @@ class SendModel {
                         attachments: self.preparedAttachments
                     )
                 case .failure:
-                    self.onSendingCompleted?(.failure(SendError.testRequestFailed))
+                    self.onSendingCompleted?(.failure(SendError.sendRequestFailed))
                     break
                 }
             }
