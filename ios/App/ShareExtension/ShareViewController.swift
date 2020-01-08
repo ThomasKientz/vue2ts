@@ -53,13 +53,14 @@ class ShareViewController: UIViewController {
         // ------- 🔨 Test Configs 🔨 -------
 //        let config = Config(fromText: nil, subjectMode: SubjectMode.custom, subjectText: nil, token1: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InFzZEBxc2QuZnIiLCJpYXQiOjE1NzgwNjY4NDF9.5HGZC_8Lp6OX7p_ztLv7S5kyySg23kWte4XNL38oPyU", token2: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InFzZEBxc2QuZnIiLCJpYXQiOjE1NzgwNjY4NDF9.5HGZC_8Lp6OX7p_ztLv7S5kyySg23kWte4XNL38oPyU")
 //        let config = Config(fromText: nil, subjectMode: SubjectMode.custom, subjectText: nil, token1: nil, token2: nil)
+//        let config = Config(fromText: nil, subjectMode: .custom, subjectText: nil, token1: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNsZW1lbnQuY2FyZG9ubmVsQG1lLmNvbSIsImlhdCI6MTU3ODMzMjA5MX0.wSm-0g_GAMApQsU9mOSI3R0rWDHlW8ETWmy2paUDPVc", token2: nil)
         // ------- 🔨 Test Configs 🔨 -------
         
         let config = ConfigReader.loadConfig()
         
         // There's no point going further if there's no registered email.
         guard config.hasAtLeastOneEmail else {
-            showError(message: SendError.noValidEmail.localizedDescription)
+            showError(message: BoomerangError.noValidEmail.localizedDescription)
             return
         }
 
@@ -80,7 +81,13 @@ class ShareViewController: UIViewController {
                 self.loaderVisualEffectView.isHidden = true
                 
                 switch result {
-                case .success(()):
+                case .success(let uploadKind):
+                    switch uploadKind {
+                    case .background:
+                        self.successLabel.text = "Sending files in background…"
+                    case .foreground:
+                        self.successLabel.text = "Boomerang sent!"
+                    }
                     self.successLabel.isHidden = false
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                         self.completeRequest()

@@ -15,8 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // TODO: Should be moved elsewhere so that the user doesn't instant refuses it.
+        #if DEBUG
+        // We ask the notification in debug mode to make the debugging easier.
         NotificationController.requestNotificationPermission()
+        #endif
+        
         
         return true
     }
@@ -33,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if identifier == "com.boomerang.app.send-with-attachments" {
             let configuration = URLSessionConfiguration.background(withIdentifier: "com.boomerang.app.send-with-attachments")
             configuration.sharedContainerIdentifier = Constants.appGroup
-            let session = URLSession(configuration: configuration, delegate: sendSessionDelegate, delegateQueue: .main)
+            _ = URLSession(configuration: configuration, delegate: sendSessionDelegate, delegateQueue: .main)
         }
     }
     

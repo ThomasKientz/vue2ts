@@ -16,6 +16,10 @@ struct Attachment {
     
     let data: Data
     
+    /**
+     The dataUrl field as seen in the requests that this extension send.
+     The goal of this property is to add a bit of necessery cruft to the base64 value.
+     */
     var dataUrl: String {
         return "data:\(type);base64,\(data.base64EncodedString())"
     }

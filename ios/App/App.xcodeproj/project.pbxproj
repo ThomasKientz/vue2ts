@@ -11,11 +11,14 @@
 		411579F423BF39A300F92E5F /* ConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411579F323BF39A300F92E5F /* ConfigReader.swift */; };
 		4156E79E23AA2BD9005C42A7 /* OSLog+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */; };
 		4156E79F23AA2BD9005C42A7 /* OSLog+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */; };
+		415B908323C5D52200AB0A3C /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 415B908223C5D52200AB0A3C /* SwiftSoup */; };
+		415B908523C5D95800AB0A3C /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 415B908423C5D95800AB0A3C /* SwiftSoup */; };
+		415B908723C5EA3A00AB0A3C /* RequestValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415B908623C5EA3A00AB0A3C /* RequestValidator.swift */; };
 		41A9C80023A9275E00B2CEDC /* SendSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A9C7FF23A9275E00B2CEDC /* SendSessionDelegate.swift */; };
 		41A9C80123A9275E00B2CEDC /* SendSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A9C7FF23A9275E00B2CEDC /* SendSessionDelegate.swift */; };
 		41B71DF423A7BE85000440D4 /* Data+Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF323A7BE85000440D4 /* Data+Size.swift */; };
 		41B71DF623A7C29C000440D4 /* SendModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF523A7C29C000440D4 /* SendModel.swift */; };
-		41B71DF823A7E1C0000440D4 /* SendError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF723A7E1C0000440D4 /* SendError.swift */; };
+		41B71DF823A7E1C0000440D4 /* BoomerangError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF723A7E1C0000440D4 /* BoomerangError.swift */; };
 		41B71DFA23A907FE000440D4 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF923A907FE000440D4 /* PaddingLabel.swift */; };
 		41C905A4239A93FC009BFCFD /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C905A3239A93FC009BFCFD /* ShareViewController.swift */; };
 		41C905A7239A93FC009BFCFD /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 41C905A5239A93FC009BFCFD /* MainInterface.storyboard */; };
@@ -29,7 +32,7 @@
 		41E3BEB123A3FCD700C2F4AD /* URL+Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E3BEB023A3FCD700C2F4AD /* URL+Title.swift */; };
 		41E6B6E923AA4194005D91CF /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E6B6E823AA4194005D91CF /* NotificationController.swift */; };
 		41E6B6EA23AA4197005D91CF /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E6B6E823AA4194005D91CF /* NotificationController.swift */; };
-		41E6B6EB23AA5A5C005D91CF /* SendError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF723A7E1C0000440D4 /* SendError.swift */; };
+		41E6B6EB23AA5A5C005D91CF /* BoomerangError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF723A7E1C0000440D4 /* BoomerangError.swift */; };
 		41E6B6EC23AA5A98005D91CF /* Data+Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF323A7BE85000440D4 /* Data+Size.swift */; };
 		41E6B6ED23AA5A9A005D91CF /* URL+Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E3BEB023A3FCD700C2F4AD /* URL+Title.swift */; };
 		41E6B6EE23AA5A9D005D91CF /* Encodable+Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E3BEAE23A3F0AE00C2F4AD /* Encodable+Dictionary.swift */; };
@@ -71,10 +74,11 @@
 		411579F323BF39A300F92E5F /* ConfigReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigReader.swift; sourceTree = "<group>"; };
 		4156E79B23AA0DBF005C42A7 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OSLog+Custom.swift"; sourceTree = "<group>"; };
+		415B908623C5EA3A00AB0A3C /* RequestValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestValidator.swift; sourceTree = "<group>"; };
 		41A9C7FF23A9275E00B2CEDC /* SendSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendSessionDelegate.swift; sourceTree = "<group>"; };
 		41B71DF323A7BE85000440D4 /* Data+Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Size.swift"; sourceTree = "<group>"; };
 		41B71DF523A7C29C000440D4 /* SendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendModel.swift; sourceTree = "<group>"; };
-		41B71DF723A7E1C0000440D4 /* SendError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendError.swift; sourceTree = "<group>"; };
+		41B71DF723A7E1C0000440D4 /* BoomerangError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoomerangError.swift; sourceTree = "<group>"; };
 		41B71DF923A907FE000440D4 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		41C905A1239A93FC009BFCFD /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		41C905A3239A93FC009BFCFD /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
@@ -106,6 +110,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				41D0AFFF23C325700041C398 /* JWTDecode in Frameworks */,
+				415B908323C5D52200AB0A3C /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +119,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */,
+				415B908523C5D95800AB0A3C /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,7 +139,7 @@
 			children = (
 				41A9C7FF23A9275E00B2CEDC /* SendSessionDelegate.swift */,
 				41E6B6E823AA4194005D91CF /* NotificationController.swift */,
-				41B71DF723A7E1C0000440D4 /* SendError.swift */,
+				41B71DF723A7E1C0000440D4 /* BoomerangError.swift */,
 				41B71DF223A7BE5A000440D4 /* Extensions */,
 				41D0B00323C34A950041C398 /* Constants.swift */,
 			);
@@ -171,6 +177,7 @@
 				41D0B00123C33DB60041C398 /* Config.swift */,
 				411579F323BF39A300F92E5F /* ConfigReader.swift */,
 				41E3BEAC23A3EF2500C2F4AD /* Attachment.swift */,
+				415B908623C5EA3A00AB0A3C /* RequestValidator.swift */,
 			);
 			path = "Model Objects";
 			sourceTree = "<group>";
@@ -239,6 +246,7 @@
 			name = ShareExtension;
 			packageProductDependencies = (
 				41D0AFFE23C325700041C398 /* JWTDecode */,
+				415B908223C5D52200AB0A3C /* SwiftSoup */,
 			);
 			productName = ShareExtension;
 			productReference = 41C905A1239A93FC009BFCFD /* ShareExtension.appex */;
@@ -261,6 +269,9 @@
 				41C905AA239A93FC009BFCFD /* PBXTargetDependency */,
 			);
 			name = App;
+			packageProductDependencies = (
+				415B908423C5D95800AB0A3C /* SwiftSoup */,
+			);
 			productName = App;
 			productReference = 504EC3041FED79650016851F /* App.app */;
 			productType = "com.apple.product-type.application";
@@ -295,6 +306,7 @@
 			mainGroup = 504EC2FB1FED79650016851F;
 			packageReferences = (
 				41D0AFFD23C325700041C398 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */,
+				415B908123C5D52200AB0A3C /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			productRefGroup = 504EC3051FED79650016851F /* Products */;
 			projectDirPath = "";
@@ -375,11 +387,12 @@
 				41B71DF623A7C29C000440D4 /* SendModel.swift in Sources */,
 				41E3BEAD23A3EF2500C2F4AD /* Attachment.swift in Sources */,
 				41E6B6EA23AA4197005D91CF /* NotificationController.swift in Sources */,
-				41B71DF823A7E1C0000440D4 /* SendError.swift in Sources */,
+				41B71DF823A7E1C0000440D4 /* BoomerangError.swift in Sources */,
 				41B71DFA23A907FE000440D4 /* PaddingLabel.swift in Sources */,
 				41D0B00223C33DB60041C398 /* Config.swift in Sources */,
 				41E3BEAF23A3F0AE00C2F4AD /* Encodable+Dictionary.swift in Sources */,
 				41E3BEB123A3FCD700C2F4AD /* URL+Title.swift in Sources */,
+				415B908723C5EA3A00AB0A3C /* RequestValidator.swift in Sources */,
 				4156E79F23AA2BD9005C42A7 /* OSLog+Custom.swift in Sources */,
 				41A9C80123A9275E00B2CEDC /* SendSessionDelegate.swift in Sources */,
 				41D0B00423C34A950041C398 /* Constants.swift in Sources */,
@@ -393,7 +406,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4156E79E23AA2BD9005C42A7 /* OSLog+Custom.swift in Sources */,
-				41E6B6EB23AA5A5C005D91CF /* SendError.swift in Sources */,
+				41E6B6EB23AA5A5C005D91CF /* BoomerangError.swift in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				41E6B6EE23AA5A9D005D91CF /* Encodable+Dictionary.swift in Sources */,
 				41E6B6E923AA4194005D91CF /* NotificationController.swift in Sources */,
@@ -681,6 +694,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		415B908123C5D52200AB0A3C /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
+			};
+		};
 		41D0AFFD23C325700041C398 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/auth0/JWTDecode.swift.git";
@@ -692,6 +713,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		415B908223C5D52200AB0A3C /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 415B908123C5D52200AB0A3C /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+		415B908423C5D95800AB0A3C /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 415B908123C5D52200AB0A3C /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
 		41D0AFFE23C325700041C398 /* JWTDecode */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 41D0AFFD23C325700041C398 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */;

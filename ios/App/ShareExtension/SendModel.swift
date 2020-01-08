@@ -7,26 +7,42 @@
 
 import Foundation
 import MobileCoreServices
-import os.log
 
-typealias SendingResult = ((Result<Void,Error>) -> ())?
+enum UploadKind {
+    case foreground, background
+}
+
+typealias SendingResult = ((Result<UploadKind,Error>) -> ())?
 
 class SendModel {
     
-    // MARK: - Properties
+    // MARK: Initialiazation-time Properties
     
     private let config: Config
     
-    lazy var selectedTokenIndex: Int = 0
-    
+    /// The completion handler that should be called to notify the view controller that this model has finished its job.
     private let onSendingCompleted: SendingResult
     
     private let attachments: [NSItemProvider]
     
+    /// The queue in which `SendModel` shall operate.
+    private let queue = DispatchQueue.global(qos: .background)
+    
+    // MARK: Properties for background
+    
+    /**
+     The index of the token that we should use to send the email.
+     It defaults to 0 in order to select the first emai, but it should be set by the view controller.
+     */
+    lazy var selectedTokenIndex: Int = 0
+    
+    /// We need to keep a reference to the background session to invalidate it at deinitialization time.
+    private var backgroundSession: URLSession?
+    
     private let sendSessionDelegate = SendSessionDelegate()
     
-    private let queue = DispatchQueue.global(qos: .background)
-        
+    // MARK: Properties used to process the request
+            
     private var preparedAttachments = [Attachment]()
     
     /// A subject proceeded from a shared URL. This should be prioritized as the email subject.
@@ -34,8 +50,8 @@ class SendModel {
     
     private var message: String?
     
-    private var backgroundSession: URLSession?
-    
+    // MARK: Properties that are kinda methods but still are proprties
+        
     private lazy var onitemsLoaded = DispatchWorkItem(block: { [weak self] in
         guard let self = self else { return }
         
@@ -59,15 +75,13 @@ class SendModel {
                     attachments: self.preparedAttachments
                 )
             } else {
-                self.onSendingCompleted?(.failure(SendError.invalidSelection))
+                self.onSendingCompleted?(.failure(BoomerangError.invalidSelection))
             }
         } else {
             // Case where we send a request with attachments. Other considerations are required.
             
             do {
-                try self.checkIndividualSizeLimit()
-                try self.checkTotalSizeLimit()
-                try self.checkFileCountLimit()
+                try RequestValidator(attachments: self.preparedAttachments).checkLimits()
             } catch let error {
                 self.onSendingCompleted?(.failure(error))
                 return
@@ -101,7 +115,7 @@ class SendModel {
                         attachments: self.preparedAttachments
                     )
                 case .failure:
-                    self.onSendingCompleted?(.failure(SendError.testRequestFailed))
+                    self.onSendingCompleted?(.failure(BoomerangError.testRequestFailed))
                     break
                 }
             }
@@ -110,7 +124,7 @@ class SendModel {
     
     
     
-    // MARK: - Life Cycle
+    // MARK: Life Cycle
     
     init(attachments: [NSItemProvider], config: Config, onSendingCompleted: SendingResult) {
         self.onSendingCompleted = onSendingCompleted
@@ -164,6 +178,15 @@ class SendModel {
         group.notify(queue: queue, work: onitemsLoaded)
     }
     
+    
+    
+    // MARK: Helpers
+    
+    /// Process the attachments from weird and complex NSItemProvider to the more consise `Attachment` object.
+    /// - Parameters:
+    ///   - provider: The provider that actually contains the attachment we're sending, but which here only to infer additional informations.
+    ///   - data: The data that came from the provider, but that should be extracted prior to this because it's very cumbersome to do.
+    ///   - name: The name retrieved from the provider.
     private func attachment(for provider: NSItemProvider, with data: Data, name: String? = nil) -> Attachment? {
         guard
             let mime = UTTypeCopyPreferredTagWithClass(provider.registeredTypeIdentifiers.first! as CFString, kUTTagClassMIMEType)?.takeRetainedValue() as String?
@@ -181,6 +204,18 @@ class SendModel {
         )
     }
     
+    
+    
+    // MARK: Networking
+    
+    /// Make a Send request that should trigger the boomerang.
+    ///
+    /// This method will decide if the request should happen in background or in foreground depending of the provided attachments.
+    ///
+    /// - Parameters:
+    ///   - message: A message to add to the body of the boomerang.
+    ///   - subject: The subject of the boomerang.
+    ///   - attachments: Attachments to send with the boomerang.
     private func send(message: String, subject: String, attachments: [Attachment]) {
         
         let isBackgroundUpload = !attachments.isEmpty
@@ -198,7 +233,7 @@ class SendModel {
             delegateQueue: nil
         )
 
-        guard let url = URL(string: "https://api.boomerang-app.io/send") else { return }
+        guard let url = URL(string: "\(Constants.apiBaseUrl)/send") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
 
@@ -228,7 +263,7 @@ class SendModel {
             let task: URLSessionTask
             if isBackgroundUpload {
                 guard let groupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.settings.boomerang") else {
-                    self.onSendingCompleted?(.failure(SendError.sendRequestFailed))
+                    self.onSendingCompleted?(.failure(BoomerangError.sendRequestFailed))
                     return
                 }
                 
@@ -238,17 +273,20 @@ class SendModel {
             } else {
                 request.httpBody = dataObject
                 
-                task = self.backgroundSession!.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+                task = self.backgroundSession!.dataTask(with: request, completionHandler: { [unowned self] (data: Data?, response: URLResponse?, error: Error?) -> Void in
                     if error == nil {
                         // Success
                         let statusCode = (response as! HTTPURLResponse).statusCode
                         print("Send request succeeded: HTTP \(statusCode)")
                         
                         if (200..<300).contains(statusCode) {
-                            self.onSendingCompleted?(.success(()))
+                            self.onSendingCompleted?(.success((.foreground)))
                         } else {
                             print(response.debugDescription)
-                            self.onSendingCompleted?(.failure(SendError.sendRequestFailed))
+                            self.onSendingCompleted?(.failure(self.handleServerError(
+                                data: data,
+                                defaultError: .sendRequestFailed
+                            )))
                         }
                     }
                     else {
@@ -264,7 +302,7 @@ class SendModel {
             
             // If it's going to be a background upload, notify on success now.
             if isBackgroundUpload {
-                self.onSendingCompleted?(.success(()))
+                self.onSendingCompleted?(.success((.background)))
             }
             
         } catch {
@@ -280,12 +318,12 @@ class SendModel {
         // Create session
         let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
         
-        guard let url = URL(string: "https://api.boomerang-app.io/test") else { return }
+        guard let url = URL(string: "\(Constants.apiBaseUrl)/test") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
 
         /* Start a new Task */
-        let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+        let task = session.dataTask(with: request, completionHandler: { [unowned self] (data: Data?, response: URLResponse?, error: Error?) -> Void in
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -294,7 +332,7 @@ class SendModel {
                 if (200..<300).contains(statusCode) {
                     completionHandler(.success(()))
                 } else {
-                    completionHandler(.failure(TestRequestError.invalidServerResponse))
+                    completionHandler(.failure(self.handleServerError(data: data, defaultError: .invalidServerResponse)))
                 }
             }
             else {
@@ -307,61 +345,15 @@ class SendModel {
         session.finishTasksAndInvalidate()
     }
     
-    
-}
-
-
-
-// MARK: - Limit Checks
-
-private extension SendModel {
-    
-    func checkIndividualSizeLimit() throws {
-        let individualSizeLimit = 10.0
-        let itemAboveLimit = self.preparedAttachments.first(where: { $0.data.sizeInMB >= individualSizeLimit })
-        
-        if let itemAboveLimit = itemAboveLimit {
-            if #available(iOS 12.0, *) {
-                os_log(.error, log: .itemDecoding, "Individual size of: %{PRIVATE}f MB exceeds limit of %{PUBLIC}f MB.", itemAboveLimit.data.sizeInMB, individualSizeLimit)
-            }
-            throw SendError.individualFileInvalidSize
-        }
-        
-        if #available(iOS 12.0, *) {
-            os_log(.debug, log: .itemDecoding, "Individual item size check passed with success. No item exceeded the %{PUBLIC}f MB limit.", individualSizeLimit)
-        }
-    }
-    
-    func checkTotalSizeLimit() throws {
-        let totalSize = self.preparedAttachments.reduce(0) { $0 + $1.data.sizeInMB }
-        let totalSizeLimit = 25.0
-        let isTotalSizeLimitReached = totalSize > totalSizeLimit
-        
-        if isTotalSizeLimitReached {
-            if #available(iOS 12.0, *) {
-                os_log(.error, log: .itemDecoding, "Total size of: %{PRIVATE}f MB exceeds limit of %{PUBLIC}f MB.", totalSize, totalSizeLimit)
-            }
-            throw SendError.totalFileInvalidSize
-        }
-        
-        if #available(iOS 12.0, *) {
-            os_log(.debug, log: .itemDecoding, "Total size check passed with success. (%{PRIVATE}f MB).", totalSize)
-        }
-    }
-    
-    func checkFileCountLimit() throws {
-        let fileCountLimit = 10
-        let fileCountLimitReached = self.preparedAttachments.count > fileCountLimit
-        
-        if fileCountLimitReached {
-            if #available(iOS 12.0, *) {
-                os_log(.error, log: .itemDecoding, "%{PRIVATE}d items exceeds limit of %{PUBLIC}d.", self.preparedAttachments.count, fileCountLimit)
-            }
-            throw SendError.invalidFilesCount
-        }
-        
-        if #available(iOS 12.0, *) {
-            os_log(.debug, log: .itemDecoding, "File count check passed with success. (%{PRIVATE}d items).", self.preparedAttachments.count)
+    /// Look for an error message and return it as an error.
+    /// - Parameter data: The data object returned by the URL Session response
+    private func handleServerError(data: Data?, defaultError: BoomerangError) -> BoomerangError {
+        if let data = data,
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:String],
+            let message = json["message"] {
+            return BoomerangError.server(message)
+        } else {
+            return defaultError
         }
     }
     

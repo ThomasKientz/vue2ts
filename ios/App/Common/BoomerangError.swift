@@ -1,5 +1,5 @@
 //
-//  SendError.swift
+//  BoomerangError.swift
 //  ShareExtension
 //
 //  Created by Clément Cardonnel on 16/12/2019.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SendError: LocalizedError {
+enum BoomerangError: LocalizedError {
     
     var errorDescription: String? {
         switch self {
@@ -25,6 +25,12 @@ enum SendError: LocalizedError {
             return "Something failed during the upload."
         case .invalidSelection:
             return "The request couldn't be sent because the data wasn't of a supported format."
+        case .invalidServerResponse:
+            return "Servers are currently unavailable. Please try again later."
+        case .urlSessionError:
+            return "Something failed during the upload."
+        case .server(let message):
+            return message
         }
     }
     
@@ -38,9 +44,10 @@ enum SendError: LocalizedError {
     case invalidSelection
     
     case sendRequestFailed
-}
-
-enum TestRequestError: Error {
+    
     case invalidServerResponse
     case urlSessionError
+    
+    /// Server error with an error message attached
+    case server(String)
 }

@@ -12,4 +12,6 @@ struct Constants {
     /// App Group Identifier
     static let appGroup = "group.settings.boomerang"
     
+    static let apiBaseUrl = "https://api.boomerang-app.io"
+    
 }

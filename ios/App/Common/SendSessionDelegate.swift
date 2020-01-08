@@ -32,14 +32,18 @@ final class SendSessionDelegate: NSObject, URLSessionDataDelegate {
                 os_log(.error, log: .backgroundUpload, "Background task failed with error: %{PUBLIC}@", error.localizedDescription)
             }
             
+            #if DEBUG
             NotificationController.sendNotification(title: "Upload failed", body: error.localizedDescription)
+            #endif
         } else if let response = task.response {
             
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
                 if #available(iOS 12.0, *) {
                     os_log(.debug, log: .backgroundUpload, "Couldn't retrieve status code from response.")
                 }
+                #if DEBUG
                 NotificationController.sendNotification(title: "Upload failed", body: "Something went wrong.")
+                #endif
                 return
             }
             
@@ -69,7 +73,9 @@ final class SendSessionDelegate: NSObject, URLSessionDataDelegate {
                 #else
                 let errorMessage = "Something went wrong."
                 #endif
+                #if DEBUG
                 NotificationController.sendNotification(title: "Upload failed", body: errorMessage)
+                #endif
             }
             
         }
