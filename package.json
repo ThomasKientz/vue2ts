@@ -3,7 +3,7 @@
   "description": "email yourself in one tap",
   "homepage": "https://getboomerang.app",
   "author": "Thomas Kientz <contact@boomerang-app.io>",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --open --port 8050",
@@ -12,7 +12,7 @@
     "build-local": "vue-cli-service build --mode localhost && npx cap copy",
     "build-android-production": "BROWSERSLIST_ENV=android vue-cli-service build --mode production && npx cap copy",
     "build-ios-production": "BROWSERSLIST_ENV=ios vue-cli-service build --mode production && npx cap copy",
-    "build-electron-production": "BROWSERSLIST_ENV=electron vue-cli-service electron:build --mode production",
+    "build-electron-production": "BROWSERSLIST_ENV=electron vue-cli-service electron:build --skipBundle --mode production",
     "dev": "npm run serve",
     "electron:build": "vue-cli-service electron:build",
     "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
