@@ -115,7 +115,7 @@ class SendModel {
                         attachments: self.preparedAttachments
                     )
                 case .failure:
-                    self.onSendingCompleted?(.failure(BoomerangError.testRequestFailed))
+                    self.onSendingCompleted?(.failure(BoomerangError.sendRequestFailed))
                     break
                 }
             }
