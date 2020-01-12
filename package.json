@@ -73,7 +73,7 @@
   },
   "browserslist": {
     "android": [
-      "Chrome >= 50"
+      "Chrome >= 37"
     ],
     "ios": [
       "ios_saf >= 11"
