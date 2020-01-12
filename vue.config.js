@@ -26,5 +26,5 @@ module.exports = {
       .after('define')
       .end()
   },
-  transpileDependencies: ['vuetify'],
+  transpileDependencies: ['vuetify', 'vuex-persist'],
 }
