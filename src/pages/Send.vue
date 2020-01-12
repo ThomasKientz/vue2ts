@@ -1,5 +1,5 @@
 <template>
-  <v-container class="fill-height flex-column">
+  <v-container style="height: auto !important;" class="fill-height flex-column">
     <!-- flex: 1 1 0; fix for safari -->
     <div style="min-width: 100% !important; flex: 1 1 0;">
       <div style="height: 100%;" @dragover.prevent @drop.prevent="dropHandler">
@@ -263,5 +263,11 @@ textarea {
 ::v-deep .v-badge__badge {
   right: -8px !important;
   top: -8px !important;
+}
+</style>
+
+<style>
+.v-content__wrap {
+  display: flex;
 }
 </style>

@@ -18,8 +18,8 @@
         </v-btn>
         <v-toolbar-title>Feedback</v-toolbar-title>
       </v-toolbar>
-      <v-card-text style="height: 100%;" class="pa-0">
-        <v-container style="height: 100%;" class="fill-height flex-column">
+      <v-card-text style="height: 100%; display: flex;" class="pa-0">
+        <v-container style="height: auto;" class="fill-height flex-column">
           <div style="min-width: 100% !important; flex: 1 1 0;">
             <div style="height: 100%;">
               <textarea
@@ -106,6 +106,7 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep header {
+  height: 48px !important;
   height: calc(48px + var(--ion-safe-area-top)) !important;
   padding-top: var(--ion-safe-area-top);
 }

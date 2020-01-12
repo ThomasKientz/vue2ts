@@ -174,6 +174,7 @@ body {
 
 .v-app-bar.v-app-bar--fixed {
   position: static !important;
+  flex: 0 0 48px !important;
   flex: 0 0 calc(48px + var(--ion-safe-area-top)) !important;
   padding-top: var(--ion-safe-area-top);
 }
