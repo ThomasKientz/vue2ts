@@ -12,6 +12,16 @@ struct Constants {
     /// App Group Identifier
     static let appGroup = "group.settings.boomerang"
     
-    static let apiBaseUrl = "https://api.boomerang-app.io"
+    static let platformShareExtension = "ios_share_extension"
+    
+    
+    
+    // MARK: API URL
+    
+    // URL for Production Environment
+//    static let apiBaseUrl = "https://api.boomerang-app.io"
+    
+    // URL for Debug Environment
+    static let apiBaseUrl = "https://boomerang-app-api-dev.herokuapp.com"
     
 }
