@@ -10,6 +10,7 @@ import os.log
 
 class IntentHandler: INExtension, INSendMessageIntentHandling {
     
+    // Check that the intent contain a message
     func resolveContent(for intent: INSendMessageIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
         if let text = intent.content,
             text.isEmpty == false {
@@ -25,25 +26,72 @@ class IntentHandler: INExtension, INSendMessageIntentHandling {
             os_log(.info, log: .siri, "Siri Intent invoked with message: %{PRIVATE}@", intent.content ?? "none")
         }
         
-        let userActivity = NSUserActivity(activityType: String(describing: INSendMessageIntent.self))
+        /// Triggers the completion handler with the specified code
+        func complete(code: INSendMessageIntentResponseCode) {
+            let userActivity = NSUserActivity(activityType: String(describing: INSendMessageIntent.self))
+            
+            completion(
+                INSendMessageIntentResponse(
+                    code: code,
+                    userActivity: userActivity
+                )
+            )
+        }
         
+        // Retrieve config
         let config = ConfigReader.loadConfig()
-        guard config.hasAtLeastOneEmail else {
+        
+        // Check that we've got a valid token
+        guard let token = config.emailTokens.first?.token else {
             if #available(iOS 12.0, *) {
                 os_log(.error, log: .siri, "Siri Intent completed with failure because no email was registered.")
             }
             
-            completion(
-                INSendMessageIntentResponse(
-                    code: .failureRequiringAppLaunch,
-                    userActivity: userActivity
-                )
-            )
+            // If not, we send the user to the app so that she logs herself.
+            complete(code: .failureRequiringAppLaunch)
             
             return
         }
         
+        // Check that we've got a valid, non-empty message
+        guard let message = intent.content, !message.isEmpty else {
+            if #available(iOS 12.0, *) {
+                os_log(.error, log: .siri, "Siri Intent completed with failure because there was no message (intent.content nil or empty).")
+            }
+            
+            complete(code: .failure)
+            
+            return
+        }
         
+        // Prepare the body
+        let body = Requests.prepareBody(
+            fromText: config.fromText,
+            message: message,
+            subject: String(message.prefix(Constants.subjectMaxLength)),
+            token: token,
+            platform: Constants.Platform.siri,
+            attachments: []
+        )
+        
+        // Send a boomerang request
+        Requests.sendBoomerang(requestBody: body) { (result) in
+            switch result {
+            case .success:
+                if #available(iOS 12.0, *) {
+                    os_log(.debug, log: .siri, "Siri Intent completed with success!")
+                }
+                
+                complete(code: .success)
+                
+            case .failure(let error):
+                if #available(iOS 12.0, *) {
+                    os_log(.error, log: .siri, "Siri Intent completed with failure. Boomerang request error: %{PUBLIC}@", error.localizedDescription)
+                }
+                
+                complete(code: .failure)
+            }
+        }
         
     }
     

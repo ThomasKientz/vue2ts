@@ -154,7 +154,7 @@ class SendModel {
         } else if config.subjectMode == .subjectText {
             subject = config.subjectText
         } else {
-            subject = String(message.prefix(78))
+            subject = String(message.prefix(Constants.subjectMaxLength))
         }
         
         let body = Requests.prepareBody(
@@ -162,7 +162,7 @@ class SendModel {
             message: message,
             subject: subject,
             token: config.emailTokens[selectedTokenIndex].token,
-            platform: "ios_share_extension",
+            platform: Constants.Platform.share,
             attachments: preparedAttachments
         )
         
@@ -189,13 +189,13 @@ class SendModel {
                 if self.config.subjectMode == .subjectText {
                     subject = self.config.subjectText
                 } else if let message = self.message {
-                    subject = String(message.prefix(78))
+                    subject = String(message.prefix(Constants.subjectMaxLength))
                 } else if !self.preparedAttachments.isEmpty {
                     subject = String(
                         self.preparedAttachments
                             .map({ $0.name })
                             .joined(separator: ", ")
-                            .prefix(78)
+                            .prefix(Constants.subjectMaxLength)
                     )
                 } else {
                     subject = self.config.subjectText
@@ -206,7 +206,7 @@ class SendModel {
                     message: self.message ?? " ",
                     subject: subject,
                     token: self.config.emailTokens[self.selectedTokenIndex].token,
-                    platform: Constants.platformShareExtension,
+                    platform: Constants.Platform.share,
                     attachments: self.preparedAttachments
                 )
                 
