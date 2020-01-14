@@ -77,7 +77,10 @@ export default {
     if (this.$store.state.theme == 'dark') this.$vuetify.theme.dark = true
   },
 
-  mounted() {
+  async mounted() {
+    await this.$store.restored
+    if (this.$store.state.theme == 'dark') this.$vuetify.theme.dark = true
+
     if (Capacitor.isNative) {
       SplashScreen.hide()
       StatusBar.show()
