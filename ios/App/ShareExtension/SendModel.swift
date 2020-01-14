@@ -8,12 +8,6 @@
 import Foundation
 import MobileCoreServices
 
-enum UploadKind {
-    case foreground, background
-}
-
-typealias SendingResult = ((Result<UploadKind,Error>) -> ())?
-
 class SendModel {
     
     // MARK: Initialiazation-time Properties
@@ -28,7 +22,7 @@ class SendModel {
     /// The queue in which `SendModel` shall operate.
     private let queue = DispatchQueue.global(qos: .background)
     
-    // MARK: Properties for background
+    // MARK: Properties for background upload
     
     /**
      The index of the token that we should use to send the email.
@@ -49,76 +43,16 @@ class SendModel {
     private var urlSubject: String?
     
     private var message: String?
-    
-    // MARK: Properties that are kinda methods but still are proprties
         
     private lazy var onitemsLoaded = DispatchWorkItem(block: { [weak self] in
         guard let self = self else { return }
         
         if self.preparedAttachments.isEmpty {
             // Case where we send a request without attachments
-            if let message = self.message {
-                
-                let subject: String
-                
-                if let urlSubject = self.urlSubject {
-                    subject = urlSubject
-                } else if self.config.subjectMode == .subjectText {
-                    subject = self.config.subjectText
-                } else {
-                    subject = String(message.prefix(78))
-                }
-                
-                self.send(
-                    message: message,
-                    subject: subject,
-                    attachments: self.preparedAttachments
-                )
-            } else {
-                self.onSendingCompleted?(.failure(BoomerangError.invalidSelection))
-            }
+            self.send()
         } else {
             // Case where we send a request with attachments. Other considerations are required.
-            
-            do {
-                try RequestValidator(attachments: self.preparedAttachments).checkLimits()
-            } catch let error {
-                self.onSendingCompleted?(.failure(error))
-                return
-            }
-            
-            // Do a test request to check if the server is online
-            self.testRequest { (result) in
-                switch result {
-                case .success:
-                    let subject: String
-                    
-                    if self.config.subjectMode == .subjectText {
-                        subject = self.config.subjectText
-                    } else if let message = self.message {
-                        subject = String(message.prefix(78))
-                    } else if !self.preparedAttachments.isEmpty {
-                        subject = String(
-                            self.preparedAttachments
-                                .map({ $0.name })
-                                .joined(separator: ", ")
-                                .prefix(78)
-                        )
-                    } else {
-                        subject = self.config.subjectText
-                    }
-                    
-                    // Looks ok, can proceed.
-                    self.send(
-                        message: self.message ?? " ",
-                        subject: subject,
-                        attachments: self.preparedAttachments
-                    )
-                case .failure:
-                    self.onSendingCompleted?(.failure(BoomerangError.sendRequestFailed))
-                    break
-                }
-            }
+            self.sendInBackground()
         }
     })
     
@@ -126,7 +60,7 @@ class SendModel {
     
     // MARK: Life Cycle
     
-    init(attachments: [NSItemProvider], config: Config, onSendingCompleted: SendingResult) {
+    init(attachments: [NSItemProvider], config: Config, onSendingCompleted: @escaping SendingResult) {
         self.onSendingCompleted = onSendingCompleted
         self.attachments = attachments
         self.config = config
@@ -204,156 +138,87 @@ class SendModel {
         )
     }
     
+    // MARK: Sending a boomerang
     
-    
-    // MARK: Networking
-    
-    /// Make a Send request that should trigger the boomerang.
-    ///
-    /// This method will decide if the request should happen in background or in foreground depending of the provided attachments.
-    ///
-    /// - Parameters:
-    ///   - message: A message to add to the body of the boomerang.
-    ///   - subject: The subject of the boomerang.
-    ///   - attachments: Attachments to send with the boomerang.
-    private func send(message: String, subject: String, attachments: [Attachment]) {
-        
-        let isBackgroundUpload = !attachments.isEmpty
-        
-        // Configure session
-        let sessionConfig = isBackgroundUpload ? URLSessionConfiguration.background(withIdentifier: "com.boomerang.app.send-with-attachments") : URLSessionConfiguration.default
-        sessionConfig.sharedContainerIdentifier = Constants.appGroup
-        sessionConfig.timeoutIntervalForRequest = 20.0
-        sessionConfig.isDiscretionary = false
-
-        // Create Session
-        backgroundSession = URLSession(
-            configuration: sessionConfig,
-            delegate: isBackgroundUpload ? sendSessionDelegate : nil,
-            delegateQueue: nil
-        )
-
-        guard let url = URL(string: "\(Constants.apiBaseUrl)/send") else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-
-        // Headers
-
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        // JSON Body
-
-        var bodyObject: [String : Any] = [
-            "fromText": config.fromText,
-            "message": message,
-            "subject": subject,
-            "token": config.emailTokens[selectedTokenIndex].token,
-            "platform": "ios_share_extension"
-        ]
-        
-        // Add the attachments if any
-        if !attachments.isEmpty {
-            bodyObject["attachments"] = attachments.compactMap({ $0.dictionary })
+    /// Send a boomerang using local config and elements
+    private func send() {
+        guard let message = message else {
+            onSendingCompleted(.failure(BoomerangError.invalidSelection))
+            return
         }
         
-        do {
-            let dataObject = try JSONSerialization.data(withJSONObject: bodyObject, options: [])
-             
-            /* Start a new Task */
-            let task: URLSessionTask
-            if isBackgroundUpload {
-                guard let groupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.settings.boomerang") else {
-                    self.onSendingCompleted?(.failure(BoomerangError.sendRequestFailed))
-                    return
-                }
-                
-                let filePath = groupURL.appendingPathComponent("upload-attachment")
-                try dataObject.write(to: filePath)
-                task = self.backgroundSession!.uploadTask(with: request, fromFile: filePath)
-            } else {
-                request.httpBody = dataObject
-                
-                task = self.backgroundSession!.dataTask(with: request, completionHandler: { [unowned self] (data: Data?, response: URLResponse?, error: Error?) -> Void in
-                    if error == nil {
-                        // Success
-                        let statusCode = (response as! HTTPURLResponse).statusCode
-                        print("Send request succeeded: HTTP \(statusCode)")
-                        
-                        if (200..<300).contains(statusCode) {
-                            self.onSendingCompleted?(.success((.foreground)))
-                        } else {
-                            print(response.debugDescription)
-                            self.onSendingCompleted?(.failure(self.handleServerError(
-                                data: data,
-                                defaultError: .sendRequestFailed
-                            )))
-                        }
-                    }
-                    else {
-                        // Failure
-                        print("Send request failed: %@", error!.localizedDescription);
-                        if !isBackgroundUpload {
-                            self.onSendingCompleted?(.failure(error!))
-                        }
-                    }
-                })
-            }
-            task.resume()
-            
-            // If it's going to be a background upload, notify on success now.
-            if isBackgroundUpload {
-                self.onSendingCompleted?(.success((.background)))
-            }
-            
-        } catch {
-            self.onSendingCompleted?(.failure(error))
-        }
+        let subject: String
         
-    }
-    
-    private func testRequest(_ completionHandler: @escaping (Result<Void,Error>) -> ()) {
-        let sessionConfig = URLSessionConfiguration.default
-        sessionConfig.timeoutIntervalForRequest = 5.0
-
-        // Create session
-        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        
-        guard let url = URL(string: "\(Constants.apiBaseUrl)/test") else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-
-        /* Start a new Task */
-        let task = session.dataTask(with: request, completionHandler: { [unowned self] (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            if (error == nil) {
-                // Success
-                let statusCode = (response as! HTTPURLResponse).statusCode
-                print("Test request Succeeded: HTTP \(statusCode)")
-                
-                if (200..<300).contains(statusCode) {
-                    completionHandler(.success(()))
-                } else {
-                    completionHandler(.failure(self.handleServerError(data: data, defaultError: .invalidServerResponse)))
-                }
-            }
-            else {
-                // Failure
-                print("Test request failed: %@", error!.localizedDescription);
-                completionHandler(.failure(error!))
-            }
-        })
-        task.resume()
-        session.finishTasksAndInvalidate()
-    }
-    
-    /// Look for an error message and return it as an error.
-    /// - Parameter data: The data object returned by the URL Session response
-    private func handleServerError(data: Data?, defaultError: BoomerangError) -> BoomerangError {
-        if let data = data,
-            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:String],
-            let message = json["message"] {
-            return BoomerangError.server(message)
+        if let urlSubject = urlSubject {
+            subject = urlSubject
+        } else if config.subjectMode == .subjectText {
+            subject = config.subjectText
         } else {
-            return defaultError
+            subject = String(message.prefix(Constants.subjectMaxLength))
+        }
+        
+        let body = Requests.prepareBody(
+            fromText: config.fromText,
+            message: message,
+            subject: subject,
+            token: config.emailTokens[selectedTokenIndex].token,
+            platform: Constants.Platform.share,
+            attachments: preparedAttachments
+        )
+        
+        Requests.sendBoomerang(requestBody: body, onSendingCompleted)
+    }
+    
+    /// Send a boomerang in background using local config and elements
+    private func sendInBackground() {
+        do {
+            try RequestValidator(attachments: preparedAttachments).checkLimits()
+        } catch let error {
+            onSendingCompleted(.failure(error))
+            return
+        }
+        
+        // Do a test request to check if the server is online
+        Requests.testRequest { [weak self] (result) in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success:
+                let subject: String
+                
+                if self.config.subjectMode == .subjectText {
+                    subject = self.config.subjectText
+                } else if let message = self.message {
+                    subject = String(message.prefix(Constants.subjectMaxLength))
+                } else if !self.preparedAttachments.isEmpty {
+                    subject = String(
+                        self.preparedAttachments
+                            .map({ $0.name })
+                            .joined(separator: ", ")
+                            .prefix(Constants.subjectMaxLength)
+                    )
+                } else {
+                    subject = self.config.subjectText
+                }
+                
+                let body = Requests.prepareBody(
+                    fromText: self.config.fromText,
+                    message: self.message ?? " ",
+                    subject: subject,
+                    token: self.config.emailTokens[self.selectedTokenIndex].token,
+                    platform: Constants.Platform.share,
+                    attachments: self.preparedAttachments
+                )
+                
+                self.backgroundSession = Requests.sendBackgroundBoomerang(
+                    requestBody: body,
+                    delegate: self.sendSessionDelegate,
+                    self.onSendingCompleted
+                )
+            case .failure:
+                self.onSendingCompleted(.failure(BoomerangError.sendRequestFailed))
+                break
+            }
         }
     }
     
