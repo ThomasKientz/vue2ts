@@ -2,7 +2,7 @@ import { AppPreferences } from '@ionic-native/app-preferences'
 
 let userPref
 document.addEventListener('deviceready', async () => {
-  userPref = AppPreferences.iosSuite('group.settings.boomerang')
+  userPref = AppPreferences.iosSuite(process.env.VUE_APP_SUITE_NAME)
 })
 
 export default store => {

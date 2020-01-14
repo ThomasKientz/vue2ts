@@ -194,6 +194,7 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep header {
+  height: 48px !important;
   height: calc(48px + var(--ion-safe-area-top)) !important;
   padding-top: var(--ion-safe-area-top);
 }
