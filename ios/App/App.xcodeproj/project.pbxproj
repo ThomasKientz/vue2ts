@@ -100,6 +100,7 @@
 		41112CA823CC789F00CF52D7 /* AppIntentVocabulary.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		41112CAD23CC7C1000CF52D7 /* Requests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
 		411579F323BF39A300F92E5F /* ConfigReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigReader.swift; sourceTree = "<group>"; };
+		4153CB3523CDAF68008EE059 /* IntentsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IntentsExtension.entitlements; sourceTree = "<group>"; };
 		4156E79B23AA0DBF005C42A7 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OSLog+Custom.swift"; sourceTree = "<group>"; };
 		415B908623C5EA3A00AB0A3C /* RequestValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestValidator.swift; sourceTree = "<group>"; };
@@ -173,6 +174,7 @@
 		41112C9A23CC73B300CF52D7 /* IntentsExtension */ = {
 			isa = PBXGroup;
 			children = (
+				4153CB3523CDAF68008EE059 /* IntentsExtension.entitlements */,
 				41112C9B23CC73B300CF52D7 /* IntentHandler.swift */,
 				41112C9D23CC73B300CF52D7 /* Info.plist */,
 				41112CA823CC789F00CF52D7 /* AppIntentVocabulary.plist */,
@@ -559,6 +561,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_ENTITLEMENTS = IntentsExtension/IntentsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = IntentsExtension/Info.plist;
@@ -584,6 +587,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_ENTITLEMENTS = IntentsExtension/IntentsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = IntentsExtension/Info.plist;
