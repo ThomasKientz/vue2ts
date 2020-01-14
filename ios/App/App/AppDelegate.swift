@@ -15,10 +15,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        #if DEBUG
-        // We ask the notification in debug mode to make the debugging easier.
-        NotificationController.requestNotificationPermission()
-        #endif
+//        #if DEBUG
+//        // We ask the notification in debug mode to make the debugging easier.
+//        NotificationController.requestNotificationPermission()
+//        #endif
         
         
         return true

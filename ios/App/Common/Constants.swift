@@ -26,13 +26,15 @@ struct Constants {
     
     // MARK: API URL
     
-    #if DEBUG
-    /// URL for Debug Environment
-    static let apiBaseUrl = "https://boomerang-app-api-dev.herokuapp.com"
-    #else
-    /// URL for Production Environment
+//    #if DEBUG
+//    /// URL for Debug Environment
+//    static let apiBaseUrl = "https://boomerang-app-api-dev.herokuapp.com"
+//    #else
+//    /// URL for Production Environment
+//    static let apiBaseUrl = "https://api.boomerang-app.io"
+//    #endif
+  
     static let apiBaseUrl = "https://api.boomerang-app.io"
-    #endif
     
     
     
