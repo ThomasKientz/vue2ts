@@ -31,19 +31,12 @@ final class SendSessionDelegate: NSObject, URLSessionDataDelegate {
             if #available(iOS 12.0, *) {
                 os_log(.error, log: .backgroundUpload, "Background task failed with error: %{PUBLIC}@", error.localizedDescription)
             }
-            
-//            #if DEBUG
-//            NotificationController.sendNotification(title: "Upload failed", body: error.localizedDescription)
-//            #endif
         } else if let response = task.response {
             
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
                 if #available(iOS 12.0, *) {
                     os_log(.debug, log: .backgroundUpload, "Couldn't retrieve status code from response.")
                 }
-//                #if DEBUG
-//                NotificationController.sendNotification(title: "Upload failed", body: "Something went wrong.")
-//                #endif
                 return
             }
             
@@ -53,29 +46,12 @@ final class SendSessionDelegate: NSObject, URLSessionDataDelegate {
                     let recreatedDebugString = isFromRecreatedSession ? " from recreated session." : "."
                     os_log(.info, log: .backgroundUpload, "Background task succeeded with HTTP status code %{PUBLIC}d%{PUBLIC}@", statusCode, recreatedDebugString)
                 }
-                
-//                #if DEBUG
-//                NotificationController.sendNotification(
-//                    title: "Upload succeeded!",
-//                    body: "\(statusCode). \(completionHandler == nil ? "" : "I am from recreated session.")"
-//                )
-//                #endif
             } else {
                 if #available(iOS 12.0, *) {
                     let isFromRecreatedSession = completionHandler != nil
                     let recreatedDebugString = isFromRecreatedSession ? " from recreated session." : "."
                     os_log(.info, log: .backgroundUpload, "Background task failed with HTTP status code %{PUBLIC}d%{PUBLIC}@", statusCode, recreatedDebugString)
                 }
-                
-//                // Failure! Should send notification
-//                #if DEBUG
-//                let errorMessage = "Something went wrong. \(statusCode)"
-//                #else
-//                let errorMessage = "Something went wrong."
-//                #endif
-//                #if DEBUG
-//                NotificationController.sendNotification(title: "Upload failed", body: errorMessage)
-//                #endif
             }
             
         }
