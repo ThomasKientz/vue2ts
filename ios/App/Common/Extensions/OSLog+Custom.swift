@@ -16,6 +16,5 @@ extension OSLog {
     
     static let itemDecoding = OSLog(subsystem: subsystem, category: "Item Decoding")
     static let backgroundUpload = OSLog(subsystem: subsystem, category: "Background Upload")
-    static let notification = OSLog(subsystem: subsystem, category: "Notification")
     static let siri = OSLog(subsystem: subsystem, category: "Siri Extension")
 }

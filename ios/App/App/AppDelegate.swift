@@ -14,13 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-//        #if DEBUG
-//        // We ask the notification in debug mode to make the debugging easier.
-//        NotificationController.requestNotificationPermission()
-//        #endif
-        
-        
         return true
     }
     
@@ -87,18 +80,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       NotificationCenter.default.post(CAPBridge.statusBarTappedNotification)
     }
   }
-
-  #if USE_PUSH
-
-  func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-    NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidRegisterForRemoteNotificationsWithDeviceToken.name()), object: deviceToken)
-  }
-
-  func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-    NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidFailToRegisterForRemoteNotificationsWithError.name()), object: error)
-  }
-
-#endif
 
 }
 
