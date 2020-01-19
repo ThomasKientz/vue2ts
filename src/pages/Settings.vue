@@ -75,6 +75,7 @@
             @change="theme = $event"
           />
           <v-switch
+            v-if="isAndroid"
             :input-value="autoClose"
             label="Auto close app after sending"
             @change="autoClose = $event"
@@ -97,7 +98,11 @@ import {
   SUBJECT_MODE_DEFAULT,
   SUBJECT_TEXT_DEFAULT,
 } from '@/utils/defaults'
-import { getStartOnLogginSetting, setStartOnLogginSetting } from '@/utils'
+import {
+  getStartOnLogginSetting,
+  setStartOnLogginSetting,
+  platform,
+} from '@/utils'
 
 export default {
   props: {
@@ -115,6 +120,7 @@ export default {
     themeItems: ['auto', 'light', 'dark'],
     autoStart: getStartOnLogginSetting(),
     isElectron: process.env.IS_ELECTRON,
+    isAndroid: platform == 'android',
   }),
 
   watch: {
@@ -185,9 +191,6 @@ export default {
   },
 
   methods: {
-    onEnter(e) {
-      console.log('onEnter', e)
-    },
     remove(index) {
       if (!this.$store.state.token2 && index == 0) {
         this.$router.replace('/email')
