@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-window touchless v-model="activeStep">
-      <v-window-item :key="1">
+      <v-window-item eager :key="1">
         <v-form ref="formEmail" @submit.prevent="next()">
           <v-text-field
             @keyup.enter="onEnter"
@@ -20,7 +20,7 @@
         </v-form>
       </v-window-item>
 
-      <v-window-item :key="2">
+      <v-window-item eager :key="2">
         <div class="subtitle-1 text-center" style="line-height: 1.5;">
           Verification code sent to :
           <strong>{{ email }}</strong>
