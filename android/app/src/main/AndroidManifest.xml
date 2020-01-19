@@ -15,7 +15,8 @@
             android:name="com.boomerang.app.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,8 +56,8 @@
     <!-- Network API
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> -->
     <!-- Navigator.getUserMedia -->
-    <!-- Video -->
-    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Video
+    <uses-permission android:name="android.permission.CAMERA" />  -->
     <!-- Audio
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/> -->
