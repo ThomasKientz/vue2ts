@@ -97,9 +97,7 @@ import {
   mdiPlus,
 } from '@mdi/js'
 import { send } from '@/utils/api'
-import { Plugins } from '@capacitor/core'
-
-const { App } = Plugins
+import { showKeyboard } from '@/utils'
 
 const MAX_SIZE = 10000000
 
@@ -150,15 +148,7 @@ export default {
   }),
 
   mounted() {
-    setTimeout(() => {
-      this.$refs.textarea.focus()
-    }, 300)
-  },
-
-  created() {
-    App.addListener('appStateChange', state => {
-      state.isActive && this.$refs.textarea && this.$refs.textarea.focus()
-    })
+    this.focus()
   },
 
   methods: {
@@ -193,6 +183,12 @@ export default {
         this.showFiles = true
       }
     },
+    focus() {
+      setTimeout(() => {
+        this.$refs.textarea.focus()
+        showKeyboard()
+      }, 200)
+    },
     send(id) {
       if (!(this.message || this.files.length) || this.loading) return
 
@@ -218,6 +214,7 @@ export default {
           this.message = null
           this.files = []
           this.$toast.success('Boomerang sent !')
+          this.focus()
 
           this.$emit('send')
         })

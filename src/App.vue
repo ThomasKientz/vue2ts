@@ -46,7 +46,7 @@
     </v-app-bar>
 
     <v-content>
-      <router-view @send="onSend" />
+      <router-view ref="view" @send="onSend" />
       <settings v-model="showSettings" />
       <feedback v-model="showFeedback" :rating="rating" />
     </v-content>
@@ -75,6 +75,14 @@ export default {
 
   created() {
     if (this.$store.state.theme == 'dark') this.$vuetify.theme.dark = true
+
+    App.addListener('appStateChange', state => {
+      state.isActive &&
+        !this.showSettings &&
+        !this.showFeedback &&
+        this.$route.name == 'send' &&
+        this.$refs.view.focus()
+    })
   },
 
   async mounted() {

@@ -1,4 +1,4 @@
-import { Capacitor } from '@capacitor/core'
+import { Plugins, Capacitor } from '@capacitor/core'
 // #if process.env.IS_ELECTRON
 import { ipcRenderer } from 'electron'
 import Store from 'electron-store'
@@ -9,8 +9,7 @@ export const setStartOnLoggin = boolean =>
   ipcRenderer.send('setStartLogin', boolean)
 // #endif
 
-import { Plugins } from '@capacitor/core'
-const { App } = Plugins
+const { App, Keyboard } = Plugins
 
 export const getStartOnLogginSetting = () =>
   process.env.IS_ELECTRON && store.get('startOnLoggin', true)
@@ -40,3 +39,7 @@ const getPlatform = () => {
 }
 
 export const platform = getPlatform()
+
+export const showKeyboard = () => {
+  Capacitor.platform === 'android' && Keyboard.show()
+}

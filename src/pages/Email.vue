@@ -2,21 +2,19 @@
   <v-container fluid>
     <v-window touchless v-model="activeStep">
       <v-window-item :key="1">
-        <div class="text-center subtitle-1">
-          What is your email address ?
-        </div>
         <v-form ref="formEmail" @submit.prevent="next()">
           <v-text-field
+            @keyup.enter="onEnter"
             :disabled="loading"
             validate-on-blur
             v-model.trim="email"
             type="email"
             label="email"
             :rules="emailRules"
-            placeholder="john@doe.com"
-            autofocus
+            placeholder="email@domain.com"
+            ref="input"
           />
-          <p class="caption">
+          <p class="caption grey--text text--darken-2">
             We strongly value privacy and will <strong>never</strong> sell it.
           </p>
         </v-form>
@@ -75,6 +73,7 @@
 <script>
 import { mdiArrowRight, mdiArrowLeft, mdiAlert } from '@mdi/js'
 import { verifyEmail, getToken } from '@/utils/api'
+import { showKeyboard } from '@/utils'
 
 const emailFormat = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
 const codeFormat = /^[0-9]{4}$/
@@ -94,10 +93,7 @@ export default {
       mdiAlert,
       loading: false,
       activeStep: 0,
-      emailRules: [
-        requiredRule,
-        v => emailFormat.test(v) || 'Invalid email address',
-      ],
+      emailRules: [requiredRule, v => emailFormat.test(v) || 'Invalid format'],
       codeRules: [requiredRule, v => codeFormat.test(v) || 'Invalid'],
     }
   },
@@ -110,7 +106,18 @@ export default {
     },
   },
 
+  mounted() {
+    setTimeout(() => {
+      this.$refs.input.focus()
+      showKeyboard()
+    }, 200)
+  },
+
   methods: {
+    onEnter() {
+      this.$refs.input.blur()
+      this.next()
+    },
     next() {
       return this.activeStep == 0 ? this.send() : this.validate()
     },
