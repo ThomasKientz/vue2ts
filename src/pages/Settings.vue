@@ -58,10 +58,14 @@
             v-if="subjectMode == 'custom'"
             v-model="subjectText"
             label="Custom subject"
+            ref="subjectText"
+            @keyup.enter="$refs.subjectText.blur()"
           />
           <v-text-field
             :value="fromText"
             label="From field"
+            ref="fromField"
+            @keyup.enter="$refs.fromField.blur()"
             @change="fromText = $event"
           />
           <v-select
@@ -181,6 +185,9 @@ export default {
   },
 
   methods: {
+    onEnter(e) {
+      console.log('onEnter', e)
+    },
     remove(index) {
       if (!this.$store.state.token2 && index == 0) {
         this.$router.replace('/email')
