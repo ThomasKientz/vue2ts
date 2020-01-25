@@ -97,7 +97,7 @@ import {
   mdiPlus,
 } from '@mdi/js'
 import { send } from '@/utils/api'
-import { showKeyboard } from '@/utils'
+// import { showKeyboard } from '@/utils'
 
 const MAX_SIZE = 10000000
 
@@ -184,9 +184,9 @@ export default {
       }
     },
     focus() {
+      if (document.activeElement === this.$refs.textarea) return
       setTimeout(() => {
         this.$refs.textarea.focus()
-        showKeyboard()
       }, 200)
     },
     send(id) {
