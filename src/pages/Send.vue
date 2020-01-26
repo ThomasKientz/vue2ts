@@ -84,7 +84,14 @@
         </v-btn>
       </v-sheet>
     </v-bottom-sheet>
-    <input type="file" ref="input" multiple v-show="false" @change="onInput" />
+    <input
+      type="file"
+      ref="input"
+      multiple
+      accept="*"
+      v-show="false"
+      @change="onInput"
+    />
   </v-container>
 </template>
 
