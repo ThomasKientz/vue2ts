@@ -78,15 +78,49 @@
         </template>
       </v-list>
       <v-sheet tile class="pa-3 elevation-0">
-        <v-btn @click="$refs.input.click()" block color="success">
+        <v-btn @click="openInput()" block color="success">
           add
           <v-icon right>{{ mdiPlus }}</v-icon>
         </v-btn>
       </v-sheet>
     </v-bottom-sheet>
+    <v-bottom-sheet v-model="showInputSelector">
+      <v-list>
+        <v-list-item
+          @click="
+            showInputSelector = false
+            $refs.inputCamera.click()
+          "
+        >
+          <v-list-item-icon>
+            <v-icon>{{ mdiCamera }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Camera</v-list-item-title>
+        </v-list-item>
+        <v-list-item
+          @click="
+            showInputSelector = false
+            $refs.input.click()
+          "
+        >
+          <v-list-item-icon>
+            <v-icon>{{ mdiFolder }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Chose from device</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-bottom-sheet>
     <input
+      ref="inputCamera"
       type="file"
+      accept="image/*"
+      capture="camera"
+      v-show="false"
+      @change="onInput"
+    />
+    <input
       ref="input"
+      type="file"
       multiple
       accept="*"
       v-show="false"
@@ -102,9 +136,11 @@ import {
   mdiClose,
   mdiCloseCircle,
   mdiPlus,
+  mdiCamera,
+  mdiFolder,
 } from '@mdi/js'
 import { send } from '@/utils/api'
-// import { showKeyboard } from '@/utils'
+import { platform } from '@/utils'
 
 const MAX_SIZE = 10000000
 
@@ -147,11 +183,14 @@ export default {
     mdiClose,
     mdiCloseCircle,
     mdiPlus,
+    mdiCamera,
+    mdiFolder,
     message: null,
     loading: false,
     showFiles: false,
     files: [],
     progress: 0,
+    showInputSelector: false,
   }),
 
   mounted() {
@@ -185,9 +224,16 @@ export default {
     },
     onFilesButton() {
       if (this.files.length === 0) {
-        this.$refs.input.click()
+        this.showInputSelector = true
       } else {
         this.showFiles = true
+      }
+    },
+    openInput() {
+      if (platform == 'android') {
+        this.showInputSelector = true
+      } else {
+        this.$refs.input.click()
       }
     },
     focus() {
