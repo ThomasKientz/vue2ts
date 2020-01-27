@@ -76,7 +76,7 @@ export const sendFeedback = ({ message }) => {
   return api.post('/feedback', {
     token: store.state.token1,
     message,
-    context: Capacitor.platform,
+    context: `${Capacitor.platform} ${navigator?.userAgent}`,
     platform,
   })
 }
