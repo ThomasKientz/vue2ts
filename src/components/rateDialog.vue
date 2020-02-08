@@ -65,7 +65,7 @@ export default {
       this.$store.commit('setRating', e)
       if (e > 3) {
         if (Capacitor.platform === 'ios') {
-          const url = `https://apps.apple.com/us/app/boomerang-mail-myself/id1154427984?action=write-review`
+          const url = `https://apps.apple.com/app/id1154427984?action=write-review`
           App.openUrl({ url })
         } else if (Capacitor.platform === 'android') {
           // const url = `https://play.google.com/store/apps/details?id=com.boomerang.app`
