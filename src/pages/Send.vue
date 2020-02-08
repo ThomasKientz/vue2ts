@@ -224,7 +224,7 @@ export default {
     },
     onFilesButton() {
       if (this.files.length === 0) {
-        this.showInputSelector = true
+        this.openInput()
       } else {
         this.showFiles = true
       }
