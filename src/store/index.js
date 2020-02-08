@@ -21,6 +21,8 @@ export default new Vuex.Store({
     return {
       token1: null,
       token2: null,
+      displayName1: null,
+      displayName2: null,
       subjectMode: null,
       subjectText: null,
       fromText: null,
@@ -35,6 +37,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setDisplayName: (state, { name, id }) => {
+      state['displayName' + id] = name
+    },
     setToken: (state, { token, id }) => {
       state['token' + id] = token
     },
@@ -62,9 +67,12 @@ export default new Vuex.Store({
     removeToken({ commit, state }, id) {
       if (id == 1 && state.token2) {
         commit('setToken', { id: 1, token: state.token2 })
+        commit('setDisplayName', { id: 1, name: state.displayName2 })
         commit('setToken', { id: 2, token: null })
+        commit('setDisplayName', { id: 2, name: null })
       } else {
-        commit('setToken', { token: null, id })
+        commit('setToken', { id, token: null })
+        commit('setDisplayName', { id, name: null })
       }
     },
   },

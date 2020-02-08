@@ -20,21 +20,36 @@
       </v-toolbar>
       <v-card-text class="pa-0">
         <v-container fluid>
-          <v-text-field
+          <div class="subtitle-2">Email{{ emails.length ? 's' : '' }}</div>
+          <template
+            :class="[index > 0 && 'mt-3']"
             v-for="(email, index) of emails"
-            :key="'email-' + index"
-            :value="email"
-            disabled
-            hide-details
-            readonly
-            :label="'email address' + (index > 0 ? ' ' + (index + 1) : '')"
           >
-            <template v-slot:append>
-              <v-icon @click="remove(index)" color="red">{{
-                mdiCloseCircle
-              }}</v-icon>
-            </template>
-          </v-text-field>
+            <v-text-field
+              :key="'email-' + index"
+              :value="email"
+              disabled
+              hide-details
+              readonly
+              :label="
+                'Email' +
+                  (index > 0 ? ` ${index + 1}` : emails.length > 1 ? ` 1` : '')
+              "
+            >
+              <template v-slot:append>
+                <v-icon @click="remove(index)" color="red">{{
+                  mdiCloseCircle
+                }}</v-icon>
+              </template>
+            </v-text-field>
+            <v-text-field
+              v-if="emails.length > 1"
+              :value="$store.state[`displayName${index + 1}`] || emails[index]"
+              :key="'emailName-' + index"
+              @change="setDisplayName(index, $event)"
+              label="Display name"
+            ></v-text-field>
+          </template>
           <v-btn
             v-if="!$store.state.token2"
             class="mt-2"
@@ -50,7 +65,7 @@
             Add second email
           </v-btn>
           <div class="subtitle-2 mt-3">Email subject</div>
-          <v-radio-group v-model="subjectMode">
+          <v-radio-group class="mt-0" v-model="subjectMode">
             <v-radio label="Preview" value="preview" />
             <v-radio label="Custom" value="custom" />
           </v-radio-group>
@@ -197,6 +212,9 @@ export default {
         this.dialog = false
       }
       this.$store.dispatch('removeToken', index + 1)
+    },
+    setDisplayName(index, value) {
+      this.$store.commit('setDisplayName', { id: index + 1, name: value })
     },
   },
 }

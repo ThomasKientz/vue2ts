@@ -34,28 +34,32 @@
     </v-layout>
     <div style="width: 100%;">
       <v-row :no-gutters="!$store.state.token2" dense>
-        <v-col :cols="$store.state.token2 ? 6 : 12">
+        <v-col class="py-0" :cols="$store.state.token2 ? 6 : 12">
           <v-btn
             :loading="loading == 1"
             :disabled="loading == 2"
             @click="send(1)"
             color="success"
             block
-            >{{ $store.state.token2 ? $store.getters.getEmail(1) : 'Send' }}
+            >{{
+              $store.state.token2
+                ? $store.state.displayName1 || $store.getters.getEmail(1)
+                : 'Send'
+            }}
             <v-icon v-show="!$store.state.token2" right>{{ mdiSend }}</v-icon>
             <template v-if="files.length" v-slot:loader>
               <v-progress-circular size="30" rotate="270" :value="progress" />
             </template>
           </v-btn>
         </v-col>
-        <v-col cols="6" v-if="$store.state.token2">
+        <v-col class="py-0" cols="6" v-if="$store.state.token2">
           <v-btn
             :loading="loading == 2"
             :disabled="loading == 1"
             @click="send(2)"
             color="success"
             block
-            >{{ $store.getters.getEmail(2) }}
+            >{{ $store.state.displayName2 || $store.getters.getEmail(2) }}
             <template v-if="files.length" v-slot:loader>
               <v-progress-circular size="30" rotate="270" :value="progress" />
             </template>
