@@ -31,6 +31,18 @@
           <v-icon>{{ mdiPaperclip }}</v-icon>
         </v-btn>
       </v-badge>
+      <v-btn
+        v-if="$store.state.showPaste"
+        style="flex-grow: 0 !important; flex-shrink: 0 !important;"
+        class="mr-0 ml-2 elevation-2"
+        color="grey"
+        fab
+        small
+        dark
+        @click="paste()"
+      >
+        <v-icon>{{ mdiContentCopy }}</v-icon>
+      </v-btn>
     </v-layout>
     <div style="width: 100%;">
       <v-row :no-gutters="!$store.state.token2" dense>
@@ -142,9 +154,12 @@ import {
   mdiPlus,
   mdiCamera,
   mdiFolder,
+  mdiContentCopy,
 } from '@mdi/js'
 import { send } from '@/utils/api'
 import { platform } from '@/utils'
+import { Plugins } from '@capacitor/core'
+const { Clipboard } = Plugins
 
 const MAX_SIZE = 10000000
 
@@ -182,6 +197,7 @@ const processFiles = async files => {
 
 export default {
   data: () => ({
+    mdiContentCopy,
     mdiSend,
     mdiPaperclip,
     mdiClose,
@@ -189,7 +205,7 @@ export default {
     mdiPlus,
     mdiCamera,
     mdiFolder,
-    message: null,
+    message: '',
     loading: false,
     showFiles: false,
     files: [],
@@ -202,6 +218,17 @@ export default {
   },
 
   methods: {
+    async paste() {
+      const str = await Clipboard.read({
+        type: 'string',
+      }).catch(e => {
+        console.error('error while pasting : ', e)
+      })
+
+      if (typeof str?.value != 'string' || !str?.value)
+        this.$toast.warning('Nothing to paste!')
+      else this.message += str.value
+    },
     async addFiles(files) {
       const { filesArray, totalExceed } = await processFiles(files)
 

@@ -28,6 +28,7 @@ export default new Vuex.Store({
       fromText: null,
       theme: 'auto',
       autoClose: false,
+      showPaste: false,
     }
   },
   getters: {
@@ -57,6 +58,9 @@ export default new Vuex.Store({
     },
     setAutoClose: (state, v) => {
       state.autoClose = v
+    },
+    setShowPaste: (state, v) => {
+      state.showPaste = v
     },
   },
   actions: {

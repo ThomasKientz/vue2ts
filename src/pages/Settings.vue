@@ -100,6 +100,7 @@
             v-model="autoStart"
             label="Start at login"
           />
+          <v-switch v-model="showPaste" label="Show paste button shortcut" />
         </v-container>
       </v-card-text>
     </v-card>
@@ -201,6 +202,14 @@ export default {
       },
       set(v) {
         return this.$store.commit('setAutoClose', v)
+      },
+    },
+    showPaste: {
+      get() {
+        return this.$store.state.showPaste
+      },
+      set(v) {
+        return this.$store.commit('setShowPaste', v)
       },
     },
   },
