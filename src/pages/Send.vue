@@ -17,7 +17,7 @@
       class="d-flex mb-2"
     >
       <v-spacer></v-spacer>
-      <v-badge color="amber" :value="files.length">
+      <v-badge color="amber" offset-x="14" offset-y="14" :value="files.length">
         <template v-slot:badge>{{ files.length }}</template>
         <v-btn
           style="flex-grow: 0 !important; flex-shrink: 0 !important;"
@@ -51,6 +51,7 @@
             :loading="loading == 1"
             :disabled="loading == 2"
             @click="send(1)"
+            class="sendButton"
             color="success"
             block
             >{{
@@ -58,7 +59,7 @@
                 ? $store.state.displayName1 || $store.getters.getEmail(1)
                 : 'Send'
             }}
-            <v-icon v-show="!$store.state.token2" right>{{ mdiSend }}</v-icon>
+            <v-icon v-if="!$store.state.token2" right>{{ mdiSend }}</v-icon>
             <template v-if="files.length" v-slot:loader>
               <v-progress-circular size="30" rotate="270" :value="progress" />
             </template>
@@ -66,6 +67,7 @@
         </v-col>
         <v-col class="py-0" cols="6" v-if="$store.state.token2">
           <v-btn
+            class="sendButton"
             :loading="loading == 2"
             :disabled="loading == 1"
             @click="send(2)"
@@ -79,27 +81,34 @@
         </v-col>
       </v-row>
     </div>
+
     <v-bottom-sheet v-model="showFiles">
-      <v-list class="list pa-0" subheader dense>
-        <template v-for="(file, n) in files">
-          <v-list-item :key="'list-item-' + n">
-            <v-list-item-title>{{ file.name }}</v-list-item-title>
-            <v-list-item-action>
-              <v-icon @click.stop.prevent="files.splice(n, 1)" color="red">{{
-                mdiCloseCircle
-              }}</v-icon>
-            </v-list-item-action>
-          </v-list-item>
-          <v-divider :key="'divider-' + n"></v-divider>
-        </template>
-      </v-list>
-      <v-sheet tile class="pa-3 elevation-0">
-        <v-btn @click="openInput()" block color="success">
+      <v-sheet tile class="px-3 pb-3 elevation-0">
+        <v-list
+          style="max-height: 200px; overflow: auto;"
+          class="list pa-0"
+          subheader
+          dense
+        >
+          <template v-for="(file, n) in files">
+            <v-list-item :key="'list-item-' + n">
+              <v-list-item-title>{{ file.name }}</v-list-item-title>
+              <v-list-item-action>
+                <v-icon @click.stop.prevent="files.splice(n, 1)" color="red">{{
+                  mdiCloseCircle
+                }}</v-icon>
+              </v-list-item-action>
+            </v-list-item>
+            <v-divider :key="'divider-' + n"></v-divider>
+          </template>
+        </v-list>
+        <v-btn class="mt-3" @click="openInput()" block color="success">
           add
           <v-icon right>{{ mdiPlus }}</v-icon>
         </v-btn>
       </v-sheet>
     </v-bottom-sheet>
+
     <v-bottom-sheet v-model="showInputSelector">
       <v-list>
         <v-list-item
@@ -126,6 +135,7 @@
         </v-list-item>
       </v-list>
     </v-bottom-sheet>
+
     <input
       ref="inputCamera"
       type="file"
@@ -329,21 +339,15 @@ textarea {
   }
 }
 
-.list {
-  max-height: 200px;
-  overflow: auto;
-}
+::v-deep .sendButton {
+  width: 100%;
 
-::v-deep .v-btn__content {
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  width: 100% !important;
-  display: block !important;
-}
-
-::v-deep .v-badge__badge {
-  right: -8px !important;
-  top: -8px !important;
+  .v-btn__content {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    width: 100% !important;
+    display: block !important;
+  }
 }
 </style>
 

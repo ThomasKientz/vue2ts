@@ -41,7 +41,6 @@
             :disabled="loading"
             :rules="codeRules"
             label="Code"
-            autofocus
           />
         </v-form>
       </v-window-item>

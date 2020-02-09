@@ -197,4 +197,9 @@ body {
 .v-snack--top {
   padding-top: var(--ion-safe-area-top);
 }
+
+.v-icon--svg svg {
+  height: 100%;
+  width: 100%;
+}
 </style>
