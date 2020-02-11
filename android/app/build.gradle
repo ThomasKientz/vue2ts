@@ -6,8 +6,8 @@ android {
         applicationId "com.boomerang.app"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 20007
-        versionName "2.0.2"
+        versionCode 20008
+        versionName "2.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
