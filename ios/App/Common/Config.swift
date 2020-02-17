@@ -10,19 +10,25 @@ import JWTDecode
 
 /// The subject mode defines if the Config should use its subject text or use the content to generate a subject.
 enum SubjectMode {
-    case custom
-    case subjectText
+    /// The subject will be defined by the user preferences. The user registered a custom subject in the main app and it's this subject that we're going to set in every case.
+    case userPreference
+    /// The subject will be defined by the content being shared. It will ignore potential custom subject field and will try to infer the subject from text, URL, or file data.
+    case contentInferred
     
     /// Init the subject mode from a string value. Typically from UserDefaults.
     static func fromUserDefaults(value: String?) -> SubjectMode {
         // We should use the subject text by default except if there's no value in SubjectMode or if it's explicitly marked "custom"
         switch value {
-        case nil:
-            return .custom
         case "custom":
-            return .custom
+            return .userPreference
+        case "preview":
+            return .contentInferred
+        case nil:
+            // No preference set, we'll use the content
+            return .contentInferred
         default:
-            return .subjectText
+            // No preference set, we'll use the content
+            return .contentInferred
         }
     }
 }

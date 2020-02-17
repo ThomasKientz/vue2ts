@@ -102,7 +102,7 @@ class SendModel {
                             self.preparedAttachments.append(
                                 Attachment(
                                     name: provider.suggestedName ?? "Image",
-                                    type: "image/png",
+                                    type: "image/png", // MIME for PNG data
                                     data: imageData))
                         }
                     case let text as String:
@@ -150,24 +150,25 @@ class SendModel {
     
     /// Send a boomerang using local config and elements
     private func send() {
-        guard let message = message else {
-            onSendingCompleted(.failure(BoomerangError.invalidSelection))
-            return
-        }
-        
         let subject: String
         
-        if let urlSubject = urlSubject {
-            subject = urlSubject
-        } else if config.subjectMode == .subjectText {
+        if config.subjectMode == .userPreference {
             subject = config.subjectText
-        } else {
+        } else if let urlSubject = urlSubject {
+            subject = urlSubject
+        } else if let message = message {
             subject = String(message.prefix(Constants.subjectMaxLength))
+        } else {
+            /*
+             We couldn't infer the subject text from the content,
+             so we fallback to the default subjectText "New Boomerang"
+             */
+            subject = config.subjectText
         }
         
         let body = Requests.prepareBody(
             fromText: config.fromText,
-            message: message,
+            message: message ?? "",
             subject: subject,
             token: config.emailTokens[selectedTokenIndex].token,
             platform: Constants.Platform.share,
@@ -194,7 +195,7 @@ class SendModel {
             case .success:
                 let subject: String
                 
-                if self.config.subjectMode == .subjectText {
+                if self.config.subjectMode == .userPreference {
                     subject = self.config.subjectText
                 } else if let message = self.message {
                     subject = String(message.prefix(Constants.subjectMaxLength))
@@ -206,12 +207,16 @@ class SendModel {
                             .prefix(Constants.subjectMaxLength)
                     )
                 } else {
+                    /*
+                     We couldn't infer the subject text from the content,
+                     so we fallback to the default subjectText "New Boomerang"
+                    */
                     subject = self.config.subjectText
                 }
                 
                 let body = Requests.prepareBody(
                     fromText: self.config.fromText,
-                    message: self.message ?? " ",
+                    message: self.message ?? "",
                     subject: subject,
                     token: self.config.emailTokens[self.selectedTokenIndex].token,
                     platform: Constants.Platform.share,
