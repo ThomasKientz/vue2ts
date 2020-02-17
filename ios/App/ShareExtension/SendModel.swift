@@ -5,7 +5,7 @@
 //  Created by Clément Cardonnel on 16/12/2019.
 //
 
-import Foundation
+import UIKit
 import MobileCoreServices
 
 class SendModel {
@@ -96,6 +96,14 @@ class SendModel {
                             self.message = "\(title)\n\(url)"
                         } else {
                             self.message = url.absoluteString
+                        }
+                    case let image as UIImage:
+                        if let imageData = image.pngData() {
+                            self.preparedAttachments.append(
+                                Attachment(
+                                    name: provider.suggestedName ?? "Image",
+                                    type: "image/png",
+                                    data: imageData))
                         }
                     case let text as String:
                         self.message = text
