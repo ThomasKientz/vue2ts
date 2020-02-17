@@ -75,8 +75,8 @@ class SendModel {
         
         attachments.forEach { [unowned self] (provider) in
             
+            group.enter()
             queue.async(group: group) {
-                group.enter()
                 provider.loadItem(forTypeIdentifier: provider.registeredTypeIdentifiers.first!, options: nil) { (encoded, error) in
                     defer{ group.leave() }
                     
@@ -93,9 +93,9 @@ class SendModel {
                     case let url as URL where !url.isFileURL:
                         if let title = url.title {
                             self.urlSubject = title
-                            self.message = "\(title)\n\(url)"
+                            self.updateMessage("\(title)\n\(url.absoluteString)")
                         } else {
-                            self.message = url.absoluteString
+                            self.updateMessage("\(url.absoluteString)")
                         }
                     case let image as UIImage:
                         if let imageData = image.pngData() {
@@ -106,13 +106,12 @@ class SendModel {
                                     data: imageData))
                         }
                     case let text as String:
-                        self.message = text
+                        self.updateMessage(text)
                     default:
                         //There may be other cases...
                         print("Unexpected data:", type(of: encoded))
                     }
                 }
-                
             }
             
         }
@@ -144,6 +143,14 @@ class SendModel {
             type: mime,
             data: data
         )
+    }
+    
+    private func updateMessage(_ newMessage: String) {
+        if let _ = message {
+            message!.append(contentsOf: "\n\(newMessage)")
+        } else {
+            message = newMessage
+        }
     }
     
     // MARK: Sending a boomerang
