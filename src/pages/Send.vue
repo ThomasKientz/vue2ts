@@ -169,7 +169,7 @@ import {
 import { send } from '@/utils/api'
 import { platform } from '@/utils'
 import { Plugins } from '@capacitor/core'
-const { Clipboard } = Plugins
+const { Clipboard, Keyboard } = Plugins
 
 const MAX_SIZE = 10000000
 
@@ -281,6 +281,7 @@ export default {
       if (document.activeElement === this.$refs.textarea) return
       setTimeout(() => {
         this.$refs.textarea.focus()
+        platform == 'android' && Keyboard.show()
       }, 200)
     },
     send(id) {

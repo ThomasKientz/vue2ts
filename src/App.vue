@@ -83,6 +83,16 @@ export default {
         this.$route.name == 'send' &&
         this.$refs.view.focus()
     })
+
+    App.addListener('backButton', () => {
+      if (this.showSettings) this.showSettings = false
+      else if (this.showFeedback) this.showFeedback = false
+      else if (this.$route.name == 'email' && this.$refs.view.activeStep > 0)
+        this.$refs.view.goBack()
+      else if (this.$route.name == 'email' && this.$store.state.token1)
+        this.$router.replace('send')
+      else App.exitApp()
+    })
   },
 
   async mounted() {

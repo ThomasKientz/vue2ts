@@ -37,6 +37,8 @@
             validate-on-blur
             type="number"
             pattern="[0-9]*"
+            ref="inputCode"
+            v-intersect.quiet="onShow"
             v-model="code"
             :disabled="loading"
             :rules="codeRules"
@@ -73,6 +75,8 @@
 <script>
 import { mdiArrowRight, mdiArrowLeft, mdiAlert } from '@mdi/js'
 import { verifyEmail, getToken } from '@/utils/api'
+import { Plugins, Capacitor } from '@capacitor/core'
+const { Keyboard } = Plugins
 
 const emailFormat = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
 const codeFormat = /^[0-9]{4}$/
@@ -105,7 +109,18 @@ export default {
     },
   },
 
+  mounted() {
+    console.log('PLATFORM', Capacitor.platform)
+    Capacitor.platform == 'android' && Keyboard.show()
+  },
+
   methods: {
+    onShow() {
+      setTimeout(() => {
+        this.$refs.inputCode.focus()
+        Capacitor.platform == 'android' && Keyboard.show()
+      }, 300)
+    },
     onEnter() {
       this.$refs.input.blur()
       this.next()
