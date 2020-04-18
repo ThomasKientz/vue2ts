@@ -110,7 +110,6 @@ export default {
   },
 
   mounted() {
-    console.log('PLATFORM', Capacitor.platform)
     Capacitor.platform == 'android' && Keyboard.show()
   },
 
