@@ -41,7 +41,7 @@ export const send = ({ token, message, attachments, progress }) => {
     store.state.subjectMode === 'custom'
       ? store.state.subjectText || SUBJECT_TEXT_DEFAULT
       : message
-      ? message.substring(0, 78).replace('\n', ' ')
+      ? message.split('\n')[0].substring(0, 78)
       : attachments && attachments.length
       ? attachments
           .map(e => e.name)
