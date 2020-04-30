@@ -27,4 +27,5 @@ module.exports = {
       .end()
   },
   transpileDependencies: ['vuetify', 'vuex-persist'],
+  productionSourceMap: false,
 }
