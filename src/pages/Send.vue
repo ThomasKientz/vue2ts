@@ -169,7 +169,7 @@ import {
 import { send } from '@/utils/api'
 import { platform } from '@/utils'
 import { Plugins } from '@capacitor/core'
-const { Clipboard, Keyboard } = Plugins
+const { Clipboard, Keyboard, Filesystem, FileInfos } = Plugins
 
 const MAX_SIZE = 10000000
 
@@ -223,11 +223,65 @@ export default {
     showInputSelector: false,
   }),
 
+  created() {
+    window.plugins?.intentShim?.onIntent(e => {
+      this.onIntent(e)
+    })
+  },
+
   mounted() {
     this.focus()
   },
 
   methods: {
+    async onIntent(intent) {
+      const subjectKeys = ['SUBJECT', 'TITLE']
+      const textKeys = ['TEXT']
+
+      const subject = subjectKeys
+        .map(key => intent.extras?.['android.intent.extra.' + key])
+        .join('')
+      const text = textKeys
+        .map(key => intent.extras?.['android.intent.extra.' + key])
+        .join('')
+
+      if (subject || text)
+        this.message +=
+          subject && text ? subject + '\n' + text : subject || text
+
+      const stream = intent.extras?.['android.intent.extra.STREAM']
+
+      if (!stream) return
+
+      const paths = Array.isArray(stream) ? stream : [stream]
+
+      let exceedSizeCtr = 0
+      for (let index = 0; index < paths.length; index++) {
+        const path = paths[index]
+        const { size, name } = await FileInfos.getInfos({
+          path,
+        })
+
+        if (size < MAX_SIZE) {
+          const { data } = await Filesystem.readFile({
+            path,
+          })
+
+          const mime = intent?.clipItems?.[index]?.type || ''
+          this.files.push({
+            name,
+            dataUrl: `data:${mime};base64,${data}`,
+            size: parseInt(size),
+          })
+        } else {
+          exceedSizeCtr++
+        }
+      }
+
+      if (exceedSizeCtr) {
+        this.$toast.error('Some files selected are too big (max 10 mB).')
+      }
+    },
     async paste() {
       const str = await Clipboard.read({
         type: 'string',
@@ -244,8 +298,8 @@ export default {
 
       if (totalExceed) {
         if (filesArray.length)
-          this.$toast.error('Some files selected are too big (> 10 mB).')
-        else this.$toast.error('The file selected is too big (> 10 mB)')
+          this.$toast.error('Some files selected are too big (max 10 mB).')
+        else this.$toast.error('The file selected is too big (max 10 mB).')
       }
 
       this.showFiles = false
@@ -292,7 +346,7 @@ export default {
       }, 0)
 
       if (totalSize > MAX_SIZE) {
-        this.$toast.error('Total files size must be less than 10mB')
+        this.$toast.error('Total files size is too big (max 10mB).')
         return
       }
 
