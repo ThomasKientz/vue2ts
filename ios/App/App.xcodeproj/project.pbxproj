@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
 		41112C9C23CC73B300CF52D7 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41112C9B23CC73B300CF52D7 /* IntentHandler.swift */; };
-		41112CA023CC73B300CF52D7 /* IntentsExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 41112C9923CC73B300CF52D7 /* IntentsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		41112CA023CC73B300CF52D7 /* Boomerang.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 41112C9923CC73B300CF52D7 /* Boomerang.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		41112CA423CC761700CF52D7 /* OSLog+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */; };
 		41112CA523CC76B700CF52D7 /* BoomerangError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF723A7E1C0000440D4 /* BoomerangError.swift */; };
 		41112CA623CC77FC00CF52D7 /* ConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411579F323BF39A300F92E5F /* ConfigReader.swift */; };
@@ -35,7 +35,7 @@
 		41B71DFA23A907FE000440D4 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF923A907FE000440D4 /* PaddingLabel.swift */; };
 		41C905A4239A93FC009BFCFD /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C905A3239A93FC009BFCFD /* ShareViewController.swift */; };
 		41C905A7239A93FC009BFCFD /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 41C905A5239A93FC009BFCFD /* MainInterface.storyboard */; };
-		41C905AB239A93FC009BFCFD /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 41C905A1239A93FC009BFCFD /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		41C905AB239A93FC009BFCFD /* Boomerang.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 41C905A1239A93FC009BFCFD /* Boomerang.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		41D0AFFF23C325700041C398 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 41D0AFFE23C325700041C398 /* JWTDecode */; };
 		41D0B00223C33DB60041C398 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D0B00123C33DB60041C398 /* Config.swift */; };
 		41D0B00423C34A950041C398 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D0B00323C34A950041C398 /* Constants.swift */; };
@@ -82,8 +82,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				41112CA023CC73B300CF52D7 /* IntentsExtension.appex in Embed App Extensions */,
-				41C905AB239A93FC009BFCFD /* ShareExtension.appex in Embed App Extensions */,
+				41112CA023CC73B300CF52D7 /* Boomerang.appex in Embed App Extensions */,
+				41C905AB239A93FC009BFCFD /* Boomerang.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -92,7 +92,7 @@
 
 /* Begin PBXFileReference section */
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
-		41112C9923CC73B300CF52D7 /* IntentsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = IntentsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		41112C9923CC73B300CF52D7 /* Boomerang.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Boomerang.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		41112C9B23CC73B300CF52D7 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		41112C9D23CC73B300CF52D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		41112CAD23CC7C1000CF52D7 /* Requests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
@@ -106,7 +106,7 @@
 		41B71DF523A7C29C000440D4 /* SendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendModel.swift; sourceTree = "<group>"; };
 		41B71DF723A7E1C0000440D4 /* BoomerangError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoomerangError.swift; sourceTree = "<group>"; };
 		41B71DF923A907FE000440D4 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
-		41C905A1239A93FC009BFCFD /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		41C905A1239A93FC009BFCFD /* Boomerang.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Boomerang.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		41C905A3239A93FC009BFCFD /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		41C905A6239A93FC009BFCFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		41C905A8239A93FC009BFCFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -236,8 +236,8 @@
 			isa = PBXGroup;
 			children = (
 				504EC3041FED79650016851F /* App.app */,
-				41C905A1239A93FC009BFCFD /* ShareExtension.appex */,
-				41112C9923CC73B300CF52D7 /* IntentsExtension.appex */,
+				41C905A1239A93FC009BFCFD /* Boomerang.appex */,
+				41112C9923CC73B300CF52D7 /* Boomerang.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -287,7 +287,7 @@
 				41112CAB23CC79C900CF52D7 /* JWTDecode */,
 			);
 			productName = IntentsExtension;
-			productReference = 41112C9923CC73B300CF52D7 /* IntentsExtension.appex */;
+			productReference = 41112C9923CC73B300CF52D7 /* Boomerang.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		41C905A0239A93FC009BFCFD /* ShareExtension */ = {
@@ -308,7 +308,7 @@
 				415B908223C5D52200AB0A3C /* SwiftSoup */,
 			);
 			productName = ShareExtension;
-			productReference = 41C905A1239A93FC009BFCFD /* ShareExtension.appex */;
+			productReference = 41C905A1239A93FC009BFCFD /* Boomerang.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		504EC3031FED79650016851F /* App */ = {
@@ -354,6 +354,7 @@
 					};
 					504EC3031FED79650016851F = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -439,10 +440,10 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
+			inputFileListPaths = (
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
+			outputFileListPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -578,7 +579,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.IntentsExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Boomerang;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -605,7 +606,7 @@
 				MARKETING_VERSION = 2.1.1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.IntentsExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Boomerang;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -633,7 +634,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.ShareExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Boomerang;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -660,7 +661,7 @@
 				MARKETING_VERSION = 2.1.1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.ShareExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Boomerang;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -796,7 +797,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG USE_PUSH";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -821,7 +822,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = USE_PUSH;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
