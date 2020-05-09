@@ -64,33 +64,40 @@ class IntentHandler: INExtension, INSendMessageIntentHandling {
             return
         }
         
-        // Prepare the body
-        let body = Requests.prepareBody(
-            fromText: config.fromText,
-            message: message,
-            subject: String(message.prefix(Constants.subjectMaxLength)),
-            token: token,
-            platform: Constants.Platform.siri,
-            attachments: []
-        )
-        
-        // Send a boomerang request
-        Requests.sendBoomerang(requestBody: body) { (result) in
-            switch result {
-            case .success:
-                if #available(iOS 12.0, *) {
-                    os_log(.debug, log: .siri, "Siri Intent completed with success!")
+        do {
+            // Prepare the body
+            let body = try Requests.prepareBody(
+                fromText: config.fromText,
+                message: message,
+                subject: String(message.prefix(Constants.subjectMaxLength)),
+                token: token,
+                platform: Constants.Platform.siri,
+                attachments: []
+            )
+            
+            // Send a boomerang request
+            Requests.sendBoomerang(requestBody: body) { (result) in
+                switch result {
+                case .success:
+                    if #available(iOS 12.0, *) {
+                        os_log(.debug, log: .siri, "Siri Intent completed with success!")
+                    }
+                    
+                    complete(code: .success)
+                    
+                case .failure(let error):
+                    if #available(iOS 12.0, *) {
+                        os_log(.error, log: .siri, "Siri Intent completed with failure. Boomerang request error: %{PUBLIC}@", error.localizedDescription)
+                    }
+                    
+                    complete(code: .failure)
                 }
-                
-                complete(code: .success)
-                
-            case .failure(let error):
-                if #available(iOS 12.0, *) {
-                    os_log(.error, log: .siri, "Siri Intent completed with failure. Boomerang request error: %{PUBLIC}@", error.localizedDescription)
-                }
-                
-                complete(code: .failure)
             }
+        } catch {
+            if #available(iOS 12.0, *) {
+                os_log(.error, log: .siri, "Siri Intent completed with failure. Boomerang request error: %{PUBLIC}@", error.localizedDescription)
+            }
+            complete(code: .failure)
         }
         
     }

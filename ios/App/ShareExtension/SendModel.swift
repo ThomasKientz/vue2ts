@@ -173,16 +173,20 @@ class SendModel {
             subject = config.subjectText
         }
         
-        let body = Requests.prepareBody(
-            fromText: config.fromText,
-            message: message ?? "",
-            subject: subject,
-            token: config.emailTokens[selectedTokenIndex].token,
-            platform: Constants.Platform.share,
-            attachments: preparedAttachments
-        )
-        
-        Requests.sendBoomerang(requestBody: body, onSendingCompleted)
+        do {
+            let body = try Requests.prepareBody(
+                fromText: config.fromText,
+                message: message ?? "",
+                subject: subject,
+                token: config.emailTokens[selectedTokenIndex].token,
+                platform: Constants.Platform.share,
+                attachments: preparedAttachments
+            )
+            
+            Requests.sendBoomerang(requestBody: body, onSendingCompleted)
+        } catch {
+            onSendingCompleted(.failure(error))
+        }
     }
     
     /// Send a boomerang in background using local config and elements
@@ -221,20 +225,24 @@ class SendModel {
                     subject = self.config.subjectText
                 }
                 
-                let body = Requests.prepareBody(
-                    fromText: self.config.fromText,
-                    message: self.message ?? "",
-                    subject: subject,
-                    token: self.config.emailTokens[self.selectedTokenIndex].token,
-                    platform: Constants.Platform.share,
-                    attachments: self.preparedAttachments
-                )
-                
-                self.backgroundSession = Requests.sendBackgroundBoomerang(
-                    requestBody: body,
-                    delegate: self.sendSessionDelegate,
-                    self.onSendingCompleted
-                )
+                do {
+                    let body = try Requests.prepareBody(
+                        fromText: self.config.fromText,
+                        message: self.message ?? "",
+                        subject: subject,
+                        token: self.config.emailTokens[self.selectedTokenIndex].token,
+                        platform: Constants.Platform.share,
+                        attachments: self.preparedAttachments
+                    )
+                    
+                    self.backgroundSession = Requests.sendBackgroundBoomerang(
+                        requestBody: body,
+                        delegate: self.sendSessionDelegate,
+                        self.onSendingCompleted
+                    )
+                } catch {
+                    self.onSendingCompleted(.failure(error))
+                }
             case .failure:
                 self.onSendingCompleted(.failure(BoomerangError.sendRequestFailed))
                 break

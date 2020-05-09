@@ -29,6 +29,8 @@ enum BoomerangError: LocalizedError {
             return "Something failed during the upload."
         case .server(let message):
             return message
+        case .emptyContent:
+            return "The request is empty. It might be an internal error. If it's the case, an error report will be sent automatically."
         }
     }
     
@@ -38,6 +40,9 @@ enum BoomerangError: LocalizedError {
     case totalFileInvalidSize
     case invalidFilesCount
     case invalidSelection
+    
+    /// Messages and attachments are both empty. Meaning the boomerang will have no purpose.
+    case emptyContent
     
     case sendRequestFailed
     

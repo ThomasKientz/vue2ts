@@ -16,7 +16,15 @@ typealias SendingResult = ((Result<UploadKind,Error>) -> ())
 struct Requests {
     
     /// Prepare a HTTP body for a Boomerang send request.
-    static func prepareBody(fromText: String, message: String, subject: String, token: String, platform: String, attachments: [Attachment]) -> [String: Any] {
+    static func prepareBody(fromText: String, message: String, subject: String, token: String, platform: String, attachments: [Attachment]) throws -> [String: Any] {
+        /*
+         Enforce that either the message or the attachments are not empty.
+         There must be some content to send!
+         */
+        guard !message.isEmpty || !attachments.isEmpty else {
+            throw BoomerangError.emptyContent
+        }
+        
         var bodyObject: [String : Any] = [
             "fromText": fromText,
             "message": message,
