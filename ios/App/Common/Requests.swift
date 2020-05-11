@@ -11,6 +11,11 @@ enum UploadKind {
     case foreground, background
 }
 
+/// Different kinds of errors…
+enum ErrorLog: String {
+    case emptyMessage = "emptyMessage"
+}
+
 typealias SendingResult = ((Result<UploadKind,Error>) -> ())
 
 struct Requests {
@@ -111,9 +116,6 @@ struct Requests {
         let sessionConfig = URLSessionConfiguration.background(withIdentifier: "com.boomerang.app.send-with-attachments")
         // This is very important to prevent error -995 (https://stackoverflow.com/a/26319143/4802021)
         sessionConfig.sharedContainerIdentifier = Constants.appGroup
-        /* Ideally, we'd want to set this property as true,
-         but in order to guarantee the fastest experience possible,
-         we'll mark it as false. */
         sessionConfig.isDiscretionary = true
         
         // Session
@@ -200,6 +202,55 @@ struct Requests {
         } else {
             return defaultError
         }
+    }
+    
+    
+    
+    // MARK: Error Logging
+    
+    /// Send a log to the back-end to notify of an error
+    static func sendErrorLog(log: ErrorLog, platform: String, token: String, message: String?, subject: String, attachments: [Attachment]) {
+        // Create session
+        let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
+        
+        guard let url = URL(string: "\(Constants.apiBaseUrl)/log") else {
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let requestBody: [String: Any] = [
+            "type": log.rawValue,
+            "platform": platform,
+            "token": token,
+            "message": message ?? "",
+            "subject": subject,
+            "attachments": attachments.map({ a in
+                ["name": a.name,
+                 "type": a.type]
+            })]
+        
+        do {
+            // Adding the http body
+            let dataObject = try JSONSerialization.data(withJSONObject: requestBody, options: [])
+            request.httpBody = dataObject
+            
+            let task = session.uploadTask(with: request, from: dataObject, completionHandler: { data, response, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                } else if let response = response {
+                    print(response.description)
+                }
+            })
+            
+            task.resume()
+            session.finishTasksAndInvalidate()
+        } catch {
+            // Ignore error
+            print(error.localizedDescription)
+        }
+        
     }
     
 }

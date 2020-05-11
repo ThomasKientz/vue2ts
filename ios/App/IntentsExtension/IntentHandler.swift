@@ -64,12 +64,14 @@ class IntentHandler: INExtension, INSendMessageIntentHandling {
             return
         }
         
+        let subject = String(message.prefix(Constants.subjectMaxLength))
+        
         do {
             // Prepare the body
             let body = try Requests.prepareBody(
                 fromText: config.fromText,
                 message: message,
-                subject: String(message.prefix(Constants.subjectMaxLength)),
+                subject: subject,
                 token: token,
                 platform: Constants.Platform.siri,
                 attachments: []
@@ -97,6 +99,7 @@ class IntentHandler: INExtension, INSendMessageIntentHandling {
             if #available(iOS 12.0, *) {
                 os_log(.error, log: .siri, "Siri Intent completed with failure. Boomerang request error: %{PUBLIC}@", error.localizedDescription)
             }
+            Requests.sendErrorLog(log: .emptyMessage, platform: Constants.Platform.siri, token: token, message: message, subject: subject, attachments: [])
             complete(code: .failure)
         }
         

@@ -93,15 +93,6 @@ class ShareViewController: UIViewController {
                         self.completeRequest()
                     }
                 case .failure(let error):
-                    
-                    switch error as? BoomerangError {
-                    case .emptyContent:
-                        // TODO: Send error request
-                        break
-                    default:
-                        break
-                    }
-                    
                     self.showError(message: error.localizedDescription)
                 }
             }

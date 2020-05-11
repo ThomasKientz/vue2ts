@@ -173,18 +173,21 @@ class SendModel {
             subject = config.subjectText
         }
         
+        let token = config.emailTokens[selectedTokenIndex].token
+        
         do {
             let body = try Requests.prepareBody(
                 fromText: config.fromText,
                 message: message ?? "",
                 subject: subject,
-                token: config.emailTokens[selectedTokenIndex].token,
+                token: token,
                 platform: Constants.Platform.share,
                 attachments: preparedAttachments
             )
             
             Requests.sendBoomerang(requestBody: body, onSendingCompleted)
         } catch {
+            Requests.sendErrorLog(log: .emptyMessage, platform: Constants.Platform.share, token: token, message: self.message, subject: subject, attachments: preparedAttachments)
             onSendingCompleted(.failure(error))
         }
     }
@@ -225,12 +228,14 @@ class SendModel {
                     subject = self.config.subjectText
                 }
                 
+                let token = self.config.emailTokens[self.selectedTokenIndex].token
+                
                 do {
                     let body = try Requests.prepareBody(
                         fromText: self.config.fromText,
                         message: self.message ?? "",
                         subject: subject,
-                        token: self.config.emailTokens[self.selectedTokenIndex].token,
+                        token: token,
                         platform: Constants.Platform.share,
                         attachments: self.preparedAttachments
                     )
@@ -241,6 +246,7 @@ class SendModel {
                         self.onSendingCompleted
                     )
                 } catch {
+                    Requests.sendErrorLog(log: .emptyMessage, platform: Constants.Platform.share, token: token, message: self.message, subject: subject, attachments: self.preparedAttachments)
                     self.onSendingCompleted(.failure(error))
                 }
             case .failure:
