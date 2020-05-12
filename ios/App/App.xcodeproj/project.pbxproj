@@ -198,15 +198,6 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
-		41B4D6F72469888A002060DA /* URL Parsing */ = {
-			isa = PBXGroup;
-			children = (
-				41B4D6F9246988AA002060DA /* ExtensionClass.js */,
-				41B4D6FB2469893F002060DA /* NSExtensionItem+WebPageProperties.swift */,
-			);
-			path = "URL Parsing";
-			sourceTree = "<group>";
-		};
 		41B71DF223A7BE5A000440D4 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -228,7 +219,8 @@
 				41C905A5239A93FC009BFCFD /* MainInterface.storyboard */,
 				41C905A8239A93FC009BFCFD /* Info.plist */,
 				41B71DF923A907FE000440D4 /* PaddingLabel.swift */,
-				41B4D6F72469888A002060DA /* URL Parsing */,
+				41B4D6F9246988AA002060DA /* ExtensionClass.js */,
+				41B4D6FB2469893F002060DA /* NSExtensionItem+WebPageProperties.swift */,
 			);
 			path = ShareExtension;
 			sourceTree = "<group>";

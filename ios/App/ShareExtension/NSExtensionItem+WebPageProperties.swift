@@ -17,8 +17,8 @@ extension NSExtensionItem {
     
     func retrieveMetadata(_ completionHandler: @escaping (WebPageMetaData?) -> ()) {
         let propertyList = String(kUTTypePropertyList)
-        
-        guard let attachments = attachments else {
+
+        guard let attachments = attachments, !attachments.isEmpty else {
             completionHandler(nil)
             return
         }
@@ -32,6 +32,7 @@ extension NSExtensionItem {
                         let results = dictionary[NSExtensionJavaScriptPreprocessingResultsKey] as? NSDictionary,
                         let title = results["title"] as? String,
                         let hostname = results["hostname"] as? String else {
+                            completionHandler(nil)
                             return
                     }
 
@@ -39,8 +40,6 @@ extension NSExtensionItem {
                 }
             )
         }
-        
-        completionHandler(nil)
     }
     
 }
