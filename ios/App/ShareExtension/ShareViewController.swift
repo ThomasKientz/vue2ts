@@ -65,15 +65,14 @@ class ShareViewController: UIViewController {
         }
 
         // Retrieve the attachments from the context. Those are what we're going to send.
-        guard let item = self.extensionContext?.inputItems.first as? NSExtensionItem,
-          let attachments = item.attachments
+        guard let item = self.extensionContext?.inputItems.first as? NSExtensionItem
           else {
             completeRequest()
             return
         }
         
         // Prepare the model
-        model = SendModel(attachments: attachments, config: config, onSendingCompleted: { [weak self] result in
+        model = SendModel(item: item, config: config, onSendingCompleted: { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 

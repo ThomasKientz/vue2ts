@@ -19,6 +19,8 @@ class SendModel {
     
     private let attachments: [NSItemProvider]
     
+    private let item: NSExtensionItem
+    
     /// The queue in which `SendModel` shall operate.
     private let queue = DispatchQueue.global(qos: .background)
     
@@ -60,8 +62,11 @@ class SendModel {
     
     // MARK: Life Cycle
     
-    init(attachments: [NSItemProvider], config: Config, onSendingCompleted: @escaping SendingResult) {
+    init?(item: NSExtensionItem, config: Config, onSendingCompleted: @escaping SendingResult) {
+        guard let attachments = item.attachments else { return nil }
+        
         self.onSendingCompleted = onSendingCompleted
+        self.item = item
         self.attachments = attachments
         self.config = config
     }
@@ -78,24 +83,28 @@ class SendModel {
             group.enter()
             queue.async(group: group) {
                 provider.loadItem(forTypeIdentifier: provider.registeredTypeIdentifiers.first!, options: nil) { (encoded, error) in
-                    defer{ group.leave() }
-                    
                     switch encoded {
                     case let data as Data:
                         if let attachment = self.attachment(for: provider, with: data) {
                             self.preparedAttachments.append(attachment)
                         }
+                        group.leave()
                     case let url as URL where url.isFileURL:
                         if let data = try? Data(contentsOf: url),
                             let attachment = self.attachment(for: provider, with: data, name: url.lastPathComponent) {
                             self.preparedAttachments.append(attachment)
                         }
+                        group.leave()
                     case let url as URL where !url.isFileURL:
-                        if let title = url.title {
-                            self.urlSubject = title
-                            self.updateMessage("\(title)\n\(url.absoluteString)")
-                        } else {
-                            self.updateMessage("\(url.absoluteString)")
+                        self.item.retrieveMetadata { (metadata) in
+                            if let metadata = metadata {
+                                self.urlSubject = metadata.title
+                                self.updateMessage("\(metadata.title)\n\(url.absoluteString)")
+                            } else {
+                                self.updateMessage("\(url.absoluteString)")
+                            }
+                            
+                            group.leave()
                         }
                     case let image as UIImage:
                         if let imageData = image.pngData() {
@@ -105,11 +114,14 @@ class SendModel {
                                     type: "image/png", // MIME for PNG data
                                     data: imageData))
                         }
+                        group.leave()
                     case let text as String:
                         self.updateMessage(text)
+                        group.leave()
                     default:
                         //There may be other cases...
                         print("Unexpected data:", type(of: encoded))
+                        group.leave()
                     }
                 }
             }
