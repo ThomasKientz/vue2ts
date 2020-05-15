@@ -24,6 +24,8 @@
 	<dict>
 		<key>NSExtensionAttributes</key>
 		<dict>
+			<key>NSExtensionJavaScriptPreprocessingFile</key>
+			<string>ExtensionClass</string>
 			<key>NSExtensionActivationRule</key>
 			<dict>
 				<key>NSExtensionActivationSupportsAttachmentsWithMaxCount</key>
@@ -36,14 +38,12 @@
 				<integer>10</integer>
 				<key>NSExtensionActivationSupportsText</key>
 				<true/>
-                <key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
-                <integer>1</integer>
+				<key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
+				<integer>1</integer>
 				<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
 				<integer>1</integer>
 			</dict>
 		</dict>
-        <key>NSExtensionJavaScriptPreprocessingFile</key>
-        <string>ExtensionClass</string>
 		<key>NSExtensionMainStoryboard</key>
 		<string>MainInterface</string>
 		<key>NSExtensionPointIdentifier</key>

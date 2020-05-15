@@ -106,6 +106,14 @@ class SendModel {
                             
                             group.leave()
                         }
+                    case let dictionary as NSDictionary:
+                        // Probably the dictionary from our JS URL extraction system
+                        if let metadata = NSExtensionItem.webPageMetadata(from: dictionary) {
+                            self.updateMessage("\(metadata.title)\n\(metadata.url)")
+                            self.urlSubject = metadata.title
+                        }
+                        
+                        group.leave()
                     case let image as UIImage:
                         if let imageData = image.pngData() {
                             self.preparedAttachments.append(
