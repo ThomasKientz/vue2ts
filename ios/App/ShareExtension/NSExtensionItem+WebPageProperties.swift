@@ -10,6 +10,7 @@
 import Foundation
 import CoreServices
 
+/// Various metadata extracted from ExtensionClass.js
 struct WebPageMetaData {
     let hostname: String
     let title: String
