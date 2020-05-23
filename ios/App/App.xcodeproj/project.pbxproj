@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
 		41112C9C23CC73B300CF52D7 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41112C9B23CC73B300CF52D7 /* IntentHandler.swift */; };
-		41112CA023CC73B300CF52D7 /* Boomerang.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 41112C9923CC73B300CF52D7 /* Boomerang.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		41112CA023CC73B300CF52D7 /* BoomerangIntent.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 41112C9923CC73B300CF52D7 /* BoomerangIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		41112CA423CC761700CF52D7 /* OSLog+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */; };
 		41112CA523CC76B700CF52D7 /* BoomerangError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF723A7E1C0000440D4 /* BoomerangError.swift */; };
 		41112CA623CC77FC00CF52D7 /* ConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411579F323BF39A300F92E5F /* ConfigReader.swift */; };
@@ -35,7 +35,7 @@
 		41B71DFA23A907FE000440D4 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B71DF923A907FE000440D4 /* PaddingLabel.swift */; };
 		41C905A4239A93FC009BFCFD /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C905A3239A93FC009BFCFD /* ShareViewController.swift */; };
 		41C905A7239A93FC009BFCFD /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 41C905A5239A93FC009BFCFD /* MainInterface.storyboard */; };
-		41C905AB239A93FC009BFCFD /* Boomerang.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 41C905A1239A93FC009BFCFD /* Boomerang.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		41C905AB239A93FC009BFCFD /* BoomerangShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 41C905A1239A93FC009BFCFD /* BoomerangShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		41D0AFFF23C325700041C398 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 41D0AFFE23C325700041C398 /* JWTDecode */; };
 		41D0B00223C33DB60041C398 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D0B00123C33DB60041C398 /* Config.swift */; };
 		41D0B00423C34A950041C398 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D0B00323C34A950041C398 /* Constants.swift */; };
@@ -80,8 +80,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				41112CA023CC73B300CF52D7 /* Boomerang.appex in Embed App Extensions */,
-				41C905AB239A93FC009BFCFD /* Boomerang.appex in Embed App Extensions */,
+				41112CA023CC73B300CF52D7 /* BoomerangIntent.appex in Embed App Extensions */,
+				41C905AB239A93FC009BFCFD /* BoomerangShare.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -90,7 +90,7 @@
 
 /* Begin PBXFileReference section */
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
-		41112C9923CC73B300CF52D7 /* Boomerang.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; name = Boomerang.appex; path = IntentsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		41112C9923CC73B300CF52D7 /* BoomerangIntent.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BoomerangIntent.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		41112C9B23CC73B300CF52D7 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		41112C9D23CC73B300CF52D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		41112CAD23CC7C1000CF52D7 /* Requests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
@@ -106,7 +106,7 @@
 		41B71DF523A7C29C000440D4 /* SendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendModel.swift; sourceTree = "<group>"; };
 		41B71DF723A7E1C0000440D4 /* BoomerangError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoomerangError.swift; sourceTree = "<group>"; };
 		41B71DF923A907FE000440D4 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
-		41C905A1239A93FC009BFCFD /* Boomerang.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; name = Boomerang.appex; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		41C905A1239A93FC009BFCFD /* BoomerangShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BoomerangShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		41C905A3239A93FC009BFCFD /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		41C905A6239A93FC009BFCFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		41C905A8239A93FC009BFCFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -234,8 +234,8 @@
 			isa = PBXGroup;
 			children = (
 				504EC3041FED79650016851F /* App.app */,
-				41C905A1239A93FC009BFCFD /* Boomerang.appex */,
-				41112C9923CC73B300CF52D7 /* Boomerang.appex */,
+				41C905A1239A93FC009BFCFD /* BoomerangShare.appex */,
+				41112C9923CC73B300CF52D7 /* BoomerangIntent.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -285,7 +285,7 @@
 				41112CAB23CC79C900CF52D7 /* JWTDecode */,
 			);
 			productName = IntentsExtension;
-			productReference = 41112C9923CC73B300CF52D7 /* Boomerang.appex */;
+			productReference = 41112C9923CC73B300CF52D7 /* BoomerangIntent.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		41C905A0239A93FC009BFCFD /* ShareExtension */ = {
@@ -305,7 +305,7 @@
 				41D0AFFE23C325700041C398 /* JWTDecode */,
 			);
 			productName = ShareExtension;
-			productReference = 41C905A1239A93FC009BFCFD /* Boomerang.appex */;
+			productReference = 41C905A1239A93FC009BFCFD /* BoomerangShare.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		504EC3031FED79650016851F /* App */ = {
@@ -561,7 +561,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CODE_SIGN_ENTITLEMENTS = IntentsExtension/IntentsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20006;
+				CURRENT_PROJECT_VERSION = 20102;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = IntentsExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -570,11 +570,11 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.IntentsExtension;
-				PRODUCT_NAME = Boomerang;
+				PRODUCT_NAME = BoomerangIntent;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -589,7 +589,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CODE_SIGN_ENTITLEMENTS = IntentsExtension/IntentsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20006;
+				CURRENT_PROJECT_VERSION = 20102;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = IntentsExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -598,10 +598,10 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.IntentsExtension;
-				PRODUCT_NAME = Boomerang;
+				PRODUCT_NAME = BoomerangIntent;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -616,7 +616,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20006;
+				CURRENT_PROJECT_VERSION = 20102;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -625,11 +625,11 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.ShareExtension;
-				PRODUCT_NAME = Boomerang;
+				PRODUCT_NAME = BoomerangShare;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -644,7 +644,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20006;
+				CURRENT_PROJECT_VERSION = 20102;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -653,10 +653,10 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.ShareExtension;
-				PRODUCT_NAME = Boomerang;
+				PRODUCT_NAME = BoomerangShare;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -779,7 +779,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20006;
+				CURRENT_PROJECT_VERSION = 20102;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -787,7 +787,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -805,7 +805,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20006;
+				CURRENT_PROJECT_VERSION = 20102;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -813,7 +813,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = USE_PUSH;
