@@ -54,6 +54,7 @@
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
 		A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */; };
+		E90A0FAC24795A4600800DC4 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = E90A0FAB24795A4600800DC4 /* SwiftSoup */; };
 		E937D6FC23CE059100BB52B3 /* AppIntentVocabulary.plist in Resources */ = {isa = PBXBuildFile; fileRef = E937D6FF23CE059100BB52B3 /* AppIntentVocabulary.plist */; };
 		E937D6FD23CE059100BB52B3 /* AppIntentVocabulary.plist in Resources */ = {isa = PBXBuildFile; fileRef = E937D6FF23CE059100BB52B3 /* AppIntentVocabulary.plist */; };
 /* End PBXBuildFile section */
@@ -146,6 +147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				41D0AFFF23C325700041C398 /* JWTDecode in Frameworks */,
+				E90A0FAC24795A4600800DC4 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +310,7 @@
 			name = ShareExtension;
 			packageProductDependencies = (
 				41D0AFFE23C325700041C398 /* JWTDecode */,
+				E90A0FAB24795A4600800DC4 /* SwiftSoup */,
 			);
 			productName = ShareExtension;
 			productReference = 41C905A1239A93FC009BFCFD /* BoomerangShare.appex */;
@@ -569,7 +572,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CODE_SIGN_ENTITLEMENTS = IntentsExtension/IntentsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20102;
+				CURRENT_PROJECT_VERSION = 20103;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = IntentsExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -578,7 +581,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.2;
+				MARKETING_VERSION = 2.1.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.IntentsExtension;
@@ -597,7 +600,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CODE_SIGN_ENTITLEMENTS = IntentsExtension/IntentsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20102;
+				CURRENT_PROJECT_VERSION = 20103;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = IntentsExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -606,7 +609,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.2;
+				MARKETING_VERSION = 2.1.3;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.IntentsExtension;
 				PRODUCT_NAME = BoomerangIntent;
@@ -624,7 +627,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20102;
+				CURRENT_PROJECT_VERSION = 20103;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -633,7 +636,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.2;
+				MARKETING_VERSION = 2.1.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.ShareExtension;
@@ -652,7 +655,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20102;
+				CURRENT_PROJECT_VERSION = 20103;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -661,7 +664,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.2;
+				MARKETING_VERSION = 2.1.3;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app.ShareExtension;
 				PRODUCT_NAME = BoomerangShare;
@@ -787,7 +790,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20102;
+				CURRENT_PROJECT_VERSION = 20103;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -795,7 +798,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.2;
+				MARKETING_VERSION = 2.1.3;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -813,7 +816,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20102;
+				CURRENT_PROJECT_VERSION = 20103;
 				DEVELOPMENT_TEAM = 5JJFR2WY9F;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -821,7 +824,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.2;
+				MARKETING_VERSION = 2.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.boomerang.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = USE_PUSH;
@@ -905,6 +908,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 41D0AFFD23C325700041C398 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */;
 			productName = JWTDecode;
+		};
+		E90A0FAB24795A4600800DC4 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 41233DCC247918CC00ED7318 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

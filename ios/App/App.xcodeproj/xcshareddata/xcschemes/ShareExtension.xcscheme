@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "41C905A0239A93FC009BFCFD"
-               BuildableName = "Boomerang.appex"
+               BuildableName = "BoomerangShare.appex"
                BlueprintName = "ShareExtension"
                ReferencedContainer = "container:App.xcodeproj">
             </BuildableReference>
