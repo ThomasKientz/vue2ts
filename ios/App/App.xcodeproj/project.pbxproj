@@ -22,6 +22,8 @@
 		41112CB623CCB64200CF52D7 /* Encodable+Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E3BEAE23A3F0AE00C2F4AD /* Encodable+Dictionary.swift */; };
 		41112CB723CCBF7500CF52D7 /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E3BEAC23A3EF2500C2F4AD /* Attachment.swift */; };
 		411579F423BF39A300F92E5F /* ConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411579F323BF39A300F92E5F /* ConfigReader.swift */; };
+		41233DCE247918CC00ED7318 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 41233DCD247918CC00ED7318 /* SwiftSoup */; };
+		41233DCF24791DB000ED7318 /* URL+WebPageTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41233DCA2479183F00ED7318 /* URL+WebPageTitle.swift */; };
 		4156E79E23AA2BD9005C42A7 /* OSLog+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */; };
 		4156E79F23AA2BD9005C42A7 /* OSLog+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */; };
 		415B908723C5EA3A00AB0A3C /* RequestValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415B908623C5EA3A00AB0A3C /* RequestValidator.swift */; };
@@ -95,6 +97,7 @@
 		41112C9D23CC73B300CF52D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		41112CAD23CC7C1000CF52D7 /* Requests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
 		411579F323BF39A300F92E5F /* ConfigReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigReader.swift; sourceTree = "<group>"; };
+		41233DCA2479183F00ED7318 /* URL+WebPageTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+WebPageTitle.swift"; sourceTree = "<group>"; };
 		4153CB3523CDAF68008EE059 /* IntentsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IntentsExtension.entitlements; sourceTree = "<group>"; };
 		4156E79B23AA0DBF005C42A7 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OSLog+Custom.swift"; sourceTree = "<group>"; };
@@ -151,6 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */,
+				41233DCE247918CC00ED7318 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +201,7 @@
 				4156E79D23AA2BD9005C42A7 /* OSLog+Custom.swift */,
 				41E3BEAE23A3F0AE00C2F4AD /* Encodable+Dictionary.swift */,
 				41B71DF323A7BE85000440D4 /* Data+Size.swift */,
+				41233DCA2479183F00ED7318 /* URL+WebPageTitle.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -327,6 +332,7 @@
 			);
 			name = App;
 			packageProductDependencies = (
+				41233DCD247918CC00ED7318 /* SwiftSoup */,
 			);
 			productName = App;
 			productReference = 504EC3041FED79650016851F /* App.app */;
@@ -366,6 +372,7 @@
 			mainGroup = 504EC2FB1FED79650016851F;
 			packageReferences = (
 				41D0AFFD23C325700041C398 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */,
+				41233DCC247918CC00ED7318 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			productRefGroup = 504EC3051FED79650016851F /* Products */;
 			projectDirPath = "";
@@ -482,6 +489,7 @@
 				415B908723C5EA3A00AB0A3C /* RequestValidator.swift in Sources */,
 				4156E79F23AA2BD9005C42A7 /* OSLog+Custom.swift in Sources */,
 				41A9C80123A9275E00B2CEDC /* SendSessionDelegate.swift in Sources */,
+				41233DCF24791DB000ED7318 /* URL+WebPageTitle.swift in Sources */,
 				41D0B00423C34A950041C398 /* Constants.swift in Sources */,
 				411579F423BF39A300F92E5F /* ConfigReader.swift in Sources */,
 				41C905A4239A93FC009BFCFD /* ShareViewController.swift in Sources */,
@@ -864,6 +872,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		41233DCC247918CC00ED7318 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.2;
+			};
+		};
 		41D0AFFD23C325700041C398 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/auth0/JWTDecode.swift.git";
@@ -879,6 +895,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 41D0AFFD23C325700041C398 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */;
 			productName = JWTDecode;
+		};
+		41233DCD247918CC00ED7318 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 41233DCC247918CC00ED7318 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
 		};
 		41D0AFFE23C325700041C398 /* JWTDecode */ = {
 			isa = XCSwiftPackageProductDependency;

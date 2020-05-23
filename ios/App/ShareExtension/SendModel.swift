@@ -96,15 +96,11 @@ class SendModel {
                         }
                         group.leave()
                     case let url as URL where !url.isFileURL:
-                        self.item.retrieveMetadata { (metadata) in
-                            if let metadata = metadata {
-                                self.urlSubject = metadata.title
-                                self.updateMessage("\(metadata.title)\n\(url.absoluteString)")
-                            } else {
-                                self.updateMessage("\(url.absoluteString)")
-                            }
-                            
-                            group.leave()
+                        if let title = url.webPageTitle {
+                            self.urlSubject = title
+                            self.updateMessage("\(title)\n\(url.absoluteString)")
+                        } else {
+                            self.updateMessage("\(url.absoluteString)")
                         }
                     case let dictionary as NSDictionary:
                         // Probably the dictionary from our JS URL extraction system
