@@ -102,6 +102,8 @@ class SendModel {
                         } else {
                             self.updateMessage("\(url.absoluteString)")
                         }
+                        
+                        group.leave()
                     case let dictionary as NSDictionary:
                         // Probably the dictionary from our JS URL extraction system
                         if let metadata = NSExtensionItem.webPageMetadata(from: dictionary) {
