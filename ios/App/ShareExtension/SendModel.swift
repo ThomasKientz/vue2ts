@@ -116,8 +116,8 @@ class SendModel {
                         if let imageData = image.pngData() {
                             self.preparedAttachments.append(
                                 Attachment(
-                                    name: provider.suggestedName ?? "Image",
-                                    type: "image/png", // MIME for PNG data
+                                    name: provider.suggestedName ?? "screenshot.png",
+                                    type: "image/png",
                                     data: imageData))
                         }
                         group.leave()
