@@ -10,16 +10,86 @@ import os.log
 
 class IntentHandler: INExtension, INSendMessageIntentHandling {
     
+    private let config = ConfigReader.loadConfig()
+    
+    
+    
+    override func handler(for intent: INIntent) -> Any? {
+        switch intent {
+        case is INSendMessageIntent, is INSetMessageAttributeIntent:
+            return self
+        default:
+            return nil
+        }
+    }
+    
+    
+    
+    // MARK: - Resolving
+    
+    func resolveRecipients(for intent: INSendMessageIntent, with completion: @escaping ([INSendMessageRecipientResolutionResult]) -> Void) {
+        guard intent.recipients == nil
+                || intent.recipients?.isEmpty ?? true
+                || (intent.recipients?.count ?? 0) > 1 else {
+            let response = [INSendMessageRecipientResolutionResult(personResolutionResult: INPersonResolutionResult.success(with: intent.recipients!.first!))]
+            completion(response)
+            return
+        }
+        
+        var persons = [INPerson]()
+        
+        for (index, token) in config.emailTokens.enumerated() {
+            let handle = INPersonHandle(value: token.email, type: .emailAddress)
+            let displayName = String(format: NSLocalizedString("EMAIL_NUMBERED", comment: ""), arguments: [(index + 1), token.email])
+            
+            let person: INPerson
+            if #available(iOSApplicationExtension 12.0, *) {
+                person = INPerson(
+                    personHandle: handle,
+                    nameComponents: nil,
+                    displayName: displayName,
+                    image: nil,
+                    contactIdentifier: nil,
+                    customIdentifier: token.token,
+                    isMe: true)
+            } else {
+                person = INPerson(
+                    personHandle: handle,
+                    nameComponents: nil,
+                    displayName: displayName,
+                    image: nil,
+                    contactIdentifier: nil,
+                    customIdentifier: token.token)
+            }
+            
+            persons.append(person)
+        }
+        
+        let response = [INSendMessageRecipientResolutionResult(personResolutionResult: INPersonResolutionResult.disambiguation(with: persons))]
+        
+        completion(response)
+    }
+    
     // Check that the intent contain a message
     func resolveContent(for intent: INSendMessageIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
         if let text = intent.content,
-            text.isEmpty == false {
+            !text.isEmpty {
+            if #available(iOS 12.0, *) {
+                os_log(.info, log: .siri, "Siri Intent content resolved: %{PRIVATE}@", text)
+            }
             completion(INStringResolutionResult.success(with: text))
         }
         else {
+            if #available(iOS 12.0, *) {
+                os_log(.info, log: .siri, "Siri Intent attempting to resolve content by requesting value.")
+            }
             completion(INStringResolutionResult.needsValue())
         }
     }
+    
+    
+    
+    // MARK: - Handle, execute
     
     func handle(intent: INSendMessageIntent, completion: @escaping (INSendMessageIntentResponse) -> Void) {
         if #available(iOS 12.0, *) {
@@ -38,11 +108,11 @@ class IntentHandler: INExtension, INSendMessageIntentHandling {
             )
         }
         
-        // Retrieve config
-        let config = ConfigReader.loadConfig()
         
         // Check that we've got a valid token
-        guard let token = config.emailTokens.first?.token else {
+        guard
+            let recipient = intent.recipients?.first,
+            let token = recipient.customIdentifier else {
             if #available(iOS 12.0, *) {
                 os_log(.error, log: .siri, "Siri Intent completed with failure because no email was registered.")
             }
@@ -103,6 +173,28 @@ class IntentHandler: INExtension, INSendMessageIntentHandling {
             complete(code: .failure)
         }
         
+    }
+    
+    func confirm(intent: INSendMessageIntent, completion: @escaping (INSendMessageIntentResponse) -> Void) {
+        let response = INSendMessageIntentResponse(code: .success, userActivity: nil)
+        completion(response)
+    }
+    
+}
+
+
+
+extension IntentHandler: INSetMessageAttributeIntentHandling {
+    
+    func handle(intent: INSetMessageAttributeIntent, completion: @escaping (INSetMessageAttributeIntentResponse) -> Void) {
+        let userActivity = NSUserActivity(activityType: String(describing: INSetMessageAttributeIntent.self))
+        
+        completion(
+            INSetMessageAttributeIntentResponse(
+                code: INSetMessageAttributeIntentResponseCode.failure,
+                userActivity: userActivity
+            )
+        )
     }
     
 }

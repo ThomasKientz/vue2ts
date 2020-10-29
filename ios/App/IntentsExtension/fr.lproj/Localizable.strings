@@ -1,0 +1,9 @@
+/* 
+  Localizable.strings
+  App
+
+  Created by Clément Cardonnel on 28/10/2020.
+  
+*/
+
+"EMAIL_NUMBERED" = "Adresse %d (%@)";
