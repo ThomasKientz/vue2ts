@@ -52,6 +52,8 @@
 	<string>Store camera photos to camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To Pick Photos from Library</string>
+	<key>NSSiriUsageDescription</key>
+	<string>Allow Boomerang to send messages with Siri</string>
 	<key>UILaunchStoryboardName</key>
 	<string>Splash</string>
 	<key>UIMainStoryboardFile</key>
@@ -77,7 +79,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>NSSiriUsageDescription</key>
-	<string>Allow Boomerang to send messages with Siri</string>
 </dict>
 </plist>
