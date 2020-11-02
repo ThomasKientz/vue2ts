@@ -2,37 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>ParameterVocabularies</key>
-	<array>
-		<dict>
-			<key>ParameterNames</key>
-			<array>
-				<string>INSendMessageIntent</string>
-			</array>
-			<key>ParameterVocabulary</key>
-			<array>
-				<dict>
-					<key>VocabularyItemIdentifier</key>
-					<string>boomerang</string>
-					<key>VocabularyItemSynonyms</key>
-					<array>
-						<dict>
-							<key>VocabularyItemPhrase</key>
-							<string>Boomerang</string>
-							<key>VocabularyItemPronunciation</key>
-							<string>boomrang</string>
-							<key>VocabularyItemExamples</key>
-							<array>
-								<string>Send a boomerang</string>
-								<string>Send a message using boomerang</string>
-								<string>Send a message with boomerang</string>
-							</array>
-						</dict>
-					</array>
-				</dict>
-			</array>
-		</dict>
-	</array>
 	<key>IntentPhrases</key>
 	<array>
 		<dict>
