@@ -7,7 +7,7 @@
 		<dict>
 			<key>ParameterNames</key>
 			<array>
-				<string>INSendMessageIntent.appName</string>
+				<string>INSendMessageIntent</string>
 			</array>
 			<key>ParameterVocabulary</key>
 			<array>
@@ -21,6 +21,12 @@
 							<string>Boomerang</string>
 							<key>VocabularyItemPronunciation</key>
 							<string>boumerang</string>
+							<key>VocabularyItemExamples</key>
+							<array>
+								<string>Envoie un boomerang</string>
+								<string>Envoie un message avec l&apos;application boomerang</string>
+								<string>Envoie un message en utilisant boomerang</string>
+							</array>
 						</dict>
 					</array>
 				</dict>
