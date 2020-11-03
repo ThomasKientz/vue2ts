@@ -28,10 +28,20 @@ class IntentHandler: INExtension, INSendMessageIntentHandling {
     // MARK: - Resolving
     
     func resolveRecipients(for intent: INSendMessageIntent, with completion: @escaping ([INSendMessageRecipientResolutionResult]) -> Void) {
+        if #available(iOS 12.0, *) {
+            os_log(.info, log: .siri, "Resolving recipients…")
+        }
+        
         guard intent.recipients == nil
                 || intent.recipients?.isEmpty ?? true
                 || (intent.recipients?.count ?? 0) > 1 else {
-            let response = [INSendMessageRecipientResolutionResult(personResolutionResult: INPersonResolutionResult.success(with: intent.recipients!.first!))]
+            let firstRecipient = intent.recipients!.first!
+            let response = [INSendMessageRecipientResolutionResult(personResolutionResult: INPersonResolutionResult.success(with: firstRecipient))]
+            
+            if #available(iOS 12.0, *) {
+                os_log(.info, log: .siri, "Siri Intent recipient resolved: %{PRIVATE}@", firstRecipient)
+            }
+            
             completion(response)
             return
         }
@@ -65,9 +75,21 @@ class IntentHandler: INExtension, INSendMessageIntentHandling {
             persons.append(person)
         }
         
-        let response = [INSendMessageRecipientResolutionResult(personResolutionResult: INPersonResolutionResult.disambiguation(with: persons))]
-        
-        completion(response)
+        if persons.count > 1 {
+            if #available(iOS 12.0, *) {
+                os_log(.info, log: .siri, "Siri Intent will attempt resolve recipients by disambiguation")
+            }
+            
+            let response = [INSendMessageRecipientResolutionResult(personResolutionResult: INPersonResolutionResult.disambiguation(with: persons))]
+            
+            completion(response)
+        } else if persons.count == 1 {
+            let response = [INSendMessageRecipientResolutionResult(personResolutionResult: INPersonResolutionResult.success(with: persons.first!))]
+            completion(response)
+        } else {
+            let response = [INSendMessageRecipientResolutionResult.unsupported()]
+            completion(response)
+        }
     }
     
     // Check that the intent contain a message
