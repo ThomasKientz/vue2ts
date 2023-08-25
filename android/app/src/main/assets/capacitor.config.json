@@ -1,8 +1,8 @@
 {
-  "appId": "com.boomerang.app",
-  "appName": "Boomerang",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "dist",
-  "cordova": {}
+	"appId": "com.boomerang.app",
+	"appName": "Boomerang",
+	"bundledWebRuntime": false,
+	"npmClient": "npm",
+	"webDir": "dist",
+	"cordova": {}
 }
