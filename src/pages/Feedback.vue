@@ -33,7 +33,7 @@
             <v-row dense>
               <v-col cols="12" :sm="12">
                 <v-btn :loading="loading" @click="send()" color="success" block
-                  >Send
+                  >Send feedback
                   <v-icon v-show="!$store.state.token2" right>{{
                     mdiSend
                   }}</v-icon>

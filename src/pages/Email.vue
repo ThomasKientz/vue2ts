@@ -75,8 +75,8 @@
 <script>
 import { mdiArrowRight, mdiArrowLeft, mdiAlert } from '@mdi/js'
 import { verifyEmail, getToken } from '@/utils/api'
-import { Plugins, Capacitor } from '@capacitor/core'
-const { Keyboard } = Plugins
+import { Capacitor } from '@capacitor/core'
+import { Keyboard } from '@capacitor/keyboard'
 
 const emailFormat = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
 const codeFormat = /^[0-9]{4}$/
@@ -110,14 +110,14 @@ export default {
   },
 
   mounted() {
-    Capacitor.platform == 'android' && Keyboard.show()
+    Capacitor.getPlatform() == 'android' && Keyboard.show()
   },
 
   methods: {
     onShow() {
       setTimeout(() => {
         this.$refs.inputCode.focus()
-        Capacitor.platform == 'android' && Keyboard.show()
+        Capacitor.getPlatform() == 'android' && Keyboard.show()
       }, 300)
     },
     onEnter() {

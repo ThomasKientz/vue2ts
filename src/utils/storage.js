@@ -1,4 +1,6 @@
-import { Plugins, Capacitor } from '@capacitor/core'
+import { Preferences } from '@capacitor/preferences'
+import { Capacitor } from '@capacitor/core'
+
 import VuexPersistence from 'vuex-persist'
 
 const getStorage = () => {
@@ -17,17 +19,16 @@ const getStorage = () => {
         length: () => storage.size(),
       },
     }
-  } else if (Capacitor.isNative) {
-    const CapStorage = Plugins.Storage
+  } else if (Capacitor.isNativePlatform()) {
     return {
       storage: {
         getItem: key =>
-          CapStorage.get({ key }).then(res => {
+          Preferences.get({ key }).then(res => {
             return res.value && JSON.parse(res.value)
           }),
         setItem: (key, value) =>
-          CapStorage.set({ key, value: JSON.stringify(value) }),
-        removeItem: key => CapStorage.remove({ key }),
+          Preferences.set({ key, value: JSON.stringify(value) }),
+        removeItem: key => Preferences.remove({ key }),
       },
       asyncStorage: true,
     }

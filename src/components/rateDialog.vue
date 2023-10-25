@@ -30,8 +30,9 @@
 
 <script>
 import { mdiHeart } from '@mdi/js'
-import { Plugins, Capacitor } from '@capacitor/core'
-const { App } = Plugins
+import { Capacitor } from '@capacitor/core'
+import { App } from '@capacitor/app'
+
 // #if process.env.IS_ELECTRON
 import { shell } from 'electron'
 // #endif
@@ -64,10 +65,10 @@ export default {
     onRate(e) {
       this.$store.commit('setRating', e)
       if (e > 3) {
-        if (Capacitor.platform === 'ios') {
+        if (Capacitor.getPlatform() === 'ios') {
           const url = `https://apps.apple.com/app/id1154427984?action=write-review`
           App.openUrl({ url })
-        } else if (Capacitor.platform === 'android') {
+        } else if (Capacitor.getPlatform() === 'android') {
           // const url = `https://play.google.com/store/apps/details?id=com.boomerang.app`
           const url = `market://details?id=com.boomerang.app`
           return App.openUrl({ url })
@@ -75,7 +76,7 @@ export default {
           const url = `https://apps.apple.com/us/app/ringer-ringtone-maker/id402437824?action=write-review`
           shell.openExternal(url)
         } else {
-          console.log('Capacitor.platform', Capacitor.platform)
+          console.log('Capacitor.getPlatform()', Capacitor.getPlatform())
           console.log('process.env.IS_ELECTRON', process.env.IS_ELECTRON)
           console.log('process.platform', process.platform)
           console.error('onRate error : unknown platform.')

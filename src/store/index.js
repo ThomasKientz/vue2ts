@@ -11,7 +11,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   plugins: [
     VuexPersist.plugin,
-    ...((Capacitor.isNative && [AppPrefPlugin]) || []),
+    ...((Capacitor.isNativePlatform() && [AppPrefPlugin]) || []),
   ],
   modules: {
     rate: rateModule,

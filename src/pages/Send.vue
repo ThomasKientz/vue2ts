@@ -4,7 +4,9 @@
     <div style="min-width: 100% !important; flex: 1 1 0;">
       <div style="height: 100%;" @dragover.prevent @drop.prevent="dropHandler">
         <textarea
+          v-if="$vuetify"
           ref="textarea"
+          :style="{ color: $vuetify.theme.isDark ? 'white' : 'black' }"
           :disabled="loading"
           v-model="message"
           placeholder="Write something..."
@@ -168,8 +170,10 @@ import {
 } from '@mdi/js'
 import { send } from '@/utils/api'
 import { platform } from '@/utils'
-import { Plugins } from '@capacitor/core'
-const { Clipboard, Keyboard, Filesystem, FileInfos } = Plugins
+import { Clipboard } from '@capacitor/clipboard'
+import { Keyboard } from '@capacitor/keyboard'
+import { Filesystem } from '@capacitor/filesystem'
+import { SendIntent } from 'send-intent'
 
 const MAX_SIZE = 10000000
 
@@ -224,9 +228,39 @@ export default {
   }),
 
   created() {
-    window.plugins?.intentShim?.onIntent(e => {
-      this.onIntent(e)
-    })
+    SendIntent.checkSendIntentReceived()
+      .then(async result => {
+        // if (result) {
+        //   console.log('SendIntent received')
+        //   console.log(JSON.stringify(result))
+        // }
+        if (result.type === 'text/plain') {
+          this.message = [result.title, result.description, result.url]
+            .filter(Boolean)
+            .join('\n')
+
+          await this.send(1)
+          SendIntent.finish()
+        } else if (result.type.includes('image/')) {
+          const path = result.url
+
+          const [{ size }, { data }] = await Promise.all([
+            Filesystem.stat({ path }),
+            Filesystem.readFile({ path }),
+          ])
+
+          this.files.push({
+            name: result.title,
+            dataUrl: `data:${result.type};base64,${data}`,
+            size: parseInt(size),
+          })
+          await this.send(1)
+          SendIntent.finish()
+        } else {
+          return
+        }
+      })
+      .catch(err => console.error(err))
   },
 
   mounted() {
@@ -234,54 +268,54 @@ export default {
   },
 
   methods: {
-    async onIntent(intent) {
-      const subjectKeys = ['SUBJECT', 'TITLE']
-      const textKeys = ['TEXT']
+    // async onIntent(intent) {
+    //   const subjectKeys = ['SUBJECT', 'TITLE']
+    //   const textKeys = ['TEXT']
 
-      const subject = subjectKeys
-        .map(key => intent.extras?.['android.intent.extra.' + key])
-        .join('')
-      const text = textKeys
-        .map(key => intent.extras?.['android.intent.extra.' + key])
-        .join('')
+    //   const subject = subjectKeys
+    //     .map(key => intent.extras?.['android.intent.extra.' + key])
+    //     .join('')
+    //   const text = textKeys
+    //     .map(key => intent.extras?.['android.intent.extra.' + key])
+    //     .join('')
 
-      if (subject || text)
-        this.message +=
-          subject && text ? subject + '\n' + text : subject || text
+    //   if (subject || text)
+    //     this.message +=
+    //       subject && text ? subject + '\n' + text : subject || text
 
-      const stream = intent.extras?.['android.intent.extra.STREAM']
+    //   const stream = intent.extras?.['android.intent.extra.STREAM']
 
-      if (!stream) return
+    //   if (!stream) return
 
-      const paths = Array.isArray(stream) ? stream : [stream]
+    //   const paths = Array.isArray(stream) ? stream : [stream]
 
-      let exceedSizeCtr = 0
-      for (let index = 0; index < paths.length; index++) {
-        const path = paths[index]
-        const { size, name } = await FileInfos.getInfos({
-          path,
-        })
+    //   let exceedSizeCtr = 0
+    //   for (let index = 0; index < paths.length; index++) {
+    //     const path = paths[index]
+    //     const { size, name } = await FileInfos.getInfos({
+    //       path,
+    //     })
 
-        if (size < MAX_SIZE) {
-          const { data } = await Filesystem.readFile({
-            path,
-          })
+    //     if (size < MAX_SIZE) {
+    //       const { data } = await Filesystem.readFile({
+    //         path,
+    //       })
 
-          const mime = intent?.clipItems?.[index]?.type || ''
-          this.files.push({
-            name,
-            dataUrl: `data:${mime};base64,${data}`,
-            size: parseInt(size),
-          })
-        } else {
-          exceedSizeCtr++
-        }
-      }
+    //       const mime = intent?.clipItems?.[index]?.type || ''
+    //       this.files.push({
+    //         name,
+    //         dataUrl: `data:${mime};base64,${data}`,
+    //         size: parseInt(size),
+    //       })
+    //     } else {
+    //       exceedSizeCtr++
+    //     }
+    //   }
 
-      if (exceedSizeCtr) {
-        this.$toast.error('Some files selected are too big (max 10 mB).')
-      }
-    },
+    //   if (exceedSizeCtr) {
+    //     this.$toast.error('Some files selected are too big (max 10 mB).')
+    //   }
+    // },
     async paste() {
       const str = await Clipboard.read({
         type: 'string',
@@ -351,7 +385,7 @@ export default {
       }
 
       this.loading = id
-      send({
+      return send({
         token: this.$store.state['token' + id],
         ...(this.message && { message: this.message }),
         ...(this.files.length && {

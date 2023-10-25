@@ -57,8 +57,11 @@
 <script>
 import { mdiMenu, mdiSettings, mdiArrowLeft, mdiHeart } from '@mdi/js'
 import Toast from '@/components/toast'
-import { Plugins, Capacitor } from '@capacitor/core'
-const { SplashScreen, App, StatusBar } = Plugins
+import { Capacitor } from '@capacitor/core'
+import { App } from '@capacitor/app'
+import { StatusBar } from '@capacitor/status-bar'
+import { SplashScreen } from '@capacitor/splash-screen'
+
 import { mapState } from 'vuex'
 import { closeApp } from '@/utils'
 import { isSameDay } from 'date-fns'
@@ -85,6 +88,7 @@ export default {
     })
 
     App.addListener('backButton', () => {
+      console.log('backButton')
       if (this.showSettings) this.showSettings = false
       else if (this.showFeedback) this.showFeedback = false
       else if (this.$route.name == 'email' && this.$refs.view.activeStep > 0)
@@ -99,7 +103,7 @@ export default {
     await this.$store.restored
     if (this.$store.state.theme == 'dark') this.$vuetify.theme.dark = true
 
-    if (Capacitor.isNative) {
+    if (Capacitor.isNativePlatform()) {
       SplashScreen.hide()
       StatusBar.show()
     }
@@ -144,6 +148,7 @@ export default {
       })
 
       App.addListener('appStateChange', state => {
+        const mq = window.matchMedia('(prefers-color-scheme: dark)')
         if (this.theme == 'auto')
           this.$vuetify.theme.dark = state.isActive && mq.matches
 

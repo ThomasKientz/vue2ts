@@ -1,4 +1,6 @@
-import { Plugins, Capacitor } from '@capacitor/core'
+import { Capacitor } from '@capacitor/core'
+import { App } from '@capacitor/app'
+import { Keyboard } from '@capacitor/keyboard'
 // #if process.env.IS_ELECTRON
 import { ipcRenderer } from 'electron'
 import Store from 'electron-store'
@@ -8,8 +10,6 @@ const store = new Store()
 export const setStartOnLoggin = boolean =>
   ipcRenderer.send('setStartLogin', boolean)
 // #endif
-
-const { App, Keyboard } = Plugins
 
 export const getStartOnLogginSetting = () =>
   process.env.IS_ELECTRON && store.get('startOnLoggin', true)
@@ -24,8 +24,11 @@ export const closeApp = () => {
 }
 
 const getPlatform = () => {
-  if (Capacitor.platform === 'ios' || Capacitor.platform === 'android') {
-    return Capacitor.platform
+  if (
+    Capacitor.getPlatform() === 'ios' ||
+    Capacitor.getPlatform() === 'android'
+  ) {
+    return Capacitor.getPlatform()
   }
 
   if (process.env.IS_ELECTRON && process.platform) {
@@ -33,7 +36,7 @@ const getPlatform = () => {
   }
 
   console.error('getPlatform() : unknown platform')
-  console.log('Capacitor.platform :', Capacitor.platform)
+  console.log('Capacitor.getPlatform() :', Capacitor.getPlatform())
   console.log('process.platform :', process.platform)
   return 'unknown platform'
 }
@@ -41,5 +44,5 @@ const getPlatform = () => {
 export const platform = getPlatform()
 
 export const showKeyboard = () => {
-  Capacitor.platform === 'android' && Keyboard.show()
+  Capacitor.getPlatform() === 'android' && Keyboard.show()
 }
